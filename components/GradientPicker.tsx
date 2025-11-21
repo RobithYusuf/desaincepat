@@ -1,0 +1,274 @@
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/utils'
+import { GRADIENT_PRESETS } from '@/lib/gradients'
+import { Paintbrush, Upload } from 'lucide-react'
+import { useMemo, useRef, useState } from 'react'
+
+export function GradientPicker({
+  background,
+  setBackground,
+  className,
+}: {
+  background: string
+  setBackground: (background: string) => void
+  className?: string
+}) {
+  const [customColor, setCustomColor] = useState('#000000')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const colorMatrix = {
+    slate: ['#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a'],
+    gray: ['#f9fafb', '#f3f4f6', '#e5e7eb', '#d1d5db', '#9ca3af', '#6b7280', '#4b5563', '#374151', '#1f2937', '#111827'],
+    zinc: ['#fafafa', '#f4f4f5', '#e4e4e7', '#d4d4d8', '#a1a1aa', '#71717a', '#52525b', '#3f3f46', '#27272a', '#18181b'],
+    red: ['#fef2f2', '#fee2e2', '#fecaca', '#fca5a5', '#f87171', '#ef4444', '#dc2626', '#b91c1c', '#991b1b', '#7f1d1d'],
+    orange: ['#fff7ed', '#ffedd5', '#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c', '#c2410c', '#9a3412', '#7c2d12'],
+    amber: ['#fffbeb', '#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e', '#78350f'],
+    yellow: ['#fefce8', '#fef9c3', '#fef08a', '#fde047', '#facc15', '#eab308', '#ca8a04', '#a16207', '#854d0e', '#713f12'],
+    lime: ['#f7fee7', '#ecfccb', '#d9f99d', '#bef264', '#a3e635', '#84cc16', '#65a30d', '#4d7c0f', '#3f6212', '#365314'],
+    green: ['#f0fdf4', '#dcfce7', '#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a', '#15803d', '#166534', '#14532d'],
+    emerald: ['#ecfdf5', '#d1fae5', '#a7f3d0', '#6ee7b7', '#34d399', '#10b981', '#059669', '#047857', '#065f46', '#064e3b'],
+    teal: ['#f0fdfa', '#ccfbf1', '#99f6e4', '#5eead4', '#2dd4bf', '#14b8a6', '#0d9488', '#0f766e', '#115e59', '#134e4a'],
+    cyan: ['#ecfeff', '#cffafe', '#a5f3fc', '#67e8f9', '#22d3ee', '#06b6d4', '#0891b2', '#0e7490', '#155e75', '#164e63'],
+    sky: ['#f0f9ff', '#e0f2fe', '#bae6fd', '#7dd3fc', '#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985', '#0c4a6e'],
+    blue: ['#eff6ff', '#dbeafe', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a'],
+    indigo: ['#eef2ff', '#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81'],
+    violet: ['#f5f3ff', '#ede9fe', '#ddd6fe', '#c4b5fd', '#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95'],
+    purple: ['#faf5ff', '#f3e8ff', '#e9d5ff', '#d8b4fe', '#c084fc', '#a855f7', '#9333ea', '#7e22ce', '#6b21a8', '#581c87'],
+    fuchsia: ['#fdf4ff', '#fae8ff', '#f5d0fe', '#f0abfc', '#e879f9', '#d946ef', '#c026d3', '#a21caf', '#86198f', '#701a75'],
+    pink: ['#fdf2f8', '#fce7f3', '#fbcfe8', '#f9a8d4', '#f472b6', '#ec4899', '#db2777', '#be185d', '#9d174d', '#831843'],
+    rose: ['#fff1f2', '#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#f43f5e', '#e11d48', '#be123c', '#9f1239', '#881337'],
+  }
+
+  const hueNames = Object.keys(colorMatrix) as (keyof typeof colorMatrix)[]
+
+  const images = [
+    // Clear/None option
+    'none',
+    // LazyLayers images
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-001.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-002.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-003.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-004.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-005.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/vibrant-vista-006.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-001.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-002.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-003.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-004.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-005.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/deep-dusk-006.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-001.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-002.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-003.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-004.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-005.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/green-glory-006.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-001.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-002.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-003.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-004.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-005.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/beautiful-blue-006.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-001.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-002.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-003.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-004.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-005.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/pretty-in-pink-006.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/nature.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/abstract.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/yellow.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/gradient.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/new.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/material.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/board.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/light.jpg)',
+    'url(https://lazylayers.ahmadrosid.com/images/background/cool.jpg)',
+    // Additional Unsplash images
+    'url(https://images.unsplash.com/photo-1688822863426-8c5f9b257090?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1620121478247-ec786b9be2fa?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1550859492-d5da9d8e45f3?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1553356084-58ef4a67b2a7?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1574169208507-84376144848b?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1510784722466-f2aa9c52fff6?w=800&q=80)',
+    'url(https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=800&q=80)',
+  ]
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const imageUrl = event.target?.result as string
+        setBackground(`url(${imageUrl})`)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const defaultTab = useMemo(() => {
+    if (background.includes('url')) return 'image'
+    if (background.includes('gradient')) return 'gradient'
+    return 'solid'
+  }, [background])
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={'outline'}
+          className={cn(
+            'w-full justify-start text-left font-normal h-12',
+            !background && 'text-muted-foreground',
+            className
+          )}
+        >
+          <div className="w-full flex items-center gap-3">
+            {background ? (
+              <div
+                className="h-8 w-8 rounded !bg-center !bg-cover transition-all border-2 border-gray-300 flex-shrink-0 shadow-sm"
+                style={{ background }}
+              ></div>
+            ) : (
+              <Paintbrush className="h-5 w-5" />
+            )}
+            <div className="truncate flex-1 text-xs">
+              {background ? background : 'Pick a color'}
+            </div>
+          </div>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <Tabs defaultValue={defaultTab} className="w-full">
+          <TabsList className="w-full mb-4 grid grid-cols-3">
+            <TabsTrigger className="text-xs" value="solid">
+              Solid
+            </TabsTrigger>
+            <TabsTrigger className="text-xs" value="gradient">
+              Gradient
+            </TabsTrigger>
+            <TabsTrigger className="text-xs" value="image">
+              Image
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="solid" className="space-y-2 mt-0 max-h-[320px] overflow-y-auto pr-1">
+            {hueNames.map((hueName) => (
+              <div key={hueName} className="space-y-1">
+                <div className="text-xs font-medium text-muted-foreground capitalize px-1">{hueName}</div>
+                <div className="grid grid-cols-10 gap-2">
+                  {colorMatrix[hueName].map((color, index) => (
+                    <div
+                      key={color}
+                      style={{ background: color }}
+                      className="h-6 rounded-md cursor-pointer transition-all hover:scale-110 hover:ring-2 hover:ring-ring hover:ring-offset-1"
+                      onClick={() => setBackground(color)}
+                      title={`${hueName}-${(index + 1) * 100}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="gradient" className="mt-0 max-h-[10rem] overflow-y-auto pr-1">
+            <div className="flex flex-wrap gap-1">
+              {GRADIENT_PRESETS.map((gradient, index) => (
+                <div
+                  key={index}
+                  style={{ background: gradient }}
+                  className="rounded-md h-6 w-6 cursor-pointer active:scale-105"
+                  onClick={() => setBackground(gradient)}
+                />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="image" className="mt-0 max-h-[10rem] overflow-y-auto pr-1">
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  style={{ backgroundImage: image === 'none' ? undefined : image }}
+                  className={cn(
+                    "border rounded-md bg-cover bg-center h-12 w-full cursor-pointer active:scale-105",
+                    image === 'none' && "bg-white relative"
+                  )}
+                  onClick={() => setBackground(image)}
+                >
+                  {image === 'none' && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <line x1="2" y1="2" x2="22" y2="22" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white"
+              size="lg"
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Choose File
+            </Button>
+          </TabsContent>
+        </Tabs>
+
+        <div className="space-y-3 mt-4 pt-4 border-t">
+          <div className="space-y-2">
+            <Label htmlFor="custom-color" className="text-xs font-medium">
+              Custom Color Code
+            </Label>
+            <Input
+              id="custom-color"
+              value={background}
+              className="h-9 text-xs font-mono"
+              placeholder="#000000 or linear-gradient(...) or url(...)"
+              onChange={(e) => setBackground(e.currentTarget.value)}
+            />
+          </div>
+          <Button
+            onClick={() => setBackground(customColor)}
+            className="w-full bg-slate-900 hover:bg-slate-800 text-white"
+            size="lg"
+          >
+            Select Custom Color
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
