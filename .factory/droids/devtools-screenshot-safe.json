@@ -1,0 +1,33 @@
+{
+  "name": "DevTools Screenshot Safe",
+  "description": "Automatically takes screenshots with best practices to avoid 413 errors. Always saves to file and uses compression.",
+  "triggers": {
+    "keywords": ["screenshot", "capture", "snap", "ambil gambar"]
+  },
+  "instructions": [
+    "When taking screenshots with MCP DevTools, ALWAYS use these best practices:",
+    "1. ALWAYS specify filePath parameter to save directly to disk instead of returning in response",
+    "2. Use format 'jpeg' or 'webp' with quality 70-80 for better compression",
+    "3. For full page screenshots, use smaller viewport size first with resize_page",
+    "4. Consider using take_snapshot (text) instead of take_screenshot when possible",
+    "5. If screenshot of specific element, use uid parameter to capture only that element",
+    "",
+    "Example safe commands:",
+    "- take_screenshot({ filePath: './screenshots/page.jpg', format: 'jpeg', quality: 75 })",
+    "- take_screenshot({ filePath: './temp/element.png', uid: 'specific-element-id' })",
+    "- take_snapshot({ filePath: './snapshots/page.txt' }) // Preferred for UI inspection",
+    "",
+    "Default screenshot path: ./screenshots/ or ./tmp/",
+    "Always create directory first if needed: mkdir -p screenshots"
+  ],
+  "examples": [
+    {
+      "input": "ambil screenshot halaman ini",
+      "output": "mkdir -p screenshots && take_screenshot({ filePath: './screenshots/page-$(date +%Y%m%d-%H%M%S).jpg', format: 'jpeg', quality: 75 })"
+    },
+    {
+      "input": "capture navbar",
+      "output": "take_snapshot() dulu untuk dapat uid navbar, lalu take_screenshot({ filePath: './screenshots/navbar.png', uid: 'navbar-uid' })"
+    }
+  ]
+}
