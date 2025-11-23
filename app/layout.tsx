@@ -61,8 +61,49 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: '--font-jet
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: '--font-plus-jakarta-sans' });
 
 export const metadata: Metadata = {
-  title: "DesainCepat - Thumbnail Generator",
-  description: "Buat thumbnail berkualitas dengan cepat dan mudah",
+  title: "DesainCepat - AI-Powered Thumbnail Generator",
+  description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode. Buat thumbnail berkualitas tinggi dengan mudah dan cepat.",
+  keywords: ["thumbnail generator", "thumbnail maker", "desain thumbnail", "AI thumbnail", "editor thumbnail", "3D animation", "gradient generator"],
+  authors: [{ name: "DesainCepat" }],
+  creator: "DesainCepat",
+  publisher: "DesainCepat",
+  metadataBase: new URL('https://desaincepat.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "DesainCepat - AI-Powered Thumbnail Generator",
+    description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode. Buat thumbnail berkualitas tinggi dengan mudah dan cepat.",
+    url: "https://desaincepat.vercel.app",
+    siteName: "DesainCepat",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "DesainCepat - AI-Powered Thumbnail Generator",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DesainCepat - AI-Powered Thumbnail Generator",
+    description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
