@@ -10,6 +10,15 @@ const config: Config = {
   theme: {
   	extend: {
   		fontFamily: {
+  			sans: [
+  				'var(--font-ibm-plex-sans-condensed)',
+  				'ui-sans-serif',
+  				'system-ui',
+  				'sans-serif'
+  			],
+  			'ibm-plex-sans-condensed': [
+  				'var(--font-ibm-plex-sans-condensed)'
+  			],
   			inter: [
   				'var(--font-inter)'
   			],
@@ -135,6 +144,18 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		backgroundImage: {
+  			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))'
+  		},
+  		keyframes: {
+  			float: {
+  				'0%, 100%': { transform: 'translateY(0px)' },
+  				'50%': { transform: 'translateY(-20px)' }
+  			}
+  		},
+  		animation: {
+  			float: 'float 3s ease-in-out infinite'
   		}
   	}
   },

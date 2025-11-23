@@ -51,6 +51,24 @@ export function GradientPicker({
 
   const hueNames = Object.keys(colorMatrix) as (keyof typeof colorMatrix)[]
 
+  const getImageName = (imageUrl: string): string => {
+    if (imageUrl === 'none') return 'No Background';
+    
+    // Extract filename from URL
+    const match = imageUrl.match(/\/([^\/]+)\.(jpg|png|jpeg|webp)/i);
+    if (match) {
+      const filename = match[1];
+      // Convert kebab-case or snake_case to Title Case
+      return filename
+        .replace(/[-_]/g, ' ')
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+    
+    return 'Background Image';
+  };
+
   const images = [
     // Clear/None option
     'none',
@@ -175,23 +193,20 @@ export function GradientPicker({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="solid" className="space-y-2 mt-0 max-h-[320px] overflow-y-auto pr-1">
-            {hueNames.map((hueName) => (
-              <div key={hueName} className="space-y-1">
-                <div className="text-xs font-medium text-muted-foreground capitalize px-1">{hueName}</div>
-                <div className="grid grid-cols-10 gap-2">
-                  {colorMatrix[hueName].map((color, index) => (
-                    <div
-                      key={color}
-                      style={{ background: color }}
-                      className="h-6 rounded-md cursor-pointer transition-all hover:scale-110 hover:ring-2 hover:ring-ring hover:ring-offset-1"
-                      onClick={() => setBackground(color)}
-                      title={`${hueName}-${(index + 1) * 100}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
+          <TabsContent value="solid" className="mt-0 max-h-[10rem] overflow-y-auto pr-1 pl-1">
+            <div className="flex flex-wrap gap-1">
+              {hueNames.map((hueName) => (
+                colorMatrix[hueName].map((color, index) => (
+                  <div
+                    key={`${hueName}-${color}`}
+                    style={{ background: color }}
+                    className="h-6 w-6 rounded-md cursor-pointer transition-all hover:scale-110 hover:ring-2 hover:ring-ring hover:ring-offset-1"
+                    onClick={() => setBackground(color)}
+                    title={`${hueName.charAt(0).toUpperCase() + hueName.slice(1)} ${(index + 1) * 100}`}
+                  />
+                ))
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="gradient" className="mt-0 max-h-[10rem] overflow-y-auto pr-1">
@@ -202,13 +217,14 @@ export function GradientPicker({
                   style={{ background: gradient }}
                   className="rounded-md h-6 w-6 cursor-pointer active:scale-105"
                   onClick={() => setBackground(gradient)}
+                  title={`Gradient ${index + 1}`}
                 />
               ))}
             </div>
           </TabsContent>
 
           <TabsContent value="image" className="mt-0 max-h-[10rem] overflow-y-auto pr-1">
-            <div className="grid grid-cols-2 gap-2 mb-2">
+            <div className="grid grid-cols-2 gap-1 mb-2">
               {images.map((image, index) => (
                 <div
                   key={index}
@@ -218,6 +234,7 @@ export function GradientPicker({
                     image === 'none' && "bg-white relative"
                   )}
                   onClick={() => setBackground(image)}
+                  title={getImageName(image)}
                 >
                   {image === 'none' && (
                     <div className="absolute inset-0 flex items-center justify-center">

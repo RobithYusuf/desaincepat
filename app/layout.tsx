@@ -25,9 +25,13 @@ import {
   Inconsolata,
   Fira_Code,
   JetBrains_Mono,
-  Plus_Jakarta_Sans
+  Plus_Jakarta_Sans,
+  IBM_Plex_Sans_Condensed
 } from "next/font/google";
 import "./globals.css";
+
+// IBM Plex Sans Condensed - Default font
+const ibmPlexSansCondensed = IBM_Plex_Sans_Condensed({ weight: ['400', '500', '600', '700'], subsets: ["latin"], variable: '--font-ibm-plex-sans-condensed' });
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const roboto = Roboto({ weight: ['400', '500', '700', '900'], subsets: ["latin"], variable: '--font-roboto' });
@@ -70,6 +74,7 @@ export default function RootLayout({
     <html lang="id">
       <body 
         className={`
+          ${ibmPlexSansCondensed.variable}
           ${inter.variable} 
           ${roboto.variable} 
           ${openSans.variable} 
@@ -96,7 +101,7 @@ export default function RootLayout({
           ${firaCode.variable}
           ${jetbrainsMono.variable}
           ${plusJakartaSans.variable}
-          font-sans
+          ${ibmPlexSansCondensed.className}
         `}
       >
         {children}

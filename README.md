@@ -1,8 +1,15 @@
 # DesainCepat
 
-Aplikasi web untuk membuat thumbnail dan desain grafis berkualitas tinggi dengan cepat dan mudah. Dibangun dengan Next.js 14, TypeScript, Tailwind CSS, dan Zustand.
+Aplikasi web untuk membuat thumbnail dan desain grafis berkualitas tinggi dengan cepat dan mudah. Dibangun dengan Next.js 14, TypeScript, Tailwind CSS, Zustand, dan Three.js untuk animasi 3D yang memukau.
 
 ## ✨ Fitur Utama
+
+### 🎭 3D Animations & Visual Effects
+- **Modern Geometric 3D Shapes** - Floating wireframe objects dengan glass effect
+- **Responsive 3D Layout** - Shapes di samping untuk desktop, subtle positioning untuk mobile
+- **Interactive Animations** - Smooth floating motions dengan hover effects
+- **Energy Particles** - 70+ animated particles dengan gradient colors
+- **Performance Optimized** - Hardware-accelerated rendering dengan Three.js
 
 ### 🎨 Canvas & Preview
 - **Real-time Preview** - Lihat perubahan design secara instant
@@ -25,13 +32,14 @@ Aplikasi web untuk membuat thumbnail dan desain grafis berkualitas tinggi dengan
 - **Noise Texture Overlay** - Adjustable intensity 0-100%
 
 ### ✍️ Typography & Text
-- **20+ Google Fonts** - Inter, Poppins, Montserrat, Roboto, dll
+- **IBM Plex Sans Condensed** - Modern default font dengan condensed look
+- **26+ Google Fonts** - Inter, Poppins, Montserrat, Roboto, Bebas Neue, dll
 - **Text Controls**:
   - Font size (12-200px)
   - Line height (0.8-2.0)
   - Text alignment (left, center, right)
-  - Font color picker
-  - Font weight (300-900)
+  - Font color picker with hex input
+  - Multiple font categories (Sans, Display, Serif, Handwriting, Monospace)
 
 ### 💾 Export & Templates
 - **High Quality Export** - 3 preset kualitas:
@@ -42,10 +50,13 @@ Aplikasi web untuk membuat thumbnail dan desain grafis berkualitas tinggi dengan
 - **LocalStorage Persist** - Templates tersimpan otomatis
 
 ### 📱 UI/UX
-- **Fully Responsive** - Mobile, tablet, desktop optimized
-- **Mobile Sidebar** - Overlay dengan backdrop blur
-- **Professional Landing Page** - Hero section dengan CTA
-- **Smooth Animations** - Transitions dan hover effects
+- **Fully Responsive** - Mobile, tablet, desktop optimized dengan adaptive 3D layouts
+- **Centered Navigation** - Modern sticky navbar dengan backdrop blur effect
+- **Hero Section** - Centered 1-column layout dengan 3D geometric background
+- **Color Picker Enhancements** - Tooltips pada hover untuk semua colors/gradients/images
+- **Optimized Scrolling** - Consistent padding dan spacing di semua tabs
+- **Mobile Sidebar** - Touch-optimized overlay dengan backdrop blur
+- **Smooth Animations** - Hardware-accelerated transitions dan hover effects
 - 🐳 **Docker Ready** - Production-ready containerization
 
 ## Quick Start
@@ -77,8 +88,10 @@ docker-compose --profile dev up dev
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
+- **3D Graphics**: Three.js + React Three Fiber + Drei
 - **State Management**: Zustand (with persist middleware)
-- **Fonts**: Google Fonts (20+ families)
+- **Default Font**: IBM Plex Sans Condensed
+- **Fonts**: Google Fonts (26+ families)
 - **Icons**: Lucide React
 - **Export**: html-to-image
 - **Containerization**: Docker (Multi-stage build)
@@ -99,7 +112,9 @@ desaincepat/
 │   ├── Canvas.tsx                # Preview canvas with zoom
 │   ├── Sidebar.tsx               # Desktop sidebar controls
 │   ├── MobileSidebar.tsx         # Mobile sidebar overlay
-│   ├── Navbar.tsx                # Top navigation bar
+│   ├── Navbar.tsx                # Centered sticky navbar with backdrop blur
+│   ├── Hero3DModern.tsx          # Modern geometric 3D background
+│   ├── GradientPicker.tsx        # Enhanced color picker with tooltips
 │   ├── ZoomControls.tsx          # Zoom in/out/fit controls
 │   ├── FrameSizePaddingControls.tsx  # Frame & padding controls
 │   ├── TemplateManager.tsx       # Save/load templates
@@ -138,19 +153,25 @@ desaincepat/
 - **Twitter Banner**: 1500 × 500 (3:1)
 - **Custom**: Bebas atur width & height (100-5000px)
 
-### Font Families (20+ Google Fonts)
+### Font Families (26+ Google Fonts)
+
+**Default:**
+- **IBM Plex Sans Condensed** (400, 500, 600, 700) - Modern condensed font untuk seluruh aplikasi
 
 **Sans-Serif:**
-- Inter (Default), Poppins, Montserrat, Roboto, Open Sans, Lato, Nunito, Raleway, Work Sans, DM Sans
+- Inter, Poppins, Montserrat, Roboto, Open Sans, Lato, Nunito, Raleway, Work Sans, PT Sans, Ubuntu, Plus Jakarta Sans
+
+**Display & Bold:**
+- Bebas Neue, Oswald, Righteous, Bangers, Russo One
 
 **Serif:**
-- Playfair Display, Merriweather, Lora, Crimson Text
+- Playfair Display, Merriweather
 
-**Display:**
-- Bebas Neue, Oswald, Anton
+**Handwriting:**
+- Dancing Script, Pacifico, Permanent Marker, Lobster
 
 **Monospace:**
-- Roboto Mono, JetBrains Mono, Fira Code
+- Inconsolata, Fira Code, JetBrains Mono
 
 ### Background Options
 
@@ -206,20 +227,24 @@ No environment variables required for basic functionality.
 
 ## 🎯 Use Cases
 
-- 📺 **YouTube Thumbnails** - Eye-catching video covers
-- 📱 **Instagram Posts** - Engagement-optimized portraits
-- 🐦 **Twitter Banners** - Professional profile headers
-- 📊 **Social Media Graphics** - Quick design iterations
-- 🎨 **Design Mockups** - Fast prototyping with templates
-- 💼 **Marketing Materials** - Consistent brand visuals
+- 📺 **YouTube Thumbnails** - Eye-catching video covers dengan modern design
+- 📱 **Instagram Posts** - Engagement-optimized portraits dengan 3D effects
+- 🐦 **Twitter Banners** - Professional profile headers dengan animations
+- 📊 **Social Media Graphics** - Quick design iterations dengan template system
+- 🎨 **Design Mockups** - Fast prototyping dengan 26+ fonts dan 181 gradients
+- 💼 **Marketing Materials** - Consistent brand visuals dengan high-quality export
+- 🎭 **Landing Pages** - Beautiful hero sections dengan 3D geometric backgrounds
 
 ## 📸 Screenshots
 
+### Landing Page
+Modern hero section dengan 3D geometric animations, centered navigation, dan responsive layouts.
+
 ### Desktop Editor
-Full-featured editor dengan real-time preview, extensive controls, dan template system.
+Full-featured editor dengan real-time preview, extensive controls, tooltip-enhanced color picker, dan template system.
 
 ### Mobile Interface
-Touch-optimized dengan mobile sidebar, responsive canvas, dan simplified controls.
+Touch-optimized dengan mobile sidebar, responsive canvas, adaptive 3D layouts, dan simplified controls.
 
 ---
 
@@ -266,11 +291,13 @@ Export PNG dengan 3 preset kualitas. File akan didownload otomatis dengan nama `
 
 ## 🚀 Performance
 
-- ⚡ **Fast Load Time** - Optimized bundle size
-- 🎯 **Real-time Updates** - Zustand state management
-- 📦 **Lazy Loading** - Components loaded on demand
-- 🖼️ **Optimized Images** - Next.js Image optimization
-- 💾 **LocalStorage Persist** - Templates saved locally
+- ⚡ **Fast Load Time** - Optimized bundle size dengan code splitting
+- 🎯 **Real-time Updates** - Zustand state management untuk instant UI updates
+- 📦 **Lazy Loading** - 3D components dan heavy modules loaded on demand
+- 🎭 **Hardware Acceleration** - WebGL rendering dengan Three.js untuk smooth 60fps animations
+- 🖼️ **Optimized Images** - Next.js Image optimization dengan lazy loading
+- 💾 **LocalStorage Persist** - Templates saved locally untuk instant access
+- 📱 **Responsive 3D** - Adaptive particle count dan shapes untuk optimal mobile performance
 
 ---
 
@@ -290,13 +317,50 @@ MIT License - feel free to use this project for personal or commercial purposes.
 
 ---
 
+## 🎨 3D Features Details
+
+### Geometric Shapes
+Landing page menggunakan **Modern Geometric 3D Background** dengan:
+
+**Desktop (>= 1024px):**
+- 6 floating geometric shapes (Icosahedron, Octahedron, Box, Torus)
+- Positioned di sisi kiri dan kanan untuk frame content
+- Connecting lines network effect
+- 70+ energy particles distributed around shapes
+
+**Mobile & Tablet (< 1024px):**
+- 4 floating shapes dengan subtle positioning ke samping
+- Optimized particle count untuk performance
+- Responsive camera positioning
+
+**Features:**
+- ✨ Glass & Wireframe effect - Semi-transparent dengan outline
+- 🎯 Hover interactions - Scale dan ring effects
+- 💫 Smooth animations - Floating dan rotation
+- 🎨 Purple-Pink gradient theme
+- ⚡ Hardware-accelerated rendering
+- 📱 Responsive layouts untuk semua screen sizes
+
+**Technical:**
+```typescript
+// 3D Component Stack
+- Three.js r181 - WebGL rendering
+- React Three Fiber - React renderer for Three.js
+- @react-three/drei - Useful helpers
+- Custom shaders untuk gradient effects
+```
+
+---
+
 ## 🙏 Credits & Inspiration
 
 - **Design Inspiration**: [LazyLayers](https://lazylayers.ahmadrosid.com/thumbnail) by Ahmad Rosid
 - **Gradients**: 181 presets extracted from LazyLayers
 - **Images**: LazyLayers backgrounds + Unsplash curated collection
+- **3D Graphics**: [Three.js](https://threejs.org/) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) + [Drei](https://github.com/pmndrs/drei)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
+- **Default Font**: [IBM Plex Sans Condensed](https://fonts.google.com/specimen/IBM+Plex+Sans+Condensed) by Google Fonts
 
 ---
 
