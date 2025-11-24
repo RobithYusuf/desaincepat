@@ -12,26 +12,24 @@ export default function Home() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-      <Navbar 
-        onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-        isMobileMenuOpen={isSidebarOpen}
-      />
+      <Navbar />
       
       {/* Frame Size & Padding Controls - Below Navbar */}
       <FrameSizePaddingControls />
       
       <main className="relative flex flex-1 overflow-hidden">
+        {/* Desktop Sidebar - LEFT SIDE */}
+        <div className="hidden w-64 border-r border-gray-200 bg-white shadow-xl md:w-72 lg:block lg:w-80">
+          <Sidebar />
+        </div>
+
         {/* Canvas Area */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 overflow-auto p-4 sm:p-6 lg:p-8">
-          <div className="relative z-20">
+        <div className="relative flex flex-1 flex-col items-center justify-center gap-4 overflow-auto p-4 sm:p-6 lg:p-8">
+          {/* Zoom Controls - Fixed position */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 sm:relative sm:top-0 sm:left-0 sm:translate-x-0">
             <ZoomControls />
           </div>
           <Canvas />
-        </div>
-
-        {/* Desktop Sidebar */}
-        <div className="hidden w-[380px] border-l border-gray-200 bg-white shadow-xl lg:block xl:w-[420px]">
-          <Sidebar />
         </div>
 
         {/* Mobile Sidebar Overlay */}
@@ -43,18 +41,18 @@ export default function Home() {
               onClick={() => setIsSidebarOpen(false)}
             />
             
-            {/* Sidebar Drawer */}
-            <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm border-l border-gray-200 bg-white shadow-2xl transition-transform lg:hidden">
+            {/* Sidebar Drawer - LEFT SIDE on mobile */}
+            <div className="fixed inset-y-0 left-0 z-50 w-full max-w-sm border-r border-gray-200 bg-white shadow-2xl transition-transform lg:hidden">
               <Sidebar onClose={() => setIsSidebarOpen(false)} />
             </div>
           </>
         )}
 
-        {/* Mobile Floating Button (when sidebar closed) */}
+        {/* Mobile Floating Button (when sidebar closed) - LEFT SIDE */}
         {!isSidebarOpen && (
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transition-all hover:shadow-xl lg:hidden"
+            className="fixed bottom-6 left-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transition-all hover:shadow-xl lg:hidden"
             aria-label="Open settings"
           >
             <svg
