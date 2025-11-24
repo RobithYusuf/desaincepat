@@ -15,55 +15,20 @@ export function InteractiveGradientCanvas() {
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  // Debounce rendering during drag to prevent jitter
-  const renderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Render canvas whenever state changes
+  // Render canvas - use fastMode during drag for smooth performance
   useEffect(() => {
     if (!canvasRef.current) return;
     
-    // Skip rendering vertices during drag to prevent jitter
-    const shouldRenderVertices = adjustVertices && !isDragging;
-    
-    // Clear previous timeout
-    if (renderTimeoutRef.current) {
-      clearTimeout(renderTimeoutRef.current);
-    }
-    
-    // Debounce rendering during drag
-    if (isDragging) {
-      renderTimeoutRef.current = setTimeout(() => {
-        renderToCanvas(canvasRef.current!, {
-          canvas,
-          shapes,
-          palette,
-          filters,
-          includeVertices: false, // Never show vertices in canvas during drag
-          includeCenterPoints: false,
-        }).catch((error) => {
-          console.error('Failed to render gradient:', error);
-        });
-      }, 16); // ~60fps
-    } else {
-      // Immediate render when not dragging
-      renderToCanvas(canvasRef.current, {
-        canvas,
-        shapes,
-        palette,
-        filters,
-        includeVertices: false, // Vertices shown in SVG overlay, not canvas
-        includeCenterPoints: false,
-      }).catch((error) => {
-        console.error('Failed to render gradient:', error);
-      });
-    }
-    
-    return () => {
-      if (renderTimeoutRef.current) {
-        clearTimeout(renderTimeoutRef.current);
-      }
-    };
-  }, [canvas, shapes, palette, filters, adjustVertices, adjustColorPosition, isDragging]);
+    renderToCanvas(canvasRef.current, {
+      canvas,
+      shapes,
+      palette,
+      filters,
+      includeVertices: false,
+      includeCenterPoints: false,
+      fastMode: isDragging, // Disable grain during drag for speed
+    });
+  }, [canvas, shapes, palette, filters, isDragging]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -140,8 +105,16 @@ export function InteractiveGradientCanvas() {
 
 
 
+  // Throttle mouse move for better performance
+  const lastMouseMoveRef = useRef<number>(0);
+  
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!canvasRef.current) return;
+    
+    // Throttle to ~60fps max
+    const now = performance.now();
+    if (now - lastMouseMoveRef.current < 16) return; // Skip if < 16ms since last update
+    lastMouseMoveRef.current = now;
     
     // Handle center point dragging
     if (draggingShapeId && adjustColorPosition) {

@@ -8,6 +8,7 @@ interface RenderOptions {
   filters: Filters;
   includeCenterPoints?: boolean;
   includeVertices?: boolean;
+  fastMode?: boolean; // Skip heavy filters for real-time dragging
 }
 
 /**
@@ -30,68 +31,87 @@ function createOffscreenCanvas(width: number, height: number): HTMLCanvasElement
   return canvas;
 }
 
+// Cache last rendered image to prevent flicker
+let cachedImage: HTMLImageElement | null = null;
+let cachedSvgHash: string = '';
+
 /**
- * Render SVG to canvas using Image element
- * This approach uses native SVG filters (feTurbulence + feSpecularLighting) 
- * which produces the SAME grain quality as Better Gradient
+ * Simple hash function for SVG content
+ */
+function hashSvg(svg: string): string {
+  let hash = 0;
+  for (let i = 0; i < svg.length; i++) {
+    const char = svg.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash.toString();
+}
+
+/**
+ * Render SVG to canvas - keeps last frame visible until new one is ready
  */
 async function renderSVGToCanvas(
   svg: string,
   targetCanvas: HTMLCanvasElement
 ): Promise<void> {
-  return new Promise((resolve, reject) => {
+  const svgHash = hashSvg(svg);
+  
+  // Skip if same content
+  if (svgHash === cachedSvgHash && cachedImage) {
+    return;
+  }
+  
+  return new Promise((resolve) => {
     const img = new Image();
-    const dataURL = svgToDataURL(svg);
-
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const blobUrl = URL.createObjectURL(blob);
+    
     img.onload = () => {
       const ctx = targetCanvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Failed to get canvas context'));
-        return;
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, targetCanvas.width, targetCanvas.height);
+        cachedImage = img;
+        cachedSvgHash = svgHash;
       }
-
-      // Clear canvas
-      ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
-      
-      // Enable high-quality image smoothing
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      
-      // Draw image to canvas
-      ctx.drawImage(img, 0, 0, targetCanvas.width, targetCanvas.height);
-      
+      URL.revokeObjectURL(blobUrl);
       resolve();
     };
 
-    img.onerror = (error) => {
-      console.error('Failed to load SVG image:', error);
-      reject(error);
+    img.onerror = () => {
+      URL.revokeObjectURL(blobUrl);
+      // On error, keep showing cached image (no flicker)
+      resolve();
     };
 
-    img.src = dataURL;
+    img.src = blobUrl;
   });
 }
 
 /**
  * Render mesh gradient to canvas element
- * NOW USING SVG APPROACH - Same as Better Gradient!
  */
 export async function renderToCanvas(
   targetCanvas: HTMLCanvasElement,
   options: RenderOptions
 ): Promise<void> {
-  const { canvas, shapes, palette, filters, includeCenterPoints, includeVertices } = options;
+  const { canvas, shapes, palette, filters, includeCenterPoints, includeVertices, fastMode } = options;
   
-  // Set canvas size
-  targetCanvas.width = canvas.width;
-  targetCanvas.height = canvas.height;
+  // Set canvas size only if changed
+  if (targetCanvas.width !== canvas.width || targetCanvas.height !== canvas.height) {
+    targetCanvas.width = canvas.width;
+    targetCanvas.height = canvas.height;
+  }
   
-  // Generate SVG with all filters (blur + grain)
+  // In fast mode, disable grain for smoother dragging
+  const renderFilters = fastMode ? { ...filters, grainEnabled: false } : filters;
+  
+  // Generate SVG
   const svg = buildSVG({
     canvas,
     shapes,
     palette,
-    filters,
+    filters: renderFilters,
     includeCenterPoints,
     includeVertices,
   });
@@ -100,8 +120,6 @@ export async function renderToCanvas(
   try {
     await renderSVGToCanvas(svg, targetCanvas);
   } catch (error) {
-    console.error('Failed to render SVG to canvas:', error);
-    
     // Fallback: draw background color
     const ctx = targetCanvas.getContext('2d');
     if (ctx) {
