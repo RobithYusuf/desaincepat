@@ -105,7 +105,7 @@ export default function LandingPage() {
                 Everything You Need,
                 <br />
                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Nothing You Don't
+                  Nothing You Don&apos;t
                 </span>
               </h2>
               <p className="mt-4 text-lg text-gray-600 sm:text-xl">

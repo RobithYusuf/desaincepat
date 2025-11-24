@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, MouseEvent } from 'react';
+import { useRef, useState, useEffect, useCallback, MouseEvent } from 'react';
 import { useGradientStore } from '@/store/gradient-store';
 import { renderToCanvas } from '@/lib/canvas-renderer';
 
@@ -122,7 +122,7 @@ export function InteractiveGradientCanvas() {
   };
 
   // Convert screen coordinates to canvas coordinates
-  const screenToCanvas = (screenX: number, screenY: number) => {
+  const screenToCanvas = useCallback((screenX: number, screenY: number) => {
     if (!canvasRef.current) return { x: 0, y: 0 };
     
     const canvasElement = canvasRef.current;
@@ -136,11 +136,11 @@ export function InteractiveGradientCanvas() {
       x: (screenX - rect.left) * scaleX,
       y: (screenY - rect.top) * scaleY,
     };
-  };
+  }, [canvas.width, canvas.height]);
 
 
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!canvasRef.current) return;
     
     // Handle center point dragging
@@ -154,13 +154,13 @@ export function InteractiveGradientCanvas() {
       const newPosition = screenToCanvas(e.clientX, e.clientY);
       updateShapeVertex(draggingVertex.shapeId, draggingVertex.vertexIndex, newPosition);
     }
-  };
+  }, [draggingShapeId, draggingVertex, adjustColorPosition, adjustVertices, updateShapeCenter, updateShapeVertex, screenToCanvas]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setDraggingShapeId(null);
     setDraggingVertex(null);
     setIsDragging(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (draggingShapeId || draggingVertex) {
@@ -171,7 +171,7 @@ export function InteractiveGradientCanvas() {
         document.removeEventListener('mouseup', handleMouseUp as any);
       };
     }
-  }, [draggingShapeId, draggingVertex, adjustColorPosition, adjustVertices]);
+  }, [draggingShapeId, draggingVertex, handleMouseMove, handleMouseUp]);
 
   return (
     <div 

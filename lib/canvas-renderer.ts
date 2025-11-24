@@ -1,11 +1,11 @@
-import { Point, Shape, Color, GradientFilters, Canvas as CanvasConfig } from '@/store/gradient-store';
+import { Point, Shape, Color, Filters, Canvas as CanvasConfig } from '@/store/gradient-store';
 import { buildSVG, svgToDataURL } from './svg-builder';
 
 interface RenderOptions {
   canvas: CanvasConfig;
   shapes: Shape[];
   palette: Color[];
-  filters: GradientFilters;
+  filters: Filters;
   includeCenterPoints?: boolean;
   includeVertices?: boolean;
 }
