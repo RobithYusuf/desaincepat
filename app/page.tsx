@@ -47,7 +47,7 @@ export default function LandingPage() {
               <div className="mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link
                   href="/editor"
-                  className="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all hover:shadow-purple-500/50 hover:scale-105 sm:text-xl"
+                  className="group relative inline-flex items-center gap-2 rounded-xl bg-purple-600 px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all hover:bg-purple-700 hover:shadow-purple-500/50 hover:scale-105 sm:text-xl"
                 >
                   <Sparkles className="h-5 w-5" />
                   Create Thumbnail Free
@@ -102,11 +102,7 @@ export default function LandingPage() {
                 Powerful Features
               </div>
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
-                Everything You Need,
-                <br />
-                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Nothing You Don&apos;t
-                </span>
+                Everything You Need
               </h2>
               <p className="mt-4 text-lg text-gray-600 sm:text-xl">
                 Professional-grade tools designed for speed and simplicity
