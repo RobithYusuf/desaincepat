@@ -3,8 +3,7 @@
 import { useGradientStore } from '@/store/gradient-store';
 import { ColorPalette } from './ColorPalette';
 import { FilterPanel } from './FilterPanel';
-import { SizePanel } from './SizePanel';
-import { Palette, Sliders, Maximize2, ChevronDown, ChevronUp, RotateCw } from 'lucide-react';
+import { Palette, Sliders, ChevronDown, ChevronUp, RotateCw } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
@@ -32,8 +31,6 @@ export function ControlsSidebar() {
   // Start with COLORS and FILTERS sections OPEN by default
   const [colorsOpen, setColorsOpen] = useState(true);
   const [filtersOpen, setFiltersOpen] = useState(true);
-  const [sizeOpen, setSizeOpen] = useState(false);
-  const [selectedShapeId, setSelectedShapeId] = useState<string | null>(null);
   const [globalRotation, setGlobalRotation] = useState(0);
 
   const handleLoadPreset = (presetTitle: string) => {
@@ -218,25 +215,6 @@ export function ControlsSidebar() {
           )}
         </div>
 
-        {/* SIZE Section */}
-        <div className="border-b border-gray-200">
-          <button
-            onClick={() => setSizeOpen(!sizeOpen)}
-            className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
-          >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
-              <Maximize2 className="h-3.5 w-3.5" />
-              <span>SIZE</span>
-            </div>
-            {sizeOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-          </button>
-
-          {sizeOpen && (
-            <div className="px-4 pb-4">
-              <SizePanel />
-            </div>
-          )}
-        </div>
       </div>
     </aside>
   );

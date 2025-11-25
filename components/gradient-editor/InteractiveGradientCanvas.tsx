@@ -161,8 +161,8 @@ export function InteractiveGradientCanvas() {
             ? 'calc(100vw - 32px)'
             : 'calc(100vw - 400px)',
           maxHeight: isMobile
-            ? 'calc(100vh - 220px)'
-            : 'calc(100vh - 200px)',
+            ? 'calc(100vh - 260px)'
+            : 'calc(100vh - 240px)',
           width: 'auto',
           height: 'auto',
           aspectRatio: `${canvas.width} / ${canvas.height}`,

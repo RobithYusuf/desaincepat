@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useGradientStore } from '@/store/gradient-store';
 import { InteractiveGradientCanvas } from '@/components/gradient-editor/InteractiveGradientCanvas';
 import { ControlsSidebar } from '@/components/gradient-editor/ControlsSidebar';
+import { GradientTopBar } from '@/components/gradient-editor/GradientTopBar';
 import { Button } from '@/components/ui/button';
 import { Download, Shuffle, Sparkles, Undo, Redo, Image, FileCode, Link, Check, Save, FolderOpen, Trash2 } from 'lucide-react';
 import { generateMeshGradient, randomizeShapes, GRADIENT_PRESETS } from '@/lib/mesh-generator';
@@ -447,6 +448,7 @@ export default function GradientEditorPage() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <Navbar />
+      <GradientTopBar />
       
       <div className="flex flex-1 overflow-hidden relative">
         {/* Desktop Sidebar */}
