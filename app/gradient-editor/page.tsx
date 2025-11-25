@@ -6,7 +6,7 @@ import { InteractiveGradientCanvas } from '@/components/gradient-editor/Interact
 import { ControlsSidebar } from '@/components/gradient-editor/ControlsSidebar';
 import { GradientTopBar } from '@/components/gradient-editor/GradientTopBar';
 import { Button } from '@/components/ui/button';
-import { Download, Shuffle, Sparkles, Undo, Redo, Image, FileCode, Link, Check, Save, FolderOpen, Trash2 } from 'lucide-react';
+import { Shuffle, Sparkles, Undo, Redo, Save, FolderOpen, Trash2 } from 'lucide-react';
 import { generateMeshGradient, randomizeShapes, GRADIENT_PRESETS } from '@/lib/mesh-generator';
 import { renderForExport, exportCanvasAsPNG, exportCanvasAsWebP, exportCanvasAsSVG } from '@/lib/canvas-renderer';
 import { Navbar } from '@/components/Navbar';
@@ -32,13 +32,11 @@ export default function GradientEditorPage() {
 
   const [isExporting, setIsExporting] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const [showExportModal, setShowExportModal] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [savedGradients, setSavedGradients] = useState<Array<{id: string, name: string, timestamp: number, preview?: string}>>([]);
   const [saveName, setSaveName] = useState('');
   const [copiedCSS, setCopiedCSS] = useState(false);
   const [copiedURL, setCopiedURL] = useState(false);
-  const exportModalRef = useRef<HTMLDivElement>(null);
   const saveModalRef = useRef<HTMLDivElement>(null);
   const loadedFromURLRef = useRef(false);
   const initializedRef = useRef(false);
@@ -144,20 +142,6 @@ export default function GradientEditorPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
-
-  // Close export modal when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (exportModalRef.current && !exportModalRef.current.contains(e.target as Node)) {
-        setShowExportModal(false);
-      }
-    };
-
-    if (showExportModal) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [showExportModal]);
 
   // Close save modal when clicking outside
   useEffect(() => {
@@ -448,7 +432,14 @@ export default function GradientEditorPage() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <Navbar />
-      <GradientTopBar />
+      <GradientTopBar 
+        isExporting={isExporting}
+        onExport={handleExport}
+        onCopyCSS={handleCopyCSS}
+        onShareURL={handleShareURL}
+        copiedCSS={copiedCSS}
+        copiedURL={copiedURL}
+      />
       
       <div className="flex flex-1 overflow-hidden relative">
         {/* Desktop Sidebar */}
@@ -688,119 +679,7 @@ export default function GradientEditorPage() {
                 )}
               </div>
 
-              {/* Export Button */}
-              <div className="relative" ref={exportModalRef}>
-                <Button
-                  onClick={() => setShowExportModal(!showExportModal)}
-                  disabled={isExporting}
-                  className="flex items-center gap-1 sm:gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-3 sm:px-4 h-7 sm:h-auto"
-                >
-                  <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span>{isExporting ? 'Exporting...' : 'Export'}</span>
-                </Button>
 
-              {/* Export Dropdown - Compact, positioned below button */}
-              {showExportModal && (
-                <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-                  {/* Header */}
-                  <div className="px-4 py-3 border-b bg-gray-50">
-                    <h2 className="text-sm font-semibold text-gray-900">Export options</h2>
-                  </div>
-
-                  <div className="p-3 space-y-3">
-                    {/* Export Section */}
-                    <div className="space-y-1">
-                      <h3 className="text-xs font-medium text-gray-400 px-2">Export</h3>
-                      
-                      <button
-                        onClick={() => { handleExport('png'); setShowExportModal(false); }}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-blue-50 transition-colors"
-                      >
-                        <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Image className="h-4 w-4 text-blue-600" />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-gray-900">PNG</div>
-                          <div className="text-xs text-gray-500">for web</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => { handleExport('webp'); setShowExportModal(false); }}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-blue-50 transition-colors"
-                      >
-                        <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Image className="h-4 w-4 text-blue-600" />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-gray-900">WebP</div>
-                          <div className="text-xs text-gray-500">smaller size</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => { handleExport('svg'); setShowExportModal(false); }}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-purple-50 transition-colors"
-                      >
-                        <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                          <FileCode className="h-4 w-4 text-purple-600" />
-                        </div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium text-gray-900">SVG</div>
-                          <div className="text-xs text-gray-500">for print</div>
-                        </div>
-                      </button>
-                    </div>
-
-                    {/* Dev Section */}
-                    <div className="space-y-1 pt-2 border-t">
-                      <h3 className="text-xs font-medium text-gray-400 px-2">Dev</h3>
-                      
-                      <button
-                        onClick={handleCopyCSS}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-orange-50 transition-colors"
-                      >
-                        <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                          <FileCode className="h-4 w-4 text-orange-600" />
-                        </div>
-                        <div className="text-left flex-1">
-                          <div className="text-sm font-medium text-gray-900">CSS</div>
-                          <div className="text-xs text-gray-500">Copy CSS</div>
-                        </div>
-                        {copiedCSS && (
-                          <span className="text-xs text-green-600 flex items-center gap-1">
-                            <Check className="h-3 w-3" /> Copied!
-                          </span>
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Share Section */}
-                    <div className="space-y-1 pt-2 border-t">
-                      <h3 className="text-xs font-medium text-gray-400 px-2">Share</h3>
-                      
-                      <button
-                        onClick={handleShareURL}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-green-50 transition-colors"
-                      >
-                        <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                          <Link className="h-4 w-4 text-green-600" />
-                        </div>
-                        <div className="text-left flex-1">
-                          <div className="text-sm font-medium text-gray-900">Share URL</div>
-                          <div className="text-xs text-gray-500">share with others</div>
-                        </div>
-                        {copiedURL && (
-                          <span className="text-xs text-green-600 flex items-center gap-1">
-                            <Check className="h-3 w-3" /> Copied!
-                          </span>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              </div>
             </div>
           </div>
 
