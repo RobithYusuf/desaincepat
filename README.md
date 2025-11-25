@@ -1,17 +1,26 @@
 # DesainCepat
 
-Aplikasi web untuk membuat thumbnail dan desain grafis berkualitas tinggi dengan cepat dan mudah. Dibangun dengan Next.js 14, TypeScript, Tailwind CSS, Zustand, dan Three.js untuk animasi 3D yang memukau.
+Aplikasi web untuk membuat thumbnail dan gradient berkualitas tinggi dengan cepat dan mudah. Dibangun dengan Next.js 14, TypeScript, Tailwind CSS, dan Zustand.
 
 ## ✨ Fitur Utama
 
-### 🎭 3D Animations & Visual Effects
-- **Modern Geometric 3D Shapes** - Floating wireframe objects dengan glass effect
-- **Responsive 3D Layout** - Shapes di samping untuk desktop, subtle positioning untuk mobile
-- **Interactive Animations** - Smooth floating motions dengan hover effects
-- **Energy Particles** - 70+ animated particles dengan gradient colors
-- **Performance Optimized** - Hardware-accelerated rendering dengan Three.js
+### 🎨 Gradient Editor
+- **Mesh Gradient Generator** - Generate gradient organik seperti Better Gradient
+- **SVG Filters** - Blur dan grain effect dengan kualitas tinggi
+- **Shape Rotation** - Rotate per-shape atau semua shapes sekaligus
+- **Drag & Drop Points** - Adjust posisi dan vertices secara interaktif
+- **My Gradients** - Save/load gradient ke localStorage dengan thumbnail preview (max 20)
+- **Export Options** - PNG, WebP, SVG, CSS code, dan Share URL
+- **Undo/Redo** - Full history support untuk semua actions
 
-### 🎨 Canvas & Preview
+### 🖼️ Thumbnail Editor
+- **Real-time Preview** - Lihat perubahan design secara instant
+- **Multiple Presets** - YouTube, Instagram, Twitter, Custom size
+- **Background Options** - Gradients, Images, Solid colors, Noise texture
+- **Typography** - 26+ Google Fonts dengan full controls
+- **Template System** - Save dan load konfigurasi design
+
+### 📐 Canvas & Preview
 - **Real-time Preview** - Lihat perubahan design secara instant
 - **Zoom Controls** - Zoom in/out untuk detail checking (25% - 200%)
 - **Fit to Screen** - Auto-adjust canvas ke ukuran viewport optimal
@@ -88,12 +97,12 @@ docker-compose --profile dev up dev
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
-- **3D Graphics**: Three.js + React Three Fiber + Drei
 - **State Management**: Zustand (with persist middleware)
+- **Gradient Rendering**: SVG + Canvas (feTurbulence, feSpecularLighting)
 - **Default Font**: IBM Plex Sans Condensed
 - **Fonts**: Google Fonts (26+ families)
 - **Icons**: Lucide React
-- **Export**: html-to-image
+- **Export**: html-to-image, Canvas API
 - **Containerization**: Docker (Multi-stage build)
 
 ## 📁 Project Structure
@@ -103,8 +112,10 @@ desaincepat/
 ├── app/                           # Next.js App Router
 │   ├── layout.tsx                # Root layout with fonts
 │   ├── page.tsx                  # Landing page (homepage)
-│   ├── editor/                   # Editor page
-│   │   └── page.tsx             # Main editor interface
+│   ├── thumbnail/                # Thumbnail editor
+│   │   └── page.tsx             # Main thumbnail interface
+│   ├── gradient-editor/          # Gradient editor
+│   │   └── page.tsx             # Mesh gradient generator
 │   ├── tutorial/                 # Tutorial page
 │   │   └── page.tsx
 │   └── globals.css               # Global styles & Tailwind
@@ -228,23 +239,26 @@ No environment variables required for basic functionality.
 ## 🎯 Use Cases
 
 - 📺 **YouTube Thumbnails** - Eye-catching video covers dengan modern design
-- 📱 **Instagram Posts** - Engagement-optimized portraits dengan 3D effects
-- 🐦 **Twitter Banners** - Professional profile headers dengan animations
+- 📱 **Instagram Posts** - Engagement-optimized portraits
+- 🐦 **Twitter Banners** - Professional profile headers
+- 🎨 **Mesh Gradients** - Beautiful organic gradients untuk backgrounds
 - 📊 **Social Media Graphics** - Quick design iterations dengan template system
-- 🎨 **Design Mockups** - Fast prototyping dengan 26+ fonts dan 181 gradients
 - 💼 **Marketing Materials** - Consistent brand visuals dengan high-quality export
-- 🎭 **Landing Pages** - Beautiful hero sections dengan 3D geometric backgrounds
+- 🖥️ **Website Backgrounds** - Export gradient sebagai CSS atau SVG
 
 ## 📸 Screenshots
 
 ### Landing Page
-Modern hero section dengan 3D geometric animations, centered navigation, dan responsive layouts.
+Modern hero section dengan centered navigation dan responsive layouts.
 
-### Desktop Editor
-Full-featured editor dengan real-time preview, extensive controls, tooltip-enhanced color picker, dan template system.
+### Gradient Editor
+Mesh gradient generator dengan SVG filters, shape rotation, dan export options.
+
+### Thumbnail Editor
+Full-featured editor dengan real-time preview, extensive controls, dan template system.
 
 ### Mobile Interface
-Touch-optimized dengan mobile sidebar, responsive canvas, adaptive 3D layouts, dan simplified controls.
+Touch-optimized dengan mobile sidebar, responsive canvas, dan simplified controls.
 
 ---
 
@@ -293,11 +307,11 @@ Export PNG dengan 3 preset kualitas. File akan didownload otomatis dengan nama `
 
 - ⚡ **Fast Load Time** - Optimized bundle size dengan code splitting
 - 🎯 **Real-time Updates** - Zustand state management untuk instant UI updates
-- 📦 **Lazy Loading** - 3D components dan heavy modules loaded on demand
-- 🎭 **Hardware Acceleration** - WebGL rendering dengan Three.js untuk smooth 60fps animations
-- 🖼️ **Optimized Images** - Next.js Image optimization dengan lazy loading
-- 💾 **LocalStorage Persist** - Templates saved locally untuk instant access
-- 📱 **Responsive 3D** - Adaptive particle count dan shapes untuk optimal mobile performance
+- 📦 **Lazy Loading** - Heavy modules loaded on demand
+- 🎭 **SVG Caching** - Hash-based caching untuk skip redundant renders
+- 🖼️ **Blob URL Rendering** - Faster image loading dari SVG
+- 💾 **LocalStorage Persist** - Templates dan gradients saved locally
+- 📱 **Responsive Canvas** - Canvas sizing menyesuaikan viewport
 
 ---
 
@@ -317,47 +331,12 @@ MIT License - feel free to use this project for personal or commercial purposes.
 
 ---
 
-## 🎨 3D Features Details
-
-### Geometric Shapes
-Landing page menggunakan **Modern Geometric 3D Background** dengan:
-
-**Desktop (>= 1024px):**
-- 6 floating geometric shapes (Icosahedron, Octahedron, Box, Torus)
-- Positioned di sisi kiri dan kanan untuk frame content
-- Connecting lines network effect
-- 70+ energy particles distributed around shapes
-
-**Mobile & Tablet (< 1024px):**
-- 4 floating shapes dengan subtle positioning ke samping
-- Optimized particle count untuk performance
-- Responsive camera positioning
-
-**Features:**
-- ✨ Glass & Wireframe effect - Semi-transparent dengan outline
-- 🎯 Hover interactions - Scale dan ring effects
-- 💫 Smooth animations - Floating dan rotation
-- 🎨 Purple-Pink gradient theme
-- ⚡ Hardware-accelerated rendering
-- 📱 Responsive layouts untuk semua screen sizes
-
-**Technical:**
-```typescript
-// 3D Component Stack
-- Three.js r181 - WebGL rendering
-- React Three Fiber - React renderer for Three.js
-- @react-three/drei - Useful helpers
-- Custom shaders untuk gradient effects
-```
-
----
-
 ## 🙏 Credits & Inspiration
 
+- **Gradient Inspiration**: [Better Gradient](https://better-gradient.com/) - SVG filter technique
 - **Design Inspiration**: [LazyLayers](https://lazylayers.ahmadrosid.com/thumbnail) by Ahmad Rosid
 - **Gradients**: 181 presets extracted from LazyLayers
 - **Images**: LazyLayers backgrounds + Unsplash curated collection
-- **3D Graphics**: [Three.js](https://threejs.org/) + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) + [Drei](https://github.com/pmndrs/drei)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Default Font**: [IBM Plex Sans Condensed](https://fonts.google.com/specimen/IBM+Plex+Sans+Condensed) by Google Fonts
