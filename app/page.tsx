@@ -46,7 +46,7 @@ export default function LandingPage() {
               
               <div className="mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link
-                  href="/editor"
+                  href="/thumbnail"
                   className="group relative inline-flex items-center gap-2 rounded-xl bg-purple-600 px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all hover:bg-purple-700 hover:shadow-purple-500/50 hover:scale-105 sm:text-xl"
                 >
                   <Sparkles className="h-5 w-5" />
@@ -211,7 +211,7 @@ export default function LandingPage() {
                 </p>
                 <div className="mt-10">
                   <Link
-                    href="/editor"
+                    href="/thumbnail"
                     className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-purple-600 shadow-xl transition-all hover:shadow-2xl hover:scale-105"
                   >
                     Start Creating Now
@@ -245,7 +245,7 @@ export default function LandingPage() {
             <div className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Quick Links</h3>
               <div className="flex flex-col gap-2">
-                <Link href="/editor" className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2">
+                <Link href="/thumbnail" className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-purple-600"></span>
                   Thumbnail Editor
                 </Link>

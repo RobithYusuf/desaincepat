@@ -15,8 +15,8 @@ interface SidebarProps {
 export function Sidebar({ onClose }: SidebarProps) {
   // Collapsible sections state
   const [textOpen, setTextOpen] = useState(true);
-  const [typographyOpen, setTypographyOpen] = useState(false);
-  const [backgroundOpen, setBackgroundOpen] = useState(false);
+  const [typographyOpen, setTypographyOpen] = useState(true);
+  const [backgroundOpen, setBackgroundOpen] = useState(true);
   const [textureOpen, setTextureOpen] = useState(false);
   const {
     text,

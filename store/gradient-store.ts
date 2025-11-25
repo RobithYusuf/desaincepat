@@ -12,6 +12,7 @@ export interface Shape {
   fillIndex: number;
   opacity?: number;
   blur?: number;
+  rotation?: number; // Rotation in degrees (0-360)
 }
 
 export interface Color {
@@ -86,6 +87,8 @@ export interface GradientActions {
   setShapes: (shapes: Shape[]) => void;
   updateShapeCenter: (shapeId: string, center: Point) => void;
   updateShapeVertex: (shapeId: string, vertexIndex: number, newPosition: Point) => void;
+  rotateShape: (shapeId: string, rotation: number) => void;
+  rotateAllShapes: (rotation: number) => void;
   
   // Filter actions
   setBlur: (blur: number) => void;
@@ -108,6 +111,7 @@ export interface GradientActions {
   // Preset actions
   loadPreset: (preset: GradientPreset) => void;
   setCurrentPreset: (presetName: string) => void;
+  loadSharedState: (state: { palette: Color[]; shapes: Shape[]; filters: Filters; canvas: Canvas }) => void;
   
   // Generation actions
   randomize: () => void;
@@ -119,6 +123,7 @@ export interface GradientActions {
   canUndo: () => boolean;
   canRedo: () => boolean;
   saveHistory: () => void;
+  clearHistory: () => void;
 }
 
 export type GradientStore = GradientState & GradientActions;
@@ -177,13 +182,15 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       canvas: { ...state.canvas, width, height },
     })),
 
-  setCanvasBackground: (color) =>
+  setCanvasBackground: (color) => {
     set((state) => ({
       canvas: {
         ...state.canvas,
         background: { ...state.canvas.background, color },
       },
-    })),
+    }));
+    get().saveHistory();
+  },
 
   // Palette actions
   addColor: (color) =>
@@ -191,7 +198,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         palette: [...state.palette, { id: crypto.randomUUID(), color }],
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -200,7 +207,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         palette: state.palette.filter((c) => c.id !== colorId),
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -211,41 +218,49 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
           c.id === colorId ? { ...c, color } : c
         ),
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
-  reorderColors: (oldIndex, newIndex) =>
+  reorderColors: (oldIndex, newIndex) => {
     set((state) => {
       const newPalette = [...state.palette];
       const [removed] = newPalette.splice(oldIndex, 1);
       newPalette.splice(newIndex, 0, removed);
       return { palette: newPalette };
-    }),
+    });
+    get().saveHistory();
+  },
 
   setSelectedColor: (colorId) => set({ selectedColorId: colorId }),
 
   // Shape actions
-  addShape: (shape) =>
+  addShape: (shape) => {
     set((state) => ({
       shapes: [...state.shapes, { ...shape, id: crypto.randomUUID() }],
-    })),
+    }));
+    get().saveHistory();
+  },
 
-  removeShape: (shapeId) =>
+  removeShape: (shapeId) => {
     set((state) => ({
       shapes: state.shapes.filter((s) => s.id !== shapeId),
-    })),
+    }));
+    get().saveHistory();
+  },
 
-  updateShape: (shapeId, updates) =>
+  updateShape: (shapeId, updates) => {
     set((state) => ({
       shapes: state.shapes.map((s) =>
         s.id === shapeId ? { ...s, ...updates } : s
       ),
-    })),
+    }));
+    get().saveHistory();
+  },
 
   setShapes: (shapes) => {
     set({ shapes });
-    setTimeout(() => get().saveHistory(), 0);
+    get().saveHistory();
   },
 
   updateShapeCenter: (shapeId, center) =>
@@ -310,13 +325,25 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       }),
     })),
 
+  rotateShape: (shapeId, rotation) =>
+    set((state) => ({
+      shapes: state.shapes.map((s) =>
+        s.id === shapeId ? { ...s, rotation } : s
+      ),
+    })),
+
+  rotateAllShapes: (rotation) =>
+    set((state) => ({
+      shapes: state.shapes.map((s) => ({ ...s, rotation })),
+    })),
+
   // Filter actions
   setBlur: (blur) =>
     set((state) => {
       const newState = {
         filters: { ...state.filters, blur },
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -325,7 +352,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         filters: { ...state.filters, grain },
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -334,7 +361,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         filters: { ...state.filters, grainEnabled: enabled },
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -343,7 +370,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         filters: { ...state.filters, opacity },
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -352,7 +379,7 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
       const newState = {
         filters: { ...state.filters, spread },
       };
-      setTimeout(() => get().saveHistory(), 0);
+      get().saveHistory();
       return newState;
     }),
 
@@ -416,6 +443,14 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
 
   setCurrentPreset: (presetName) => set({ currentPreset: presetName }),
 
+  loadSharedState: (state) =>
+    set({
+      palette: state.palette,
+      shapes: state.shapes,
+      filters: state.filters,
+      canvas: state.canvas,
+    }),
+
   // Generation actions - will be implemented with mesh generator
   randomize: () => {
     // Will be implemented
@@ -426,32 +461,55 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
     const state = get();
     const shuffledPalette = [...state.palette].sort(() => Math.random() - 0.5);
     set({ palette: shuffledPalette });
+    get().saveHistory();
   },
 
-  // History actions
-  saveHistory: () => {
-    const state = get();
-    const snapshot: HistorySnapshot = {
-      palette: state.palette,
-      shapes: state.shapes,
-      filters: state.filters,
-      canvas: state.canvas,
+  // History actions with debouncing
+  saveHistory: (() => {
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastSavedState: string | null = null;
+    
+    return () => {
+      // Clear previous debounce timer
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+      
+      // Debounce: wait 300ms before saving to batch rapid changes
+      debounceTimer = setTimeout(() => {
+        const state = get();
+        
+        // Deep clone to prevent mutation issues
+        const snapshot: HistorySnapshot = {
+          palette: JSON.parse(JSON.stringify(state.palette)),
+          shapes: JSON.parse(JSON.stringify(state.shapes)),
+          filters: JSON.parse(JSON.stringify(state.filters)),
+          canvas: JSON.parse(JSON.stringify(state.canvas)),
+        };
+        
+        // Check if state actually changed (avoid duplicate entries)
+        const stateHash = JSON.stringify(snapshot);
+        if (stateHash === lastSavedState) {
+          return; // Skip if no actual change
+        }
+        lastSavedState = stateHash;
+
+        // Remove any history after current index (for when user made changes after undo)
+        const newHistory = state.history.slice(0, state.historyIndex + 1);
+        
+        // Add new snapshot
+        newHistory.push(snapshot);
+        
+        // Limit history to 50 snapshots for performance
+        const limitedHistory = newHistory.slice(-50);
+        
+        set({
+          history: limitedHistory,
+          historyIndex: limitedHistory.length - 1,
+        });
+      }, 300);
     };
-
-    // Remove any history after current index (for when user made changes after undo)
-    const newHistory = state.history.slice(0, state.historyIndex + 1);
-    
-    // Add new snapshot
-    newHistory.push(snapshot);
-    
-    // Limit history to 50 snapshots for performance
-    const limitedHistory = newHistory.slice(-50);
-    
-    set({
-      history: limitedHistory,
-      historyIndex: limitedHistory.length - 1,
-    });
-  },
+  })(),
 
   undo: () => {
     const state = get();
@@ -459,12 +517,15 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
 
     const newIndex = state.historyIndex - 1;
     const snapshot = state.history[newIndex];
+    
+    if (!snapshot) return;
 
+    // Deep clone to prevent mutation
     set({
-      palette: snapshot.palette,
-      shapes: snapshot.shapes,
-      filters: snapshot.filters,
-      canvas: snapshot.canvas,
+      palette: JSON.parse(JSON.stringify(snapshot.palette)),
+      shapes: JSON.parse(JSON.stringify(snapshot.shapes)),
+      filters: JSON.parse(JSON.stringify(snapshot.filters)),
+      canvas: JSON.parse(JSON.stringify(snapshot.canvas)),
       historyIndex: newIndex,
     });
   },
@@ -475,12 +536,15 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
 
     const newIndex = state.historyIndex + 1;
     const snapshot = state.history[newIndex];
+    
+    if (!snapshot) return;
 
+    // Deep clone to prevent mutation
     set({
-      palette: snapshot.palette,
-      shapes: snapshot.shapes,
-      filters: snapshot.filters,
-      canvas: snapshot.canvas,
+      palette: JSON.parse(JSON.stringify(snapshot.palette)),
+      shapes: JSON.parse(JSON.stringify(snapshot.shapes)),
+      filters: JSON.parse(JSON.stringify(snapshot.filters)),
+      canvas: JSON.parse(JSON.stringify(snapshot.canvas)),
       historyIndex: newIndex,
     });
   },
@@ -493,5 +557,12 @@ export const useGradientStore = create<GradientStore>((set, get) => ({
   canRedo: () => {
     const state = get();
     return state.historyIndex < state.history.length - 1;
+  },
+  
+  clearHistory: () => {
+    set({
+      history: [],
+      historyIndex: -1,
+    });
   },
 }));

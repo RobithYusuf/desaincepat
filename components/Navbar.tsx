@@ -53,9 +53,9 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 Home
               </Link>
               <Link
-                href="/editor"
+                href="/thumbnail"
                 className={`text-sm font-medium transition-all ${
-                  pathname === '/editor' 
+                  pathname === '/thumbnail' 
                     ? 'text-purple-600' 
                     : 'text-gray-700 hover:text-purple-600'
                 }`}
@@ -89,7 +89,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
           <div className="flex items-center gap-3">
             {/* Try Now Button - Hidden on mobile */}
             <Link
-              href="/editor"
+              href="/thumbnail"
               className="hidden items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105 sm:inline-flex"
             >
               <Sparkles className="h-4 w-4" />
@@ -127,10 +127,10 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 Home
               </Link>
               <Link
-                href="/editor"
+                href="/thumbnail"
                 onClick={handleLinkClick}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  pathname === '/editor'
+                  pathname === '/thumbnail'
                     ? 'bg-purple-50 text-purple-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
@@ -163,7 +163,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
               {/* Try Now Button in Mobile Menu */}
               <div className="border-t border-gray-200 pt-3 mt-3">
                 <Link
-                  href="/editor"
+                  href="/thumbnail"
                   onClick={handleLinkClick}
                   className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 text-sm font-semibold text-white transition-colors"
                 >

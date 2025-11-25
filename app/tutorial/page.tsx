@@ -78,7 +78,7 @@ export default function TutorialPage() {
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/editor"
+                href="/thumbnail"
                 className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-purple-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               >
                 <Type className="h-5 w-5" />

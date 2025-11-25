@@ -137,9 +137,15 @@ export function buildSVG(options: SVGExportOptions): string {
     const filterId = blurFilters[shapeBlur] ?? 'blur';
     const color = palette[shape.fillIndex]?.color ?? palette[0]?.color ?? '#000000';
     const opacity = Math.max(0, Math.min(shape.opacity ?? filters.opacity, 100)) / 100;
+    const rotation = shape.rotation ?? 0;
+
+    // Apply rotation transform around shape center
+    const transform = rotation !== 0 
+      ? `transform="rotate(${rotation} ${shape.center.x} ${shape.center.y})"` 
+      : '';
 
     svg.push(
-      `<path d="${buildPath(shape.points)}" fill="${color}" fill-opacity="${opacity}" filter="url(#${filterId})"/>`
+      `<path d="${buildPath(shape.points)}" fill="${color}" fill-opacity="${opacity}" filter="url(#${filterId})" ${transform}/>`
     );
   }
 

@@ -15,7 +15,7 @@ export function InteractiveGradientCanvas() {
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  // Render canvas - use fastMode during drag for smooth performance
+  // Render canvas with full quality (including grain)
   useEffect(() => {
     if (!canvasRef.current) return;
     
@@ -26,9 +26,8 @@ export function InteractiveGradientCanvas() {
       filters,
       includeVertices: false,
       includeCenterPoints: false,
-      fastMode: isDragging, // Disable grain during drag for speed
     });
-  }, [canvas, shapes, palette, filters, isDragging]);
+  }, [canvas, shapes, palette, filters]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -149,22 +148,25 @@ export function InteractiveGradientCanvas() {
   return (
     <div 
       ref={canvasContainerRef}
-      className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 p-2 sm:p-4 md:p-6 gap-4 sm:gap-8 overflow-auto"
+      className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 p-2 sm:p-4 md:p-6 overflow-hidden"
     >
-      {/* Canvas Gradient */}
+      {/* Canvas Gradient with original SVG grain */}
       <canvas
         ref={canvasRef}
         width={canvas.width}
         height={canvas.height}
-        className="rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl border-2 sm:border-4 border-white"
+        className="rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl border-2 sm:border-4 border-white flex-shrink"
         style={{
           maxWidth: isMobile 
-            ? `min(calc(100vw - 32px), calc(100vh - 180px) * ${canvas.width / canvas.height})`
-            : `min(calc(100vw - 384px), calc(100vh - 180px) * ${canvas.width / canvas.height})`,
-          maxHeight: 'calc(100vh - 180px)',
+            ? 'calc(100vw - 32px)'
+            : 'calc(100vw - 400px)',
+          maxHeight: isMobile
+            ? 'calc(100vh - 220px)'
+            : 'calc(100vh - 200px)',
           width: 'auto',
           height: 'auto',
           aspectRatio: `${canvas.width} / ${canvas.height}`,
+          objectFit: 'contain',
         }}
       />
       
@@ -289,8 +291,8 @@ export function InteractiveGradientCanvas() {
           );
         })}
       
-      {/* Canvas Size Info */}
-      <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-white px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 shadow-md border border-gray-200">
+      {/* Canvas Size Info - Fixed at bottom */}
+      <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 rounded-lg bg-white px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 shadow-md border border-gray-200">
         <svg className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
         </svg>

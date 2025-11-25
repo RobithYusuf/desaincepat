@@ -93,7 +93,7 @@ export function ExportModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
-          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+          className="bg-blue-600 text-white hover:bg-blue-700"
         >
           <Download className="mr-2 h-4 w-4" />
           Export
@@ -205,7 +205,7 @@ export function ExportModal() {
           <Button
             onClick={handleExport}
             disabled={isExporting || !fileName.trim()}
-            className="h-8 bg-gradient-to-r from-purple-600 to-pink-600 text-xs text-white hover:from-purple-700 hover:to-pink-700"
+            className="h-8 bg-blue-600 text-xs text-white hover:bg-blue-700"
           >
             {isExporting ? (
               <>

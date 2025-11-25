@@ -8,7 +8,6 @@ interface RenderOptions {
   filters: Filters;
   includeCenterPoints?: boolean;
   includeVertices?: boolean;
-  fastMode?: boolean; // Skip heavy filters for real-time dragging
 }
 
 /**
@@ -50,19 +49,21 @@ function hashSvg(svg: string): string {
 
 /**
  * Render SVG to canvas - keeps last frame visible until new one is ready
+ * @param skipCache - Force render without caching (for export)
  */
 async function renderSVGToCanvas(
   svg: string,
-  targetCanvas: HTMLCanvasElement
+  targetCanvas: HTMLCanvasElement,
+  skipCache: boolean = false
 ): Promise<void> {
   const svgHash = hashSvg(svg);
   
-  // Skip if same content
-  if (svgHash === cachedSvgHash && cachedImage) {
+  // Skip if same content (unless skipCache is true for export)
+  if (!skipCache && svgHash === cachedSvgHash && cachedImage) {
     return;
   }
   
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     const blob = new Blob([svg], { type: 'image/svg+xml' });
     const blobUrl = URL.createObjectURL(blob);
@@ -71,17 +72,24 @@ async function renderSVGToCanvas(
       const ctx = targetCanvas.getContext('2d');
       if (ctx) {
         ctx.drawImage(img, 0, 0, targetCanvas.width, targetCanvas.height);
-        cachedImage = img;
-        cachedSvgHash = svgHash;
+        if (!skipCache) {
+          cachedImage = img;
+          cachedSvgHash = svgHash;
+        }
       }
       URL.revokeObjectURL(blobUrl);
       resolve();
     };
 
-    img.onerror = () => {
+    img.onerror = (error) => {
       URL.revokeObjectURL(blobUrl);
-      // On error, keep showing cached image (no flicker)
-      resolve();
+      if (skipCache) {
+        // For export, we need to report the error
+        reject(error);
+      } else {
+        // For preview, keep showing cached image (no flicker)
+        resolve();
+      }
     };
 
     img.src = blobUrl;
@@ -89,13 +97,13 @@ async function renderSVGToCanvas(
 }
 
 /**
- * Render mesh gradient to canvas element
+ * Render mesh gradient to canvas element (with caching for preview)
  */
 export async function renderToCanvas(
   targetCanvas: HTMLCanvasElement,
   options: RenderOptions
 ): Promise<void> {
-  const { canvas, shapes, palette, filters, includeCenterPoints, includeVertices, fastMode } = options;
+  const { canvas, shapes, palette, filters, includeCenterPoints, includeVertices } = options;
   
   // Set canvas size only if changed
   if (targetCanvas.width !== canvas.width || targetCanvas.height !== canvas.height) {
@@ -103,22 +111,19 @@ export async function renderToCanvas(
     targetCanvas.height = canvas.height;
   }
   
-  // In fast mode, disable grain for smoother dragging
-  const renderFilters = fastMode ? { ...filters, grainEnabled: false } : filters;
-  
-  // Generate SVG
+  // Generate SVG with all filters
   const svg = buildSVG({
     canvas,
     shapes,
     palette,
-    filters: renderFilters,
+    filters,
     includeCenterPoints,
     includeVertices,
   });
   
-  // Render SVG to canvas
+  // Render SVG to canvas (with caching for smooth preview)
   try {
-    await renderSVGToCanvas(svg, targetCanvas);
+    await renderSVGToCanvas(svg, targetCanvas, false);
   } catch (error) {
     // Fallback: draw background color
     const ctx = targetCanvas.getContext('2d');
@@ -127,6 +132,33 @@ export async function renderToCanvas(
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
   }
+}
+
+/**
+ * Render mesh gradient to canvas for export (skip cache, force full render)
+ */
+export async function renderForExport(
+  targetCanvas: HTMLCanvasElement,
+  options: RenderOptions
+): Promise<void> {
+  const { canvas, shapes, palette, filters } = options;
+  
+  // Set canvas size
+  targetCanvas.width = canvas.width;
+  targetCanvas.height = canvas.height;
+  
+  // Generate SVG with all filters
+  const svg = buildSVG({
+    canvas,
+    shapes,
+    palette,
+    filters,
+    includeCenterPoints: false,
+    includeVertices: false,
+  });
+  
+  // Render SVG to canvas (skip cache for accurate export)
+  await renderSVGToCanvas(svg, targetCanvas, true);
 }
 
 /**
@@ -171,28 +203,21 @@ export function exportCanvasAsWebP(
 }
 
 /**
- * Export canvas as SVG (for vector export compatibility)
+ * Export canvas as SVG with full filters (blur, grain, opacity, rotation)
  */
 export function exportCanvasAsSVG(
   options: RenderOptions,
   filename: string = 'gradient.svg'
 ): void {
-  const { canvas, shapes, palette } = options;
-  
-  // Build SVG string
-  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas.width} ${canvas.height}" width="${canvas.width}" height="${canvas.height}">`;
-  
-  // Background
-  svg += `<rect width="${canvas.width}" height="${canvas.height}" fill="${canvas.background?.color || '#ffffff'}" />`;
-  
-  // Shapes (without filters for simplicity - user can add in vector editor)
-  shapes.forEach((shape) => {
-    const color = palette[shape.fillIndex]?.color || '#000000';
-    const points = shape.points.map(p => `${p.x},${p.y}`).join(' ');
-    svg += `<polygon points="${points}" fill="${color}" />`;
+  // Use the same buildSVG function to ensure consistency
+  const svg = buildSVG({
+    canvas: options.canvas,
+    shapes: options.shapes,
+    palette: options.palette,
+    filters: options.filters,
+    includeCenterPoints: false,
+    includeVertices: false,
   });
-  
-  svg += '</svg>';
   
   // Download
   const blob = new Blob([svg], { type: 'image/svg+xml' });

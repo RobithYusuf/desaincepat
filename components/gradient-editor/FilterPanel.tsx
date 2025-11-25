@@ -10,7 +10,7 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ onSpreadChange }: FilterPanelProps) {
-  const { filters, setBlur, setGrain, setGrainEnabled, setOpacity, setSpread, resetFilters } = useGradientStore();
+  const { filters, setBlur, setGrain, setOpacity, setSpread, resetFilters } = useGradientStore();
 
   const handleSpreadChange = (value: number) => {
     setSpread(value);

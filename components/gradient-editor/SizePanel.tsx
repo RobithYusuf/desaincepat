@@ -50,31 +50,33 @@ export function SizePanel() {
   };
 
   return (
-    <div className="space-y-3.5">
-      <div className="space-y-1.5">
-        <Label htmlFor="width" className="text-xs font-medium">
-          Export Width
-        </Label>
-        <Input
-          id="width"
-          type="number"
-          value={exportWidth}
-          onChange={(e) => setExportWidth(Number(e.target.value))}
-          className="w-full h-8 text-xs"
-        />
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="height" className="text-xs font-medium">
-          Export Height
-        </Label>
-        <Input
-          id="height"
-          type="number"
-          value={exportHeight}
-          onChange={(e) => setExportHeight(Number(e.target.value))}
-          className="w-full h-8 text-xs"
-        />
+    <div className="space-y-3">
+      {/* Width & Height in 2 columns */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label htmlFor="width" className="text-xs font-medium">
+            Width
+          </Label>
+          <Input
+            id="width"
+            type="number"
+            value={exportWidth}
+            onChange={(e) => setExportWidth(Number(e.target.value))}
+            className="w-full h-8 text-xs"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="height" className="text-xs font-medium">
+            Height
+          </Label>
+          <Input
+            id="height"
+            type="number"
+            value={exportHeight}
+            onChange={(e) => setExportHeight(Number(e.target.value))}
+            className="w-full h-8 text-xs"
+          />
+        </div>
       </div>
 
       <button

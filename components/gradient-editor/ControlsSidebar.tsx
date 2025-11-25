@@ -4,9 +4,10 @@ import { useGradientStore } from '@/store/gradient-store';
 import { ColorPalette } from './ColorPalette';
 import { FilterPanel } from './FilterPanel';
 import { SizePanel } from './SizePanel';
-import { Palette, Sliders, Maximize2, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { Palette, Sliders, Maximize2, ChevronDown, ChevronUp, RotateCw } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { GRADIENT_PRESETS, generateMeshGradient } from '@/lib/mesh-generator';
 import { useState } from 'react';
 
@@ -20,14 +21,20 @@ export function ControlsSidebar() {
     loadPreset,
     canvas,
     palette,
+    shapes,
     setShapes,
     filters,
+    rotateShape,
+    rotateAllShapes,
+    saveHistory,
   } = useGradientStore();
 
-  // Start with COLORS section OPEN by default
+  // Start with COLORS and FILTERS sections OPEN by default
   const [colorsOpen, setColorsOpen] = useState(true);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(true);
   const [sizeOpen, setSizeOpen] = useState(false);
+  const [selectedShapeId, setSelectedShapeId] = useState<string | null>(null);
+  const [globalRotation, setGlobalRotation] = useState(0);
 
   const handleLoadPreset = (presetTitle: string) => {
     const preset = GRADIENT_PRESETS.find((p) => p.title === presetTitle);
@@ -134,10 +141,59 @@ export function ControlsSidebar() {
                 </div>
               </div>
 
-              <button className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900">
-                <span>Hints</span>
-                <HelpCircle className="h-3.5 w-3.5" />
-              </button>
+              {/* Shape Rotation Controls */}
+              <div className="space-y-3 pt-2 border-t border-gray-100">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
+                  <RotateCw className="h-3.5 w-3.5" />
+                  <span>Shape Rotation</span>
+                </div>
+
+                {/* Rotate All Shapes */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-normal text-gray-600">All Shapes</Label>
+                    <span className="text-[10px] text-gray-500">{globalRotation}°</span>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={360}
+                    step={1}
+                    value={[globalRotation]}
+                    onValueChange={(value) => {
+                      setGlobalRotation(value[0]);
+                      rotateAllShapes(value[0]);
+                    }}
+                    onValueCommit={() => saveHistory()}
+                    className="w-full"
+                  />
+                </div>
+
+                {/* Per-Shape Rotation */}
+                <div className="space-y-2">
+                  <Label className="text-xs font-normal text-gray-600">Per Shape</Label>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {shapes.map((shape, index) => (
+                      <div key={shape.id} className="flex items-center gap-2">
+                        <div 
+                          className="w-4 h-4 rounded-sm border border-gray-300 flex-shrink-0"
+                          style={{ backgroundColor: palette[shape.fillIndex]?.color || '#ccc' }}
+                        />
+                        <span className="text-[10px] text-gray-500 w-6">#{index + 1}</span>
+                        <Slider
+                          min={0}
+                          max={360}
+                          step={1}
+                          value={[shape.rotation ?? 0]}
+                          onValueChange={(value) => rotateShape(shape.id, value[0])}
+                          onValueCommit={() => saveHistory()}
+                          className="flex-1"
+                        />
+                        <span className="text-[10px] text-gray-500 w-8">{shape.rotation ?? 0}°</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
