@@ -94,24 +94,25 @@ export function Canvas() {
   // Apply zoom on top of base scale
   const scale = baseScale * zoomLevel;
   
-  // Get texture URL based on type
+  // Get texture URL based on type - all inline SVG for reliable export
   const getTextureUrl = () => {
     if (!textureEnabled) return null;
     
     switch (textureType) {
       case 'noise':
-        // Use LazyLayers noise texture
-        return 'https://lazylayers.ahmadrosid.com/images/noise-light.png';
+        // Inline SVG noise - classic noise pattern
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="200" height="200" filter="url(%23n)" opacity="0.3"/%3E%3C/svg%3E';
       case 'fine':
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="1"/%3E%3C/filter%3E%3Crect width="50" height="50" filter="url(%23n)" opacity="0.15"/%3E%3C/svg%3E';
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="1" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="50" height="50" filter="url(%23n)" opacity="0.15"/%3E%3C/svg%3E';
       case 'medium':
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23n)" opacity="0.2"/%3E%3C/svg%3E';
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23n)" opacity="0.2"/%3E%3C/svg%3E';
       case 'coarse':
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/%3E%3C/filter%3E%3Crect width="200" height="200" filter="url(%23n)" opacity="0.25"/%3E%3C/svg%3E';
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="200" height="200" filter="url(%23n)" opacity="0.25"/%3E%3C/svg%3E';
       case 'paper':
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="turbulence" baseFrequency="0.05" numOctaves="4"/%3E%3C/filter%3E%3Crect width="300" height="300" filter="url(%23n)" opacity="0.1"/%3E%3C/svg%3E';
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="turbulence" baseFrequency="0.05" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="300" height="300" filter="url(%23n)" opacity="0.1"/%3E%3C/svg%3E';
       default:
-        return 'https://lazylayers.ahmadrosid.com/images/noise-light.png';
+        // Default inline SVG noise
+        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="200" height="200" filter="url(%23n)" opacity="0.3"/%3E%3C/svg%3E';
     }
   };
 
@@ -120,11 +121,18 @@ export function Canvas() {
       {/* Canvas Container */}
       <div className="relative flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          {/* Canvas Preview - NO WHITE BORDER */}
+          {/* Canvas Preview with border wrapper */}
+          <div 
+            className="rounded-lg ring-2 ring-gray-300/50 ring-offset-4 ring-offset-gray-100"
+            style={{
+              transform: `scale(${scale})`,
+              transformOrigin: 'center',
+            }}
+          >
           <div
             ref={canvasRef}
             id="canvas-export"
-            className="relative overflow-hidden rounded-lg shadow-2xl transition-transform duration-200"
+            className="relative overflow-hidden rounded-lg shadow-2xl"
             style={{
               width: `${width}px`,
               height: `${height}px`,
@@ -136,16 +144,13 @@ export function Canvas() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              transform: `scale(${scale})`,
-              transformOrigin: 'center',
             }}
           >
-            {/* Noise Texture Overlay - Same as LazyLayers */}
+            {/* Noise Texture Overlay */}
             {getTextureUrl() && (
               <div
-                className="absolute rounded-lg z-20 shadow-lg"
+                className="absolute inset-0 z-20"
                 style={{
-                  inset: '0px',
                   backgroundImage: `url(${getTextureUrl()})`,
                   backgroundRepeat: 'repeat',
                   backgroundSize: 'auto',
@@ -176,6 +181,7 @@ export function Canvas() {
                 {text || 'Enter your text...'}
               </h1>
             </div>
+          </div>
           </div>
 
           {/* Dimensions Info */}

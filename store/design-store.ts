@@ -7,6 +7,7 @@ export interface Template {
   id: string;
   name: string;
   createdAt: number;
+  mode: 'single' | 'bulk';
   config: {
     text: string;
     fontSize: number;
@@ -50,8 +51,8 @@ export type GradientPreset =
   | 'gradient-18'
   | 'solid';
 
-export interface DesignState {
-  // Text properties
+// Undoable state - properties that can be undone/redone
+export interface UndoableState {
   text: string;
   fontSize: number;
   lineHeight: number;
@@ -59,34 +60,35 @@ export interface DesignState {
   fontColor: string;
   fontFamily: string;
   textAlign: 'left' | 'center' | 'right';
-
-  // Frame properties
   frameSize: FrameSize;
   customWidth: number;
   customHeight: number;
   padding: number;
-
-  // Background properties
   backgroundMode: 'solid' | 'gradient';
   backgroundColor: string;
   gradientPreset: GradientPreset;
   customGradient: string;
-  
-  // Texture properties
   textureEnabled: boolean;
   textureType: 'noise' | 'fine' | 'medium' | 'coarse' | 'paper';
-  textureIntensity: number; // 0 to 100
+  textureIntensity: number;
+}
 
-  // Export properties
+export interface DesignState extends UndoableState {
+  // Export properties (not undoable)
   fileName: string;
   exportQuality: number; // 0.1 to 1.0 (10% to 100%)
   exportPixelRatio: number; // 1 to 3
 
-  // Zoom properties
+  // Zoom properties (not undoable)
   zoomLevel: number; // 0.25 to 2.0 (25% to 200%)
 
-  // Templates
+  // Templates (not undoable)
   templates: Template[];
+
+  // History for undo/redo
+  history: UndoableState[];
+  historyIndex: number;
+  isUndoRedoAction: boolean; // Flag to prevent history push during undo/redo
 }
 
 export interface DesignActions {
@@ -118,10 +120,17 @@ export interface DesignActions {
   getFrameDimensions: () => { width: number; height: number };
   
   // Template actions
-  saveTemplate: (name: string) => void;
+  saveTemplate: (name: string, mode: 'single' | 'bulk') => void;
   loadTemplate: (templateId: string) => void;
   deleteTemplate: (templateId: string) => void;
   getCurrentConfig: () => Template['config'];
+
+  // Undo/Redo actions
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  pushToHistory: () => void;
 }
 
 export type DesignStore = DesignState & DesignActions;
@@ -166,6 +175,11 @@ export const useDesignStore = create<DesignStore>()(
       zoomLevel: 1, // 100% default
       
       templates: [], // No templates initially
+
+      // History for undo/redo
+      history: [],
+      historyIndex: -1,
+      isUndoRedoAction: false,
 
   // Actions
   setText: (text) => set({ text }),
@@ -216,6 +230,14 @@ export const useDesignStore = create<DesignStore>()(
       const dataUrl = await toPng(element, {
         quality: state.exportQuality,
         pixelRatio: state.exportPixelRatio,
+        cacheBust: true,
+        includeQueryParams: true,
+        skipAutoScale: true,
+        backgroundColor: undefined,
+        fetchRequestInit: {
+          mode: 'cors',
+          cache: 'no-cache',
+        },
       });
 
       const link = document.createElement('a');
@@ -259,12 +281,13 @@ export const useDesignStore = create<DesignStore>()(
     };
   },
 
-  saveTemplate: (name: string) => {
+  saveTemplate: (name: string, mode: 'single' | 'bulk') => {
     const state = get();
     const newTemplate: Template = {
       id: `template-${Date.now()}`,
       name,
       createdAt: Date.now(),
+      mode,
       config: state.getCurrentConfig(),
     };
     
@@ -302,6 +325,104 @@ export const useDesignStore = create<DesignStore>()(
   deleteTemplate: (templateId: string) => {
     const state = get();
     set({ templates: state.templates.filter((t) => t.id !== templateId) });
+  },
+
+  // Undo/Redo implementations
+  pushToHistory: () => {
+    const state = get();
+    
+    // Don't push to history if this is an undo/redo action
+    if (state.isUndoRedoAction) return;
+
+    // Create snapshot of current undoable state
+    const snapshot: UndoableState = {
+      text: state.text,
+      fontSize: state.fontSize,
+      lineHeight: state.lineHeight,
+      maxWidth: state.maxWidth,
+      fontColor: state.fontColor,
+      fontFamily: state.fontFamily,
+      textAlign: state.textAlign,
+      frameSize: state.frameSize,
+      customWidth: state.customWidth,
+      customHeight: state.customHeight,
+      padding: state.padding,
+      backgroundMode: state.backgroundMode,
+      backgroundColor: state.backgroundColor,
+      gradientPreset: state.gradientPreset,
+      customGradient: state.customGradient,
+      textureEnabled: state.textureEnabled,
+      textureType: state.textureType,
+      textureIntensity: state.textureIntensity,
+    };
+
+    // Check if this snapshot is identical to the last one (avoid duplicates)
+    const lastSnapshot = state.history[state.historyIndex];
+    if (lastSnapshot && JSON.stringify(snapshot) === JSON.stringify(lastSnapshot)) {
+      return; // Don't push duplicate state
+    }
+
+    // Remove any future history (if we're in the middle of history)
+    const newHistory = state.history.slice(0, state.historyIndex + 1);
+    
+    // Add new snapshot
+    newHistory.push(snapshot);
+
+    // Limit history to 50 items
+    const limitedHistory = newHistory.slice(-50);
+
+    set({
+      history: limitedHistory,
+      historyIndex: limitedHistory.length - 1,
+    });
+  },
+
+  undo: () => {
+    const state = get();
+    
+    if (state.historyIndex <= 0) return;
+
+    const newIndex = state.historyIndex - 1;
+    const previousState = state.history[newIndex];
+
+    if (previousState) {
+      set({
+        isUndoRedoAction: true,
+        historyIndex: newIndex,
+        ...previousState,
+      });
+      // Reset the flag after a delay to allow React to process
+      setTimeout(() => set({ isUndoRedoAction: false }), 100);
+    }
+  },
+
+  redo: () => {
+    const state = get();
+    
+    if (state.historyIndex >= state.history.length - 1) return;
+
+    const newIndex = state.historyIndex + 1;
+    const nextState = state.history[newIndex];
+
+    if (nextState) {
+      set({
+        isUndoRedoAction: true,
+        historyIndex: newIndex,
+        ...nextState,
+      });
+      // Reset the flag after a delay to allow React to process
+      setTimeout(() => set({ isUndoRedoAction: false }), 100);
+    }
+  },
+
+  canUndo: () => {
+    const state = get();
+    return state.historyIndex > 0;
+  },
+
+  canRedo: () => {
+    const state = get();
+    return state.historyIndex < state.history.length - 1;
   },
 }),
     {

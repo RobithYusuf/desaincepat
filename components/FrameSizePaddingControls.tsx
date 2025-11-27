@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useDesignStore } from '@/store/design-store';
+import { useBulkStore } from '@/store/bulk-store';
 import { ProgressSlider } from './ProgressSlider';
 import { ExportModal } from './ExportModal';
+import { BulkExportModal } from './bulk/BulkExportModal';
 
 export function FrameSizePaddingControls() {
   const {
@@ -14,6 +17,55 @@ export function FrameSizePaddingControls() {
     customHeight,
     setCustomDimensions,
   } = useDesignStore();
+  
+  const { isBulkMode } = useBulkStore();
+
+  // Local state for input values (as strings to handle empty input)
+  const [widthInput, setWidthInput] = useState<string>(customWidth.toString());
+  const [heightInput, setHeightInput] = useState<string>(customHeight.toString());
+
+  // Sync local state when store values change externally
+  useEffect(() => {
+    setWidthInput(customWidth.toString());
+  }, [customWidth]);
+
+  useEffect(() => {
+    setHeightInput(customHeight.toString());
+  }, [customHeight]);
+
+  const handleWidthChange = (value: string) => {
+    // Allow empty or numeric input
+    if (value === '' || /^\d+$/.test(value)) {
+      setWidthInput(value);
+    }
+  };
+
+  const handleHeightChange = (value: string) => {
+    // Allow empty or numeric input
+    if (value === '' || /^\d+$/.test(value)) {
+      setHeightInput(value);
+    }
+  };
+
+  const applyWidth = () => {
+    const num = parseInt(widthInput, 10);
+    if (!isNaN(num) && num >= 100 && num <= 5000) {
+      setCustomDimensions(num, customHeight);
+    } else {
+      // Reset to current value if invalid
+      setWidthInput(customWidth.toString());
+    }
+  };
+
+  const applyHeight = () => {
+    const num = parseInt(heightInput, 10);
+    if (!isNaN(num) && num >= 100 && num <= 5000) {
+      setCustomDimensions(customWidth, num);
+    } else {
+      // Reset to current value if invalid
+      setHeightInput(customHeight.toString());
+    }
+  };
 
   return (
     <div className="border-b border-gray-200 bg-white">
@@ -39,22 +91,24 @@ export function FrameSizePaddingControls() {
           {frameSize === 'custom' && (
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <input
-                type="number"
-                value={customWidth}
-                onChange={(e) => setCustomDimensions(Number(e.target.value), customHeight)}
+                type="text"
+                inputMode="numeric"
+                value={widthInput}
+                onChange={(e) => handleWidthChange(e.target.value)}
+                onBlur={applyWidth}
+                onKeyDown={(e) => e.key === 'Enter' && applyWidth()}
                 placeholder="Width"
-                min={100}
-                max={5000}
                 className="w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
               />
               <span className="text-xs text-gray-500">×</span>
               <input
-                type="number"
-                value={customHeight}
-                onChange={(e) => setCustomDimensions(customWidth, Number(e.target.value))}
+                type="text"
+                inputMode="numeric"
+                value={heightInput}
+                onChange={(e) => handleHeightChange(e.target.value)}
+                onBlur={applyHeight}
+                onKeyDown={(e) => e.key === 'Enter' && applyHeight()}
                 placeholder="Height"
-                min={100}
-                max={5000}
                 className="w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
               />
               <span className="text-[10px] text-gray-500">px</span>
@@ -79,7 +133,7 @@ export function FrameSizePaddingControls() {
 
         {/* Right Side: Export Button */}
         <div className="w-full sm:w-auto">
-          <ExportModal />
+          {isBulkMode ? <BulkExportModal /> : <ExportModal />}
         </div>
       </div>
     </div>

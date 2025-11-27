@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Download } from "lucide-react";
 import { useDesignStore } from "@/store/design-store";
 import {
@@ -14,6 +14,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+// Convert text to filename-friendly format
+const textToFileName = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-')          // Replace spaces with dashes
+    .replace(/-+/g, '-')           // Replace multiple dashes with single
+    .replace(/^-|-$/g, '')         // Remove leading/trailing dashes
+    .slice(0, 50)                  // Limit length
+    || 'thumbnail';                // Fallback if empty
+};
 
 const EXPORT_PRESETS = [
   {
@@ -52,11 +65,23 @@ export function ExportModal() {
     backgroundMode,
     fontFamily,
     textureEnabled,
+    text,
   } = useDesignStore();
   const [open, setOpen] = useState(false);
-  const [fileName, setFileName] = useState("desaincepat-thumbnail");
+  const [fileName, setFileName] = useState("");
   const [selectedPreset, setSelectedPreset] = useState<string>("best");
   const [isExporting, setIsExporting] = useState(false);
+
+  // Generate default filename from text
+  const defaultFileName = textToFileName(text);
+
+  // Handle modal open - set filename from current text
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      setFileName(defaultFileName);
+    }
+    setOpen(isOpen);
+  };
 
   const dimensions = getFrameDimensions();
   const preset = EXPORT_PRESETS.find((p) => p.id === selectedPreset);
@@ -90,7 +115,7 @@ export function ExportModal() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button 
           className="bg-blue-600 text-white hover:bg-blue-700"

@@ -6,9 +6,19 @@ import { Sidebar } from "@/components/Sidebar";
 import { Navbar } from "@/components/Navbar";
 import { FrameSizePaddingControls } from "@/components/FrameSizePaddingControls";
 import { ZoomControls } from "@/components/ZoomControls";
+import { UndoRedoControls } from "@/components/UndoRedoControls";
+import { BulkPreviewGrid } from "@/components/bulk";
+import { useBulkStore } from "@/store/bulk-store";
+import { useDesignStore } from "@/store/design-store";
+import { useHistoryTracker } from "@/hooks/useHistoryTracker";
 
 export default function Home() {
+  // Track design changes for undo/redo
+  useHistoryTracker();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isBulkMode, bulkItems } = useBulkStore();
+  const { frameSize, getFrameDimensions } = useDesignStore();
+  const { width, height } = getFrameDimensions();
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
@@ -25,11 +35,33 @@ export default function Home() {
 
         {/* Canvas Area */}
         <div className="relative flex flex-1 flex-col items-center justify-center gap-4 overflow-auto p-4 sm:p-6 lg:p-8">
-          {/* Zoom Controls - Fixed position */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 sm:relative sm:top-0 sm:left-0 sm:translate-x-0">
+          {/* Top Controls */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:relative sm:top-0 sm:left-0 sm:translate-x-0">
+            <UndoRedoControls />
             <ZoomControls />
           </div>
-          <Canvas />
+          
+          {/* Canvas (always rendered for export) */}
+          <div style={isBulkMode ? { position: 'fixed', top: 0, left: 0, zIndex: -9999, visibility: 'hidden' } : undefined}>
+            <Canvas />
+          </div>
+          
+          {/* Bulk Preview (shown only in bulk mode) */}
+          {isBulkMode && (
+            <div className="w-full max-w-6xl px-2 sm:px-0">
+              <BulkPreviewGrid />
+              {/* Canvas Size Info */}
+              <div className="mt-4 flex justify-center">
+                <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm">
+                  <span>{width} × {height}px</span>
+                  <span className="text-gray-400">•</span>
+                  <span className="capitalize">{frameSize}</span>
+                  <span className="text-gray-400">•</span>
+                  <span>{bulkItems.length} items</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Mobile Sidebar Overlay */}

@@ -2,25 +2,37 @@
 
 import { useState } from 'react';
 import { useDesignStore } from '@/store/design-store';
-import { Save, Bookmark, Trash2, Check } from 'lucide-react';
+import { useBulkStore } from '@/store/bulk-store';
+import { Save, Bookmark, Trash2, Check, FileText, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function TemplateManager() {
   const { templates, saveTemplate, loadTemplate, deleteTemplate } = useDesignStore();
+  const { isBulkMode, setBulkMode } = useBulkStore();
   const [isAdding, setIsAdding] = useState(false);
   const [templateName, setTemplateName] = useState('');
   const [loadedTemplateId, setLoadedTemplateId] = useState<string | null>(null);
 
+  const currentMode = isBulkMode ? 'bulk' : 'single';
+  
+  // Filter templates by current mode
+  const filteredTemplates = templates.filter(t => t.mode === currentMode || !t.mode);
+
   const handleSaveTemplate = () => {
     if (templateName.trim()) {
-      saveTemplate(templateName.trim());
+      saveTemplate(templateName.trim(), currentMode);
       setTemplateName('');
       setIsAdding(false);
     }
   };
 
   const handleLoadTemplate = (templateId: string) => {
+    const template = templates.find(t => t.id === templateId);
+    if (template && template.mode) {
+      // Switch to the template's mode
+      setBulkMode(template.mode === 'bulk');
+    }
     loadTemplate(templateId);
     setLoadedTemplateId(templateId);
     
@@ -44,7 +56,14 @@ export function TemplateManager() {
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Bookmark className="h-3.5 w-3.5 text-gray-600" />
-          <h3 className="text-xs font-semibold text-gray-900">Templates</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Template Saya</h3>
+          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+            currentMode === 'bulk' 
+              ? 'bg-purple-100 text-purple-600' 
+              : 'bg-blue-100 text-blue-600'
+          }`}>
+            {currentMode === 'bulk' ? 'Bulk' : 'Single'}
+          </span>
         </div>
         <button
           onClick={() => setIsAdding(!isAdding)}
@@ -80,15 +99,15 @@ export function TemplateManager() {
       )}
 
       {/* Templates List */}
-      {templates.length === 0 ? (
+      {filteredTemplates.length === 0 ? (
         <div className="text-center py-6 text-xs text-gray-500">
           <Bookmark className="h-8 w-8 mx-auto mb-2 opacity-20" />
-          <p>No templates saved yet.</p>
-          <p className="mt-1">Create one to reuse your design!</p>
+          <p>Belum ada template {currentMode === 'bulk' ? 'Bulk' : 'Single'}.</p>
+          <p className="mt-1">Simpan desain untuk digunakan kembali!</p>
         </div>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {templates.map((template) => (
+          {filteredTemplates.map((template) => (
             <div
               key={template.id}
               className={`group rounded-lg border p-2.5 transition-all ${

@@ -2,17 +2,21 @@
 
 import { useState } from 'react';
 import { useDesignStore } from '@/store/design-store';
-import { toPng } from 'html-to-image';
-import { Type, Layout, Paintbrush, X, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
+import { useBulkStore } from '@/store/bulk-store';
+import { Type, Paintbrush, X, ChevronDown, ChevronUp, Image as ImageIcon, Layers } from 'lucide-react';
 import { GradientPicker } from './GradientPicker';
 import { ProgressSlider } from './ProgressSlider';
 import { TemplateManager } from './TemplateManager';
+import { BulkTextInput } from './bulk';
 
 interface SidebarProps {
   onClose?: () => void;
 }
 
 export function Sidebar({ onClose }: SidebarProps) {
+  // Bulk mode
+  const { isBulkMode, setBulkMode, resetGeneration, bulkItems } = useBulkStore();
+  
   // Collapsible sections state
   const [textOpen, setTextOpen] = useState(true);
   const [typographyOpen, setTypographyOpen] = useState(true);
@@ -92,13 +96,52 @@ export function Sidebar({ onClose }: SidebarProps) {
 
           {textOpen && (
             <div className="space-y-3 px-4 pb-4">
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-xs transition-all focus:border-purple-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-500/20"
-                rows={3}
-                placeholder="Enter your text..."
-              />
+              {/* Mode Toggle */}
+              <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg">
+                <button
+                  onClick={() => { resetGeneration(); setBulkMode(false); }}
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                    !isBulkMode
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Type className="h-3 w-3" />
+                  Single
+                </button>
+                <button
+                  onClick={() => setBulkMode(true)}
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                    isBulkMode
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Layers className="h-3 w-3" />
+                  Bulk
+                  {bulkItems.length > 0 && (
+                    <span className="ml-1 px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full text-[10px]">
+                      {bulkItems.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Single Mode: Text Input */}
+              {!isBulkMode && (
+                <textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  className="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-xs transition-all focus:border-purple-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+                  rows={3}
+                  placeholder="Enter your text..."
+                />
+              )}
+
+              {/* Bulk Mode: Multiple Text Input */}
+              {isBulkMode && (
+                <BulkTextInput />
+              )}
             </div>
           )}
         </div>
@@ -124,7 +167,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                 value={fontSize}
                 onChange={setFontSize}
                 min={12}
-                max={200}
+                max={500}
                 valueFormatter={(v) => `${v}px`}
               />
 
