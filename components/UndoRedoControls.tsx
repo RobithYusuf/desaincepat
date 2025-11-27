@@ -39,11 +39,11 @@ export function UndoRedoControls() {
   const isRedoDisabled = !canRedo();
 
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
+    <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg">
       <button
         onClick={() => canUndo() && undo()}
         disabled={isUndoDisabled}
-        className="flex h-8 w-8 items-center justify-center rounded text-gray-600 transition-colors hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+        className="flex h-9 w-9 items-center justify-center rounded text-gray-600 transition-colors hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         title="Undo (Ctrl+Z)"
         aria-label="Undo"
       >
@@ -53,7 +53,7 @@ export function UndoRedoControls() {
       <button
         onClick={() => canRedo() && redo()}
         disabled={isRedoDisabled}
-        className="flex h-8 w-8 items-center justify-center rounded text-gray-600 transition-colors hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+        className="flex h-9 w-9 items-center justify-center rounded text-gray-600 transition-colors hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         title="Redo (Ctrl+Y)"
         aria-label="Redo"
       >
