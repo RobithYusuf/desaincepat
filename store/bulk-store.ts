@@ -129,7 +129,7 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
       .filter((line) => line.length > 0);
     
     // Remove duplicate lines (keep first occurrence)
-    const uniqueLines = [...new Set(lines)];
+    const uniqueLines = Array.from(new Set(lines));
     
     // Preserve existing backgrounds and typography when updating
     const items: BulkItem[] = uniqueLines.map((text, index) => {
@@ -164,7 +164,7 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
       .filter((line) => line.length > 0);
     
     // Remove duplicate lines (keep first occurrence)
-    const uniqueLines = [...new Set(lines)];
+    const uniqueLines = Array.from(new Set(lines));
     
     const items: BulkItem[] = uniqueLines.map((text, index) => {
       const existing = existingItems.find((item) => item.text === text);
