@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from 'react';
-import { useDesignStore } from '@/store/design-store';
+import { useDesignStore, DesignStore } from '@/store/design-store';
 
 // Create a snapshot string for comparison
-function createSnapshot(store: ReturnType<typeof useDesignStore>): string {
+function createSnapshot(store: DesignStore): string {
   return JSON.stringify({
     text: store.text,
     fontSize: store.fontSize,

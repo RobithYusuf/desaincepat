@@ -116,13 +116,23 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
 
   setRawInput: (input) => {
     const { bulkItems: existingItems } = get();
-    const lines = input
+    // Normalize line endings and clean input
+    const cleanInput = input
+      .replace(/\r\n/g, '\n')     // Windows -> Unix
+      .replace(/\r/g, '\n')       // Old Mac -> Unix
+      .replace(/\u200B/g, '')     // Remove zero-width spaces
+      .replace(/\u00A0/g, ' ');   // Replace non-breaking space with regular space
+    
+    const lines = cleanInput
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line.length > 0);
     
+    // Remove duplicate lines (keep first occurrence)
+    const uniqueLines = [...new Set(lines)];
+    
     // Preserve existing backgrounds and typography when updating
-    const items: BulkItem[] = lines.map((text, index) => {
+    const items: BulkItem[] = uniqueLines.map((text, index) => {
       const existing = existingItems.find((item) => item.text === text);
       return {
         id: existing?.id || `item-${Date.now()}-${index}`,
@@ -141,12 +151,22 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
 
   parseItems: () => {
     const { rawInput, bulkItems: existingItems } = get();
-    const lines = rawInput
+    // Normalize line endings and clean input
+    const cleanInput = rawInput
+      .replace(/\r\n/g, '\n')     // Windows -> Unix
+      .replace(/\r/g, '\n')       // Old Mac -> Unix
+      .replace(/\u200B/g, '')     // Remove zero-width spaces
+      .replace(/\u00A0/g, ' ');   // Replace non-breaking space with regular space
+    
+    const lines = cleanInput
       .split('\n')
       .map((line) => line.trim())
       .filter((line) => line.length > 0);
     
-    const items: BulkItem[] = lines.map((text, index) => {
+    // Remove duplicate lines (keep first occurrence)
+    const uniqueLines = [...new Set(lines)];
+    
+    const items: BulkItem[] = uniqueLines.map((text, index) => {
       const existing = existingItems.find((item) => item.text === text);
       return {
         id: existing?.id || `item-${Date.now()}-${index}`,
