@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { useDesignStore } from './design-store';
+import { useDesignStore, GradientPreset } from './design-store';
 
 // ============================================
 // Types
@@ -40,10 +40,10 @@ export interface GlobalTypography {
   textAlign: 'left' | 'center' | 'right';
   backgroundColor: string;
   backgroundMode: 'solid' | 'gradient';
-  gradientPreset: string;
+  gradientPreset: GradientPreset;
   customGradient: string;
   textureEnabled: boolean;
-  textureType: string;
+  textureType: 'noise' | 'fine' | 'medium' | 'coarse' | 'paper';
   textureIntensity: number;
 }
 
