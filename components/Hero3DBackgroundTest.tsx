@@ -26,7 +26,7 @@ function TestCube() {
 // TEST 3D Scene - Simple and OBVIOUS
 export default function Hero3DBackgroundTest() {
   return (
-    <div className="absolute inset-0 -z-10 bg-blue-200">
+    <div className="absolute inset-0 -z-10 bg-green-200">
       {/* Blue background so we know div is there */}
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={1} />

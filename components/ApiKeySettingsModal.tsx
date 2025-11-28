@@ -82,15 +82,15 @@ export function ApiKeySettingsModal({ open, onOpenChange }: ApiKeySettingsModalP
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
-            <p className="text-sm text-blue-800 mb-2">
+          <div className="rounded-lg border border-green-200 bg-green-50 p-3">
+            <p className="text-sm text-green-800 mb-2">
               Dapatkan API key gratis dari Google AI Studio:
             </p>
             <a
               href="https://aistudio.google.com/apikey"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800"
+              className="inline-flex items-center gap-1 text-sm font-medium text-green-600 hover:text-green-800"
             >
               <ExternalLink className="h-4 w-4" />
               Dapatkan API Key

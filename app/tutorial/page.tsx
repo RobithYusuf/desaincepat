@@ -19,7 +19,7 @@ export default function TutorialPage() {
         <div className="mx-auto max-w-5xl">
           {/* Header */}
           <div className="text-center">
-            <div className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 text-sm font-semibold text-purple-700">
+            <div className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 text-sm font-semibold text-green-700">
               📚 Documentation & Tutorial
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
@@ -37,7 +37,7 @@ export default function TutorialPage() {
                 onClick={() => setActiveTab("thumbnail")}
                 className={`flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all ${
                   activeTab === "thumbnail"
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -48,7 +48,7 @@ export default function TutorialPage() {
                 onClick={() => setActiveTab("gradient")}
                 className={`flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all ${
                   activeTab === "gradient"
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
+                    ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-md"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -68,18 +68,18 @@ export default function TutorialPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-16 rounded-2xl bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 p-8 text-center sm:p-12 shadow-2xl">
+          <div className="mt-16 rounded-2xl bg-gradient-to-br from-green-600 via-emerald-600 to-green-700 p-8 text-center sm:p-12 shadow-2xl">
             <Sparkles className="mx-auto h-12 w-12 text-yellow-200" />
             <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
               Ready to Create Amazing Designs?
             </h2>
-            <p className="mt-2 text-purple-100 max-w-xl mx-auto">
+            <p className="mt-2 text-green-100 max-w-xl mx-auto">
               Choose your tool and start designing professional graphics in minutes
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/thumbnail"
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-purple-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-green-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               >
                 <Type className="h-5 w-5" />
                 Thumbnail Editor
@@ -100,7 +100,7 @@ export default function TutorialPage() {
           <div className="mt-8 text-center">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-purple-600 font-medium"
+              className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-green-600 font-medium"
             >
               ← Back to Home
             </Link>
@@ -116,9 +116,9 @@ function ThumbnailTutorial() {
   return (
     <div className="space-y-8">
       {/* Overview Card */}
-      <div className="rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6">
+      <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600 text-white">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-600 text-white">
             <Type className="h-6 w-6" />
           </div>
           <div className="flex-1">
@@ -152,7 +152,7 @@ function ThumbnailTutorial() {
           icon={<Type className="h-5 w-5" />}
           title="Add Your Text"
           description="Enter your thumbnail text in the Text Content section. Keep it short and impactful (3-5 words work best)."
-          color="purple"
+          color="green"
         >
           <div className="mt-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -182,7 +182,7 @@ function ThumbnailTutorial() {
           icon={<Sliders className="h-5 w-5" />}
           title="Customize Typography"
           description="Choose from 26 Google Fonts and adjust font size (12-200px), line height, and max width."
-          color="blue"
+          color="emerald"
         >
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <InfoBox label="Font Size" value="60-120px for YouTube" />
@@ -196,7 +196,7 @@ function ThumbnailTutorial() {
           icon={<Palette className="h-5 w-5" />}
           title="Choose Background"
           description="Select from solid colors, 181 gradient presets, or 60 background images."
-          color="pink"
+          color="teal"
         >
           <div className="mt-4 space-y-2">
             <BackgroundOption type="Solid" description="200 colors organized by hue" />
@@ -211,7 +211,7 @@ function ThumbnailTutorial() {
           icon={<Settings className="h-5 w-5" />}
           title="Fine-tune Settings"
           description="Select frame size (YouTube, Instagram, Twitter) and adjust padding for perfect spacing."
-          color="purple"
+          color="green"
         />
 
         {/* Step 5 */}
@@ -232,9 +232,9 @@ function GradientTutorial() {
   return (
     <div className="space-y-8">
       {/* Overview Card */}
-      <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50 p-6">
+      <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-600 text-white">
             <Palette className="h-6 w-6" />
           </div>
           <div className="flex-1">
@@ -268,7 +268,7 @@ function GradientTutorial() {
           icon={<Palette className="h-5 w-5" />}
           title="Choose Color Palette"
           description="Select from 5 beautiful presets (Golden Mist, Coral Breeze, etc.) or create your own by adding/removing colors."
-          color="blue"
+          color="emerald"
         >
           <div className="mt-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -298,7 +298,7 @@ function GradientTutorial() {
           icon={<Move className="h-5 w-5" />}
           title="Adjust Positions (Optional)"
           description="Enable 'Adjust color position' to move shape centers or 'Adjust Vertices' to reshape individual polygons."
-          color="purple"
+          color="green"
         >
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <InfoBox label="Center Points" value="Drag to reposition shapes" />
@@ -312,7 +312,7 @@ function GradientTutorial() {
           icon={<Sliders className="h-5 w-5" />}
           title="Apply Filters & Effects"
           description="Adjust blur (0-100), grain texture (0-100), opacity, and spread to perfect your gradient."
-          color="pink"
+          color="teal"
         >
           <div className="mt-4 space-y-2">
             <FilterOption label="Blur" description="Smoothness of color blending" range="0-100" />
@@ -336,7 +336,7 @@ function GradientTutorial() {
           icon={<Download className="h-5 w-5" />}
           title="Export Your Gradient"
           description="Click Export to download as PNG, WebP, or SVG. Your gradient is ready for backgrounds, posts, or designs!"
-          color="blue"
+          color="emerald"
         />
 
         {/* Step 6 */}
@@ -345,7 +345,7 @@ function GradientTutorial() {
           icon={<Sparkles className="h-5 w-5" />}
           title="Randomize & Experiment"
           description="Use 'Randomize' for new layouts or 'Shuffle' to reorder colors. Keep experimenting until you find the perfect gradient!"
-          color="purple"
+          color="green"
         />
       </div>
     </div>
@@ -358,23 +358,21 @@ interface TutorialStepProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  color: "purple" | "blue" | "pink" | "green";
+  color: "green" | "emerald" | "teal";
   children?: React.ReactNode;
 }
 
 function TutorialStep({ number, icon, title, description, color, children }: TutorialStepProps) {
   const colorClasses = {
-    purple: "from-purple-600 to-purple-700 text-purple-600",
-    blue: "from-blue-600 to-blue-700 text-blue-600",
-    pink: "from-pink-600 to-pink-700 text-pink-600",
     green: "from-green-600 to-green-700 text-green-600",
+    emerald: "from-emerald-600 to-emerald-700 text-emerald-600",
+    teal: "from-teal-600 to-teal-700 text-teal-600",
   };
 
   const bgColorClasses = {
-    purple: "bg-purple-50",
-    blue: "bg-blue-50",
-    pink: "bg-pink-50",
     green: "bg-green-50",
+    emerald: "bg-emerald-50",
+    teal: "bg-teal-50",
   };
 
   return (
@@ -409,8 +407,8 @@ function InfoBox({ label, value }: { label: string; value: string }) {
 
 function BackgroundOption({ type, description }: { type: string; description: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 hover:border-purple-300 transition-colors">
-      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 text-xs font-bold text-white shadow">
+    <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 hover:border-green-300 transition-colors">
+      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 text-xs font-bold text-white shadow">
         {type[0]}
       </div>
       <div>

@@ -118,7 +118,7 @@ export function ExportModal() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button 
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-green-600 text-white hover:bg-green-700"
         >
           <Download className="mr-2 h-4 w-4" />
           Export
@@ -185,14 +185,14 @@ export function ExportModal() {
                   onClick={() => setSelectedPreset(preset.id)}
                   className={`relative flex items-start gap-2 rounded-md border p-2 text-left transition-all ${
                     selectedPreset === preset.id
-                      ? "border-purple-600 bg-purple-50"
+                      ? "border-green-600 bg-green-50"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   {/* Radio Circle */}
                   <div className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 border-gray-300">
                     {selectedPreset === preset.id && (
-                      <div className="h-2 w-2 rounded-full bg-purple-600" />
+                      <div className="h-2 w-2 rounded-full bg-green-600" />
                     )}
                   </div>
 
@@ -201,7 +201,7 @@ export function ExportModal() {
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold text-gray-900">{preset.label}</span>
                       {preset.recommended && (
-                        <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700">
+                        <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700">
                           ⭐ Recommended
                         </span>
                       )}
@@ -230,7 +230,7 @@ export function ExportModal() {
           <Button
             onClick={handleExport}
             disabled={isExporting || !fileName.trim()}
-            className="h-8 bg-blue-600 text-xs text-white hover:bg-blue-700"
+            className="h-8 bg-green-600 text-xs text-white hover:bg-green-700"
           >
             {isExporting ? (
               <>

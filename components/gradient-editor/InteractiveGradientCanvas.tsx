@@ -148,7 +148,7 @@ export function InteractiveGradientCanvas() {
   return (
     <div 
       ref={canvasContainerRef}
-      className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 p-2 sm:p-4 md:p-6 overflow-hidden"
+      className="relative w-full h-full flex flex-col items-center justify-center bg-gray-100 p-2 sm:p-4 md:p-6 overflow-auto"
     >
       {/* Canvas Gradient with original SVG grain */}
       <canvas
@@ -161,8 +161,8 @@ export function InteractiveGradientCanvas() {
             ? 'calc(100vw - 32px)'
             : 'calc(100vw - 400px)',
           maxHeight: isMobile
-            ? 'calc(100vh - 260px)'
-            : 'calc(100vh - 240px)',
+            ? 'calc(100vh - 300px)'
+            : 'calc(100vh - 280px)',
           width: 'auto',
           height: 'auto',
           aspectRatio: `${canvas.width} / ${canvas.height}`,
@@ -291,8 +291,8 @@ export function InteractiveGradientCanvas() {
           );
         })}
       
-      {/* Canvas Size Info - Fixed at bottom */}
-      <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 rounded-lg bg-white px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 shadow-md border border-gray-200">
+      {/* Canvas Size Info - Below canvas */}
+      <div className="mt-3 sm:mt-4 flex items-center gap-1.5 sm:gap-2 rounded-lg bg-white/95 backdrop-blur-sm px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 shadow-lg border border-gray-200 flex-shrink-0">
         <svg className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
         </svg>

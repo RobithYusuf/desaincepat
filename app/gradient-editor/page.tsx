@@ -455,7 +455,7 @@ export default function GradientEditorPage() {
               onClick={() => setShowMobileSidebar(false)}
             />
             <div className="fixed left-0 top-0 bottom-0 w-full max-w-sm bg-white z-50 sm:hidden overflow-y-auto shadow-2xl">
-              <div className="flex items-center justify-between px-4 py-3 border-b bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="flex items-center justify-between px-4 py-3 border-b bg-gradient-to-r from-green-50 to-emerald-50">
                 <h2 className="font-bold text-lg text-gray-900">Gradient Controls</h2>
                 <button
                   onClick={() => setShowMobileSidebar(false)}
@@ -474,7 +474,7 @@ export default function GradientEditorPage() {
                     handleRandomize();
                     setShowMobileSidebar(false);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white"
                 >
                   <Sparkles className="h-4 w-4" />
                   Randomize
@@ -498,74 +498,83 @@ export default function GradientEditorPage() {
         )}
         
         <div className="flex flex-1 flex-col relative overflow-hidden">
-          {/* Top toolbar with undo/redo, randomize/shuffle, and export */}
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-20 flex items-center justify-between pointer-events-none">
-            {/* Left: Undo/Redo */}
-            <div className="flex items-center gap-1 sm:gap-2 pointer-events-auto">
+          {/* Top toolbar - centered absolute */}
+          <div className="absolute top-4 left-0 right-0 z-20 flex justify-center pointer-events-none">
+            <div className="flex items-center gap-2 rounded-xl bg-white/95 backdrop-blur-sm px-3 py-2 shadow-lg border border-gray-200 pointer-events-auto">
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setShowMobileSidebar(true)}
-                className="sm:hidden flex items-center justify-center h-8 w-8 bg-white rounded-lg shadow-md hover:bg-gray-50"
+                className="sm:hidden flex items-center justify-center h-8 w-8 rounded-lg hover:bg-gray-100"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <Button
-                variant="outline"
-                size="icon"
-                disabled={!canUndo}
-                onClick={undo}
-                className="h-7 w-7 sm:h-8 sm:w-8 bg-white"
-                title="Undo (Ctrl+Z)"
-              >
-                <Undo className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                disabled={!canRedo}
-                onClick={redo}
-                className="h-7 w-7 sm:h-8 sm:w-8 bg-white"
-                title="Redo (Ctrl+Shift+Z)"
-              >
-                <Redo className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              </Button>
-            </div>
 
-            {/* Center: Randomize/Shuffle buttons */}
-            <div className="hidden sm:flex items-center gap-2 pointer-events-auto">
-              <Button
-                onClick={handleRandomize}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-2 sm:px-4"
-              >
-                <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Randomize</span>
-              </Button>
+              {/* Undo/Redo */}
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!canUndo}
+                  onClick={undo}
+                  className="h-8 w-8"
+                  title="Undo (Ctrl+Z)"
+                >
+                  <Undo className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!canRedo}
+                  onClick={redo}
+                  className="h-8 w-8"
+                  title="Redo (Ctrl+Shift+Z)"
+                >
+                  <Redo className="h-4 w-4" />
+                </Button>
+              </div>
 
-              <Button
-                onClick={handleShuffle}
-                variant="outline"
-                className="flex items-center gap-2 bg-white text-xs sm:text-sm px-2 sm:px-4"
-              >
-                <Shuffle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Shuffle</span>
-              </Button>
-            </div>
+              {/* Divider */}
+              <div className="hidden sm:block h-6 w-px bg-gray-200" />
 
-            {/* Right: My Gradients & Export */}
-            <div className="flex items-center gap-1 sm:gap-2 pointer-events-auto">
+              {/* Randomize/Shuffle buttons */}
+              <div className="hidden sm:flex items-center gap-1">
+                <Button
+                  onClick={handleRandomize}
+                  size="sm"
+                  className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Randomize
+                </Button>
+
+                <Button
+                  onClick={handleShuffle}
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-1.5"
+                >
+                  <Shuffle className="h-4 w-4" />
+                  Shuffle
+                </Button>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden sm:block h-6 w-px bg-gray-200" />
+
               {/* My Gradients Button */}
               <div className="relative" ref={saveModalRef}>
                 <Button
                   onClick={() => setShowSaveModal(!showSaveModal)}
-                  variant="outline"
-                  className="flex items-center gap-1 sm:gap-2 bg-white text-xs sm:text-sm px-3 sm:px-4 h-7 sm:h-auto"
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-1.5"
                 >
-                  <FolderOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <FolderOpen className="h-4 w-4" />
                   <span className="hidden sm:inline">My Gradients</span>
                   {savedGradients.length > 0 && (
-                    <span className="hidden sm:inline-flex items-center justify-center w-5 h-5 text-[10px] font-medium bg-blue-100 text-blue-600 rounded-full">
+                    <span className="hidden sm:inline-flex items-center justify-center w-5 h-5 text-[10px] font-medium bg-green-100 text-green-600 rounded-full">
                       {savedGradients.length}
                     </span>
                   )}
@@ -574,7 +583,7 @@ export default function GradientEditorPage() {
                 {/* My Gradients Modal */}
                 {showSaveModal && (
                   <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-                    <div className="px-4 py-3 border-b bg-gradient-to-r from-blue-50 to-purple-50">
+                    <div className="px-4 py-3 border-b bg-gradient-to-r from-green-50 to-emerald-50">
                       <h2 className="text-sm font-semibold text-gray-900">My Gradients</h2>
                       <p className="text-xs text-gray-500">Save and load your gradients</p>
                     </div>
@@ -583,7 +592,7 @@ export default function GradientEditorPage() {
                       {/* Save Current Gradient */}
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                          <Save className="h-4 w-4 text-blue-600" />
+                          <Save className="h-4 w-4 text-green-600" />
                           <h3 className="text-xs font-semibold text-gray-700">Save Current</h3>
                         </div>
                         {savedGradients.length >= MAX_SAVED_GRADIENTS ? (
@@ -597,13 +606,13 @@ export default function GradientEditorPage() {
                               value={saveName}
                               onChange={(e) => setSaveName(e.target.value)}
                               placeholder="Enter gradient name..."
-                              className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                               onKeyDown={(e) => e.key === 'Enter' && handleSaveGradient()}
                             />
                             <Button
                               onClick={handleSaveGradient}
                               disabled={!saveName.trim()}
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                              className="bg-green-600 hover:bg-green-700 text-white px-4"
                             >
                               Save
                             </Button>
@@ -615,7 +624,7 @@ export default function GradientEditorPage() {
                       <div className="space-y-2 pt-3 border-t">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <FolderOpen className="h-4 w-4 text-purple-600" />
+                            <FolderOpen className="h-4 w-4 text-green-600" />
                             <h3 className="text-xs font-semibold text-gray-700">Saved Gradients</h3>
                           </div>
                           <span className={`text-xs ${savedGradients.length >= MAX_SAVED_GRADIENTS ? 'text-red-500 font-medium' : 'text-gray-400'}`}>
@@ -683,7 +692,7 @@ export default function GradientEditorPage() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-auto pt-14 bg-gray-100">
             <InteractiveGradientCanvas />
           </div>
         </div>

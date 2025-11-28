@@ -30,7 +30,7 @@ export function ProgressSlider({
         <div className="mb-1 flex items-center justify-between">
           <label className="text-xs text-gray-700">{label}</label>
           {showValue && (
-            <span className="text-xs font-semibold text-purple-600">
+            <span className="text-xs font-semibold text-green-600">
               {valueFormatter(value)}
             </span>
           )}

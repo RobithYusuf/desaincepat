@@ -272,7 +272,7 @@ export default function Hero3DModern() {
   }, []);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-gradient-to-br from-purple-50/60 via-pink-50/40 to-white">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-gradient-to-br from-green-50/60 via-emerald-50/40 to-white">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 50 }}
         dpr={[1, 2]}

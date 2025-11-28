@@ -5,7 +5,11 @@ import { Undo2, Redo2 } from 'lucide-react';
 import { useDesignStore } from '@/store/design-store';
 import { useBulkStore } from '@/store/bulk-store';
 
-export function UndoRedoControls() {
+interface UndoRedoControlsProps {
+  minimal?: boolean;
+}
+
+export function UndoRedoControls({ minimal = false }: UndoRedoControlsProps) {
   const { undo, redo, canUndo, canRedo } = useDesignStore();
   const { isBulkMode, bulkUndo, bulkRedo, canBulkUndo, canBulkRedo } = useBulkStore();
 
@@ -57,8 +61,12 @@ export function UndoRedoControls() {
   const isUndoDisabled = isBulkMode ? !canBulkUndo() : !canUndo();
   const isRedoDisabled = isBulkMode ? !canBulkRedo() : !canRedo();
 
+  const wrapperClass = minimal 
+    ? "flex items-center gap-1" 
+    : "flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg";
+
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg">
+    <div className={wrapperClass}>
       <button
         onClick={handleUndo}
         disabled={isUndoDisabled}

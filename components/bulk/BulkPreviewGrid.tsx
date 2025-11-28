@@ -199,7 +199,7 @@ function PreviewCard({
       <div className="mt-2 flex items-center justify-center gap-1.5">
         {item.typography && Object.keys(item.typography).length > 0 && (
           <div 
-            className="w-4 h-4 rounded border border-purple-300 bg-purple-100 flex-shrink-0 shadow-sm flex items-center justify-center text-purple-600"
+            className="w-4 h-4 rounded border border-green-300 bg-green-100 flex-shrink-0 shadow-sm flex items-center justify-center text-green-600"
             title="Custom typography"
           >
             <span className="text-[8px] font-bold">T</span>
@@ -302,7 +302,7 @@ export function BulkPreviewGrid() {
           <h2 className="text-xs sm:text-sm font-semibold text-gray-700">
             Bulk Preview
           </h2>
-          <span className="px-1.5 sm:px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full text-[10px] sm:text-xs font-medium">
+          <span className="px-1.5 sm:px-2 py-0.5 bg-green-100 text-green-600 rounded-full text-[10px] sm:text-xs font-medium">
             {bulkItems.length} items
           </span>
         </div>

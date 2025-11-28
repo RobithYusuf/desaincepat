@@ -78,7 +78,7 @@ export function BulkTypographyPicker({
         <button
           className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center transition-all shadow-sm ${
             hasCustomTypography 
-              ? 'bg-purple-500 text-white' 
+              ? 'bg-green-500 text-white' 
               : 'bg-white/90 text-gray-600 hover:bg-white'
           }`}
           title="Edit typography"
@@ -122,7 +122,7 @@ export function BulkTypographyPicker({
               max="500"
               value={currentFontSize}
               onChange={(e) => setTypography({ fontSize: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
             />
           </div>
 
@@ -139,7 +139,7 @@ export function BulkTypographyPicker({
               step="0.1"
               value={currentLineHeight}
               onChange={(e) => setTypography({ lineHeight: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
             />
           </div>
 
@@ -155,7 +155,7 @@ export function BulkTypographyPicker({
               max="100"
               value={currentMaxWidth}
               onChange={(e) => setTypography({ maxWidth: Number(e.target.value) })}
-              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+              className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
             />
           </div>
 
@@ -165,7 +165,7 @@ export function BulkTypographyPicker({
             <select
               value={currentFontFamily}
               onChange={(e) => setTypography({ fontFamily: e.target.value })}
-              className="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-green-500"
             >
               {FONT_FAMILIES.map((font) => (
                 <option key={font.value} value={font.value}>
@@ -189,7 +189,7 @@ export function BulkTypographyPicker({
                 type="text"
                 value={currentFontColor}
                 onChange={(e) => setTypography({ fontColor: e.target.value })}
-                className="flex-1 px-2 py-1.5 text-xs border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="flex-1 px-2 py-1.5 text-xs border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-green-500"
                 placeholder="#ffffff"
               />
             </div>
@@ -205,7 +205,7 @@ export function BulkTypographyPicker({
                   onClick={() => setTypography({ textAlign: align })}
                   className={`flex-1 py-1.5 text-xs font-medium rounded-md border transition-all ${
                     currentTextAlign === align
-                      ? 'bg-purple-50 border-purple-300 text-purple-700'
+                      ? 'bg-green-50 border-green-300 text-green-700'
                       : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                   }`}
                 >
@@ -217,7 +217,7 @@ export function BulkTypographyPicker({
 
           {/* Info */}
           {hasCustomTypography && (
-            <p className="text-[10px] text-purple-600 bg-purple-50 rounded px-2 py-1">
+            <p className="text-[10px] text-green-600 bg-green-50 rounded px-2 py-1">
               Custom typography aktif untuk item ini
             </p>
           )}

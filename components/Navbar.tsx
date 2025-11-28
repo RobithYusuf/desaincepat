@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Palette, Github, Twitter, Menu, X, Sparkles } from 'lucide-react';
+import { Palette, Github, Twitter, Menu, X, Coffee } from 'lucide-react';
 
 interface NavbarProps {
   onMenuToggle?: () => void;
@@ -27,79 +28,82 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
 
   return (
     <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="w-full px-6 sm:px-8 lg:px-12">
-        <div className="relative flex h-16 items-center justify-between">
+      <div className="w-full px-2 sm:px-4 lg:px-6">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo - Far Left */}
-          <div className="flex items-center">
+          <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
+              <Image
+                src="/icon.png"
+                alt="DesainCepat"
+                width={36}
+                height={36}
+                className="rounded-lg"
+              />
               <span className="text-lg font-bold text-gray-900">DesainCepat</span>
             </Link>
           </div>
 
-          {/* Navigation Links - Centered */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:block">
-            <div className="flex items-center gap-8">
-              <Link
-                href="/"
-                className={`text-sm font-medium transition-all ${
-                  pathname === '/' 
-                    ? 'text-purple-600' 
-                    : 'text-gray-700 hover:text-purple-600'
-                }`}
-              >
-                Home
-              </Link>
-              <Link
-                href="/thumbnail"
-                className={`text-sm font-medium transition-all ${
-                  pathname === '/thumbnail' 
-                    ? 'text-purple-600' 
-                    : 'text-gray-700 hover:text-purple-600'
-                }`}
-              >
-                Thumbnail
-              </Link>
-              <Link
-                href="/gradient-editor"
-                className={`text-sm font-medium transition-all ${
-                  pathname === '/gradient-editor' 
-                    ? 'text-purple-600' 
-                    : 'text-gray-700 hover:text-purple-600'
-                }`}
-              >
-                Gradient
-              </Link>
-              <Link
-                href="/tutorial"
-                className={`text-sm font-medium transition-all ${
-                  pathname === '/tutorial' 
-                    ? 'text-purple-600' 
-                    : 'text-gray-700 hover:text-purple-600'
-                }`}
-              >
-                Tutorial
-              </Link>
-            </div>
-          </div>
-
-          {/* Right Section - Far Right */}
-          <div className="flex items-center gap-3">
-            {/* Try Now Button - Hidden on mobile */}
+          {/* Navigation Links - Center */}
+          <div className="hidden lg:flex items-center gap-8">
+            <Link
+              href="/"
+              className={`text-sm font-medium transition-all ${
+                pathname === '/' 
+                  ? 'text-green-600' 
+                  : 'text-gray-700 hover:text-green-600'
+              }`}
+            >
+              Home
+            </Link>
             <Link
               href="/thumbnail"
-              className="hidden items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105 sm:inline-flex"
+              className={`text-sm font-medium transition-all ${
+                pathname === '/thumbnail' 
+                  ? 'text-green-600' 
+                  : 'text-gray-700 hover:text-green-600'
+              }`}
             >
-              <Sparkles className="h-4 w-4" />
-              Try Now
+              Thumbnail
             </Link>
+            <Link
+              href="/gradient-editor"
+              className={`text-sm font-medium transition-all ${
+                pathname === '/gradient-editor' 
+                  ? 'text-green-600' 
+                  : 'text-gray-700 hover:text-green-600'
+              }`}
+            >
+              Gradient
+            </Link>
+            <Link
+              href="/tutorial"
+              className={`text-sm font-medium transition-all ${
+                pathname === '/tutorial' 
+                  ? 'text-green-600' 
+                  : 'text-gray-700 hover:text-green-600'
+              }`}
+            >
+              Tutorial
+            </Link>
+          </div>
+
+          {/* Trakteer Button - Far Right */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://saweria.co/robithyusuf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-orange-600 hover:shadow-lg sm:inline-flex"
+            >
+              <Coffee className="h-4 w-4" />
+              Trakteer
+            </a>
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={handleToggle}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition-all hover:text-purple-600 lg:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition-all hover:text-green-600 lg:hidden"
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -120,7 +124,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 onClick={handleLinkClick}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   pathname === '/'
-                    ? 'bg-purple-50 text-purple-600'
+                    ? 'bg-green-50 text-green-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -131,7 +135,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 onClick={handleLinkClick}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   pathname === '/thumbnail'
-                    ? 'bg-purple-50 text-purple-600'
+                    ? 'bg-green-50 text-green-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -142,7 +146,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 onClick={handleLinkClick}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   pathname === '/gradient-editor'
-                    ? 'bg-purple-50 text-purple-600'
+                    ? 'bg-green-50 text-green-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -153,7 +157,7 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
                 onClick={handleLinkClick}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   pathname === '/tutorial'
-                    ? 'bg-purple-50 text-purple-600'
+                    ? 'bg-green-50 text-green-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
@@ -162,14 +166,15 @@ export function Navbar({ onMenuToggle, isMobileMenuOpen }: NavbarProps) {
 
               {/* Try Now Button in Mobile Menu */}
               <div className="border-t border-gray-200 pt-3 mt-3">
-                <Link
-                  href="/thumbnail"
-                  onClick={handleLinkClick}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 text-sm font-semibold text-white transition-colors"
+                <a
+                  href="https://saweria.co/robithyusuf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-600"
                 >
-                  <Sparkles className="h-4 w-4" />
-                  Try Now
-                </Link>
+                  <Coffee className="h-4 w-4" />
+                  Trakteer
+                </a>
               </div>
             </div>
           </div>

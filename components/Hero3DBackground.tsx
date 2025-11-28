@@ -127,7 +127,7 @@ function AmbientParticles() {
 // Main 3D Scene - Professional Setup (Centered, Subtle)
 export default function Hero3DBackground() {
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-gradient-to-br from-purple-50/70 via-pink-50/50 to-white">
+    <div className="absolute inset-0 -z-10 overflow-hidden bg-gradient-to-br from-green-50/70 via-emerald-50/50 to-white">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 60 }}
         dpr={[1, 2]}

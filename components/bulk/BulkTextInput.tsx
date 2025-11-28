@@ -25,12 +25,12 @@ export function BulkTextInput() {
         value={rawInput}
         onChange={(e) => setRawInput(e.target.value)}
         placeholder="Tutorial React untuk Pemula&#10;Belajar Next.js dari Nol&#10;Tips CSS yang Wajib Tahu"
-        className="w-full h-32 p-2.5 text-xs border border-gray-300 rounded-lg resize-none focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 placeholder:text-gray-400"
+        className="w-full h-32 p-2.5 text-xs border border-gray-300 rounded-lg resize-none focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 placeholder:text-gray-400"
       />
 
       <p className="text-[10px] text-gray-500">
         {bulkItems.length > 0 ? (
-          <span className="text-purple-600 font-medium">{bulkItems.length} items</span>
+          <span className="text-green-600 font-medium">{bulkItems.length} items</span>
         ) : (
           'Masukkan text, satu per baris'
         )}

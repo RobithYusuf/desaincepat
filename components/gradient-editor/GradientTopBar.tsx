@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Lock, Unlock, Download, Image, FileCode, Link, Check } from 'lucide-react';
+import { Lock, Unlock, Download, Image as ImageIcon, FileCode, Link, Check } from 'lucide-react';
 import { useGradientStore } from '@/store/gradient-store';
 import { generateMeshGradient } from '@/lib/mesh-generator';
 import { TopBarWrapper } from '@/components/TopBarWrapper';
@@ -185,7 +185,7 @@ export function GradientTopBar({
             onClick={() => setIsLocked(!isLocked)}
             className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-colors ${
               isLocked 
-                ? 'bg-purple-50 border-purple-300 text-purple-600' 
+                ? 'bg-green-50 border-green-300 text-green-600' 
                 : 'bg-white border-gray-200 text-gray-400 hover:text-gray-600'
             }`}
             title={isLocked ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
@@ -209,7 +209,7 @@ export function GradientTopBar({
           <Button
             onClick={() => setShowExportModal(!showExportModal)}
             disabled={isExporting}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs px-4 h-9"
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-xs px-4 h-9"
           >
             <Download className="h-3.5 w-3.5" />
             <span>{isExporting ? 'Exporting...' : 'Export'}</span>
@@ -229,10 +229,10 @@ export function GradientTopBar({
                   
                   <button
                     onClick={() => { onExport('png'); setShowExportModal(false); }}
-                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-green-50 transition-colors"
                   >
-                    <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <Image className="h-4 w-4 text-blue-600" />
+                    <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <ImageIcon className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-medium text-gray-900">PNG</div>
@@ -242,10 +242,10 @@ export function GradientTopBar({
 
                   <button
                     onClick={() => { onExport('webp'); setShowExportModal(false); }}
-                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-green-50 transition-colors"
                   >
-                    <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <Image className="h-4 w-4 text-blue-600" />
+                    <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <ImageIcon className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-medium text-gray-900">WebP</div>
@@ -255,10 +255,10 @@ export function GradientTopBar({
 
                   <button
                     onClick={() => { onExport('svg'); setShowExportModal(false); }}
-                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-green-50 transition-colors"
                   >
-                    <div className="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                      <FileCode className="h-4 w-4 text-purple-600" />
+                    <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <FileCode className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-medium text-gray-900">SVG</div>

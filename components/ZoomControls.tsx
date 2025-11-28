@@ -3,15 +3,23 @@
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { useDesignStore } from '@/store/design-store';
 
-export function ZoomControls() {
+interface ZoomControlsProps {
+  minimal?: boolean;
+}
+
+export function ZoomControls({ minimal = false }: ZoomControlsProps) {
   const { zoomLevel, zoomIn, zoomOut, resetZoom } = useDesignStore();
 
   const zoomPercentage = Math.round(zoomLevel * 100);
   const canZoomIn = zoomLevel < 2;
   const canZoomOut = zoomLevel > 0.25;
 
+  const wrapperClass = minimal
+    ? "relative z-30 flex items-center gap-1"
+    : "relative z-30 flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg";
+
   return (
-    <div className="relative z-30 flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg">
+    <div className={wrapperClass}>
       {/* Zoom Out */}
       <button
         onClick={zoomOut}

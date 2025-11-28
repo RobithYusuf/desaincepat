@@ -18,7 +18,7 @@ function ColorSwatch({ id, color, onRemove, onClick }: ColorSwatchProps) {
       {/* Color button - clickable to edit */}
       <button
         onClick={onClick}
-        className="h-11 w-11 rounded-full border-2 border-white shadow-md transition-all hover:scale-110 hover:shadow-lg cursor-pointer ring-2 ring-gray-200 hover:ring-blue-500"
+        className="h-11 w-11 rounded-full border-2 border-white shadow-md transition-all hover:scale-110 hover:shadow-lg cursor-pointer ring-2 ring-gray-200 hover:ring-green-500"
         style={{ backgroundColor: color }}
         aria-label={`Edit color ${color}`}
       />
@@ -100,7 +100,7 @@ export function ColorPalette() {
         ))}
         <button
           onClick={handleAddColor}
-          className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-gray-300 text-gray-400 transition-all hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50"
+          className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-dashed border-gray-300 text-gray-400 transition-all hover:border-green-400 hover:text-green-500 hover:bg-green-50"
           aria-label="Add color"
         >
           <Plus className="h-5 w-5" />
@@ -127,7 +127,7 @@ export function ColorPalette() {
               <h3 className="text-xs font-semibold text-gray-900">Edit Color</h3>
               <button
                 onClick={() => setShowPicker(false)}
-                className="text-xs font-medium text-blue-600 hover:text-blue-700"
+                className="text-xs font-medium text-green-600 hover:text-green-700"
               >
                 ✕
               </button>
@@ -146,7 +146,7 @@ export function ColorPalette() {
                 type="text"
                 value={selectedColor}
                 onChange={(e) => handleColorChange(e.target.value)}
-                className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="#000000"
               />
             </div>

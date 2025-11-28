@@ -40,21 +40,29 @@ export default function Home() {
 
         {/* Canvas Area */}
         <div className="relative flex flex-1 flex-col items-center overflow-auto p-4 sm:p-6 lg:p-8">
-          {/* Top Controls - Always sticky at top */}
-          <div className="sticky top-0 z-20 mb-4 flex items-center gap-2 rounded-lg bg-white/80 backdrop-blur-sm p-2 shadow-sm">
-            <UndoRedoControls />
-            <ZoomControls />
+          {/* Top Controls - Sticky with gradient editor style */}
+          <div className="sticky top-0 z-20 mb-4 flex items-center gap-2 rounded-xl bg-white/95 backdrop-blur-sm px-3 py-2 shadow-lg border border-gray-200">
+            {/* Undo/Redo */}
+            <UndoRedoControls minimal />
+            
+            {/* Separator */}
+            <div className="h-6 w-px bg-gray-300" />
+            
+            {/* Zoom Controls */}
+            <ZoomControls minimal />
+            
+            {/* Separator */}
+            <div className="h-6 w-px bg-gray-300" />
+            
             {/* AI Prompt Button */}
-            <div className="flex items-center rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg">
-              <button
-                onClick={() => setIsPromptModalOpen(true)}
-                className="flex h-9 items-center gap-1.5 rounded px-2.5 text-sm font-medium text-purple-600 transition-colors hover:bg-purple-50"
-                title="AI Prompt Generator"
-              >
-                <Sparkles className="h-4 w-4" />
-                <span className="hidden sm:inline">AI Prompt</span>
-              </button>
-            </div>
+            <button
+              onClick={() => setIsPromptModalOpen(true)}
+              className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-green-600 transition-colors hover:bg-green-50"
+              title="AI Prompt Generator"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span className="hidden sm:inline">AI Prompt</span>
+            </button>
           </div>
           
           {/* Canvas (always rendered for export) */}
@@ -100,7 +108,7 @@ export default function Home() {
         {!isSidebarOpen && (
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="fixed bottom-6 left-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transition-all hover:shadow-xl lg:hidden"
+            className="fixed bottom-6 left-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg transition-all hover:shadow-xl lg:hidden"
             aria-label="Open settings"
           >
             <svg

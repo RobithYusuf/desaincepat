@@ -6,7 +6,7 @@ import { ReactNode, InputHTMLAttributes, SelectHTMLAttributes } from 'react';
 // Shared Styles
 // ============================================
 
-const FOCUS_STYLES = "focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20";
+const FOCUS_STYLES = "focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20";
 const BASE_INPUT_STYLES = "rounded-lg border border-gray-200 bg-white text-xs font-medium";
 
 // ============================================

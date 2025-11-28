@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import NextImage from "next/image";
 import { Navbar } from "@/components/Navbar";
-import { Sparkles, Zap, Palette, Download, ArrowRight, Image, Type, Layers } from "lucide-react";
+import { Sparkles, Zap, Palette, Download, ArrowRight, Image as ImageIcon, Type, Layers } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // Dynamically import 3D component (client-side only)
@@ -26,7 +27,7 @@ export default function LandingPage() {
           <div className="relative mx-auto max-w-5xl">
             <div className="text-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-purple-50 px-4 py-2 text-sm font-medium text-purple-700 mb-7">
+              <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-medium text-green-700 mb-7">
                 <Sparkles className="h-4 w-4" />
                 <span>Free Online Thumbnail Generator</span>
               </div>
@@ -34,7 +35,7 @@ export default function LandingPage() {
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl lg:text-7xl">
                 Create Professional
                 <br />
-                <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 bg-clip-text text-transparent">
                   Thumbnails
                 </span>
                 {" "}That Get Clicks
@@ -47,7 +48,7 @@ export default function LandingPage() {
               <div className="mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link
                   href="/thumbnail"
-                  className="group relative inline-flex items-center gap-2 rounded-xl bg-purple-600 px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all hover:bg-purple-700 hover:shadow-purple-500/50 hover:scale-105 sm:text-xl"
+                  className="group relative inline-flex items-center gap-2 rounded-xl bg-green-600 px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all hover:bg-green-700 hover:shadow-green-500/50 hover:scale-105 sm:text-xl"
                 >
                   <Sparkles className="h-5 w-5" />
                   Create Thumbnail Free
@@ -55,7 +56,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/gradient-editor"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-purple-200 bg-white px-8 py-5 text-base font-semibold text-purple-600 transition-all hover:border-purple-300 hover:bg-purple-50 sm:text-lg"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-green-200 bg-white px-8 py-5 text-base font-semibold text-green-600 transition-all hover:border-green-300 hover:bg-green-50 sm:text-lg"
                 >
                   <Palette className="h-5 w-5" />
                   Try Gradient Editor
@@ -73,16 +74,16 @@ export default function LandingPage() {
                   <span className="font-medium">100% Free</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                    <svg className="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                    <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
                   <span className="font-medium">No Sign-up</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100">
-                    <svg className="h-5 w-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
+                    <svg className="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
@@ -94,10 +95,10 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-green-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-7xl">
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-2 text-sm font-semibold text-purple-700 mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700 mb-4">
                 <Zap className="h-4 w-4" />
                 Powerful Features
               </div>
@@ -111,10 +112,10 @@ export default function LandingPage() {
 
             <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {/* Feature 1 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-lg">
                     <Type className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">26 Google Fonts</h3>
@@ -125,10 +126,10 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 2 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-200/30 to-green-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-pink-600 to-purple-600 text-white shadow-lg">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 text-white shadow-lg">
                     <Palette className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">181 Gradients</h3>
@@ -139,11 +140,11 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 3 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg">
-                    <Image className="h-7 w-7" />
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-lg">
+                    <ImageIcon className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">60+ Backgrounds</h3>
                   <p className="mt-3 text-gray-600 leading-relaxed">
@@ -153,10 +154,10 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 4 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-200/30 to-green-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-pink-600 to-purple-600 text-white shadow-lg">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 text-white shadow-lg">
                     <Layers className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Texture Overlays</h3>
@@ -167,10 +168,10 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 5 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-lg">
                     <Zap className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Instant Preview</h3>
@@ -181,10 +182,10 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 6 */}
-              <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
+              <div className="group relative overflow-hidden rounded-2xl border border-green-100 bg-white p-8 shadow-lg transition-all hover:shadow-2xl hover:scale-105">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-200/30 to-green-200/30 rounded-full blur-3xl -translate-y-16 translate-x-16"></div>
                 <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-pink-600 to-purple-600 text-white shadow-lg">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 text-white shadow-lg">
                     <Download className="h-7 w-7" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">HD Export</h3>
@@ -200,19 +201,19 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="bg-gray-50 px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
-            <div className="rounded-3xl bg-gradient-to-br from-purple-600 to-pink-600 p-8 sm:p-12 lg:p-16 shadow-2xl">
+            <div className="rounded-3xl bg-gradient-to-br from-green-600 to-emerald-600 p-8 sm:p-12 lg:p-16 shadow-2xl">
               <div className="text-center">
                 <Sparkles className="mx-auto h-12 w-12 text-white opacity-90" />
                 <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
                   Ready to Create Amazing Thumbnails?
                 </h2>
-                <p className="mt-4 text-lg text-purple-100 sm:text-xl">
+                <p className="mt-4 text-lg text-green-100 sm:text-xl">
                   Join thousands of creators using DesainCepat to make stunning thumbnails in minutes
                 </p>
                 <div className="mt-10">
                   <Link
                     href="/thumbnail"
-                    className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-purple-600 shadow-xl transition-all hover:shadow-2xl hover:scale-105"
+                    className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-green-600 shadow-xl transition-all hover:shadow-2xl hover:scale-105"
                   >
                     Start Creating Now
                     <ArrowRight className="h-5 w-5" />
@@ -231,9 +232,13 @@ export default function LandingPage() {
             {/* Brand Section */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 shadow-lg">
-                  <Sparkles className="h-6 w-6 text-white" />
-                </div>
+                <NextImage
+                  src="/icon.png"
+                  alt="DesainCepat"
+                  width={40}
+                  height={40}
+                  className="rounded-xl shadow-lg"
+                />
                 <span className="text-xl font-bold text-gray-900">DesainCepat</span>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -245,16 +250,16 @@ export default function LandingPage() {
             <div className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Quick Links</h3>
               <div className="flex flex-col gap-2">
-                <Link href="/thumbnail" className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-purple-600"></span>
+                <Link href="/thumbnail" className="text-sm text-gray-600 hover:text-green-600 transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-green-600"></span>
                   Thumbnail Editor
                 </Link>
-                <Link href="/gradient-editor" className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-purple-600"></span>
+                <Link href="/gradient-editor" className="text-sm text-gray-600 hover:text-green-600 transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-green-600"></span>
                   Gradient Editor
                 </Link>
-                <Link href="/tutorial" className="text-sm text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-purple-600"></span>
+                <Link href="/tutorial" className="text-sm text-gray-600 hover:text-green-600 transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-green-600"></span>
                   Tutorial
                 </Link>
               </div>
@@ -285,7 +290,7 @@ export default function LandingPage() {
                     </svg>
                     100% Free
                   </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
                     <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>

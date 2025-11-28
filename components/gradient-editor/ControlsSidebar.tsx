@@ -83,7 +83,7 @@ export function ControlsSidebar() {
             onClick={() => setColorsOpen(!colorsOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <Palette className="h-3.5 w-3.5" />
               <span>COLORS</span>
             </div>
@@ -201,7 +201,7 @@ export function ControlsSidebar() {
             onClick={() => setFiltersOpen(!filtersOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <Sliders className="h-3.5 w-3.5" />
               <span>FILTERS</span>
             </div>

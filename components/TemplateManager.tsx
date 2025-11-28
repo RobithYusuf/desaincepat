@@ -59,15 +59,15 @@ export function TemplateManager() {
           <h3 className="text-xs font-semibold text-gray-900">Template Saya</h3>
           <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
             currentMode === 'bulk' 
-              ? 'bg-purple-100 text-purple-600' 
-              : 'bg-blue-100 text-blue-600'
+              ? 'bg-green-100 text-green-600' 
+              : 'bg-green-100 text-green-600'
           }`}>
             {currentMode === 'bulk' ? 'Bulk' : 'Single'}
           </span>
         </div>
         <button
           onClick={() => setIsAdding(!isAdding)}
-          className="text-xs font-medium text-purple-600 hover:text-purple-700 transition-colors"
+          className="text-xs font-medium text-green-600 hover:text-green-700 transition-colors"
         >
           {isAdding ? 'Cancel' : '+ New'}
         </button>
@@ -75,7 +75,7 @@ export function TemplateManager() {
 
       {/* Save New Template Form */}
       {isAdding && (
-        <div className="mb-3 space-y-2 rounded-lg bg-purple-50 p-2.5 border border-purple-200">
+        <div className="mb-3 space-y-2 rounded-lg bg-green-50 p-2.5 border border-green-200">
           <Input
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
@@ -90,7 +90,7 @@ export function TemplateManager() {
           <Button
             onClick={handleSaveTemplate}
             disabled={!templateName.trim()}
-            className="w-full h-7 text-xs bg-purple-600 hover:bg-purple-700"
+            className="w-full h-7 text-xs bg-green-600 hover:bg-green-700"
           >
             <Save className="mr-1.5 h-3 w-3" />
             Save Template
@@ -113,7 +113,7 @@ export function TemplateManager() {
               className={`group rounded-lg border p-2.5 transition-all ${
                 loadedTemplateId === template.id
                   ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 bg-gray-50 hover:border-purple-300 hover:bg-purple-50'
+                  : 'border-gray-200 bg-gray-50 hover:border-green-300 hover:bg-green-50'
               }`}
             >
               <div className="flex items-start justify-between gap-2">
@@ -149,7 +149,7 @@ export function TemplateManager() {
                 <div className="flex gap-1">
                   <button
                     onClick={() => handleLoadTemplate(template.id)}
-                    className="rounded px-2 py-1 text-xs font-medium text-purple-600 hover:bg-purple-100 transition-colors"
+                    className="rounded px-2 py-1 text-xs font-medium text-green-600 hover:bg-green-100 transition-colors"
                   >
                     Load
                   </button>

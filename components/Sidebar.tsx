@@ -87,7 +87,7 @@ export function Sidebar({ onClose }: SidebarProps) {
             onClick={() => setTextOpen(!textOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <Type className="h-3.5 w-3.5" />
               <span>TEXT</span>
             </div>
@@ -120,7 +120,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                   <Layers className="h-3 w-3" />
                   Bulk
                   {bulkItems.length > 0 && (
-                    <span className="ml-1 px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded-full text-[10px]">
+                    <span className="ml-1 px-1.5 py-0.5 bg-green-100 text-green-600 rounded-full text-[10px]">
                       {bulkItems.length}
                     </span>
                   )}
@@ -132,7 +132,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                 <textarea
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-xs transition-all focus:border-purple-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+                  className="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-xs transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-green-500/20"
                   rows={3}
                   placeholder="Enter your text..."
                 />
@@ -152,7 +152,7 @@ export function Sidebar({ onClose }: SidebarProps) {
             onClick={() => setTypographyOpen(!typographyOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <Type className="h-3.5 w-3.5" />
               <span>TYPOGRAPHY</span>
             </div>
@@ -204,7 +204,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                     type="text"
                     value={fontColor}
                     onChange={(e) => setFontColor(e.target.value)}
-                    className="flex-1 rounded border border-gray-300 bg-gray-50 px-2 py-1 text-xs font-mono focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+                    className="flex-1 rounded border border-gray-300 bg-gray-50 px-2 py-1 text-xs font-mono focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/20"
                   />
                 </div>
               </div>
@@ -215,7 +215,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                 <select
                   value={fontFamily}
                   onChange={(e) => setFontFamily(e.target.value)}
-                  className="w-full rounded border border-gray-300 bg-gray-50 px-2 py-1.5 text-xs focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+                  className="w-full rounded border border-gray-300 bg-gray-50 px-2 py-1.5 text-xs focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/20"
                 >
                 <optgroup label="Sans Serif">
                   <option value="font-inter">Inter</option>
@@ -266,7 +266,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                     onClick={() => setTextAlign(align)}
                     className={`flex-1 rounded border px-2 py-1 text-xs font-medium transition-all ${
                       textAlign === align
-                        ? 'border-purple-600 bg-purple-600 text-white'
+                        ? 'border-green-600 bg-green-600 text-white'
                         : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
                     }`}
                   >
@@ -285,7 +285,7 @@ export function Sidebar({ onClose }: SidebarProps) {
             onClick={() => setBackgroundOpen(!backgroundOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <Paintbrush className="h-3.5 w-3.5" />
               <span>BACKGROUND</span>
             </div>
@@ -322,7 +322,7 @@ export function Sidebar({ onClose }: SidebarProps) {
             onClick={() => setTextureOpen(!textureOpen)}
             className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
           >
-            <div className="flex items-center gap-1.5 font-semibold text-blue-600 text-xs">
+            <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
               <ImageIcon className="h-3.5 w-3.5" />
               <span>TEXTURE</span>
             </div>
@@ -337,7 +337,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                     type="checkbox"
                     checked={textureEnabled}
                     onChange={(e) => setTextureEnabled(e.target.checked)}
-                    className="h-3.5 w-3.5 rounded border-gray-300 text-purple-600 focus:ring-1 focus:ring-purple-500"
+                    className="h-3.5 w-3.5 rounded border-gray-300 text-green-600 focus:ring-1 focus:ring-green-500"
                   />
                   <span className="text-xs text-gray-700">Enable Texture</span>
                 </label>
@@ -350,7 +350,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                     <select
                       value={textureType}
                       onChange={(e) => setTextureType(e.target.value as any)}
-                      className="w-full rounded border border-gray-300 bg-gray-50 px-2 py-1.5 text-xs focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+                      className="w-full rounded border border-gray-300 bg-gray-50 px-2 py-1.5 text-xs focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/20"
                     >
                       <option value="fine">Fine Grain</option>
                       <option value="medium">Medium Grain</option>

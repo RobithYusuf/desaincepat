@@ -108,7 +108,7 @@ export function BulkExportModal() {
       <DialogTrigger asChild>
         <Button
           disabled={bulkItems.length === 0}
-          className="bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50"
+          className="bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
         >
           <Download className="mr-2 h-4 w-4" />
           Export {bulkItems.length} Thumbnails
@@ -118,7 +118,7 @@ export function BulkExportModal() {
       <DialogContent className="sm:max-w-[420px]">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-base flex items-center gap-2">
-            <FileArchive className="h-5 w-5 text-purple-600" />
+            <FileArchive className="h-5 w-5 text-green-600" />
             Bulk Export
           </DialogTitle>
           <DialogDescription className="text-xs">
@@ -160,7 +160,7 @@ export function BulkExportModal() {
                   disabled={isGenerating}
                   className={`px-3 py-2.5 rounded-md text-xs font-medium border transition-all ${
                     exportQuality === q
-                      ? 'border-purple-600 bg-purple-50 text-purple-700'
+                      ? 'border-green-600 bg-green-50 text-green-700'
                       : 'border-gray-200 hover:border-gray-300 text-gray-600'
                   } disabled:opacity-50`}
                 >
@@ -189,7 +189,7 @@ export function BulkExportModal() {
                 disabled={isGenerating}
                 className={`px-3 py-2.5 rounded-md text-xs font-medium border transition-all flex items-center justify-center gap-2 ${
                   downloadMode === 'zip'
-                    ? 'border-purple-600 bg-purple-50 text-purple-700'
+                    ? 'border-green-600 bg-green-50 text-green-700'
                     : 'border-gray-200 hover:border-gray-300 text-gray-600'
                 } disabled:opacity-50`}
               >
@@ -204,7 +204,7 @@ export function BulkExportModal() {
                 disabled={isGenerating}
                 className={`px-3 py-2.5 rounded-md text-xs font-medium border transition-all flex items-center justify-center gap-2 ${
                   downloadMode === 'multiple'
-                    ? 'border-purple-600 bg-purple-50 text-purple-700'
+                    ? 'border-green-600 bg-green-50 text-green-700'
                     : 'border-gray-200 hover:border-gray-300 text-gray-600'
                 } disabled:opacity-50`}
               >
@@ -243,11 +243,11 @@ export function BulkExportModal() {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-600">Generating...</span>
-                <span className="text-purple-600 font-medium">{currentIndex}/{totalItems}</span>
+                <span className="text-green-600 font-medium">{currentIndex}/{totalItems}</span>
               </div>
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-purple-600 transition-all duration-300"
+                  className="h-full bg-green-600 transition-all duration-300"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -282,7 +282,7 @@ export function BulkExportModal() {
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || bulkItems.length === 0}
-            className="h-8 bg-purple-600 text-xs text-white hover:bg-purple-700"
+            className="h-8 bg-green-600 text-xs text-white hover:bg-green-700"
           >
             {isGenerating ? (
               <>
