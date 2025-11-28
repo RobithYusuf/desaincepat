@@ -116,19 +116,28 @@ export function Canvas() {
     }
   };
 
+  // Calculate scaled dimensions for proper layout
+  const scaledWidth = width * scale;
+  const scaledHeight = height * scale;
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      {/* Canvas Container */}
-      <div className="relative flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          {/* Canvas Preview with border wrapper */}
-          <div 
-            className="rounded-lg ring-2 ring-gray-300/50 ring-offset-4 ring-offset-gray-100"
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: 'center',
-            }}
-          >
+    <div className="flex flex-col items-center gap-4">
+      {/* Canvas Container with proper scaled dimensions */}
+      <div 
+        className="relative flex items-center justify-center"
+        style={{
+          width: `${scaledWidth}px`,
+          height: `${scaledHeight}px`,
+        }}
+      >
+        {/* Canvas Preview with border wrapper */}
+        <div 
+          className="absolute rounded-lg ring-2 ring-gray-300/50 ring-offset-4 ring-offset-gray-100"
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: 'center',
+          }}
+        >
           <div
             ref={canvasRef}
             id="canvas-export"
@@ -182,15 +191,14 @@ export function Canvas() {
               </h1>
             </div>
           </div>
-          </div>
-
-          {/* Dimensions Info */}
-          <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm">
-            <span>{width} × {height}px</span>
-            <span className="text-gray-400">•</span>
-            <span className="capitalize">{frameSize}</span>
-          </div>
         </div>
+      </div>
+
+      {/* Dimensions Info */}
+      <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm">
+        <span>{width} × {height}px</span>
+        <span className="text-gray-400">•</span>
+        <span className="capitalize">{frameSize}</span>
       </div>
     </div>
   );

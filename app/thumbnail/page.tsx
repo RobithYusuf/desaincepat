@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 import { Canvas } from "@/components/Canvas";
 import { Sidebar } from "@/components/Sidebar";
 import { Navbar } from "@/components/Navbar";
@@ -8,14 +9,18 @@ import { FrameSizePaddingControls } from "@/components/FrameSizePaddingControls"
 import { ZoomControls } from "@/components/ZoomControls";
 import { UndoRedoControls } from "@/components/UndoRedoControls";
 import { BulkPreviewGrid } from "@/components/bulk";
+import { PromptGeneratorModal } from "@/components/PromptGeneratorModal";
 import { useBulkStore } from "@/store/bulk-store";
 import { useDesignStore } from "@/store/design-store";
 import { useHistoryTracker } from "@/hooks/useHistoryTracker";
+import { useBulkHistoryTracker } from "@/hooks/useBulkHistoryTracker";
 
 export default function Home() {
   // Track design changes for undo/redo
   useHistoryTracker();
+  useBulkHistoryTracker();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const { isBulkMode, bulkItems } = useBulkStore();
   const { frameSize, getFrameDimensions } = useDesignStore();
   const { width, height } = getFrameDimensions();
@@ -34,11 +39,22 @@ export default function Home() {
         </div>
 
         {/* Canvas Area */}
-        <div className="relative flex flex-1 flex-col items-center justify-center gap-4 overflow-auto p-4 sm:p-6 lg:p-8">
-          {/* Top Controls */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:relative sm:top-0 sm:left-0 sm:translate-x-0">
+        <div className="relative flex flex-1 flex-col items-center overflow-auto p-4 sm:p-6 lg:p-8">
+          {/* Top Controls - Always sticky at top */}
+          <div className="sticky top-0 z-20 mb-4 flex items-center gap-2 rounded-lg bg-white/80 backdrop-blur-sm p-2 shadow-sm">
             <UndoRedoControls />
             <ZoomControls />
+            {/* AI Prompt Button */}
+            <div className="flex items-center rounded-lg border border-gray-200 bg-white p-1.5 shadow-lg">
+              <button
+                onClick={() => setIsPromptModalOpen(true)}
+                className="flex h-9 items-center gap-1.5 rounded px-2.5 text-sm font-medium text-purple-600 transition-colors hover:bg-purple-50"
+                title="AI Prompt Generator"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Prompt</span>
+              </button>
+            </div>
           </div>
           
           {/* Canvas (always rendered for export) */}
@@ -104,6 +120,12 @@ export default function Home() {
           </button>
         )}
       </main>
+
+      {/* AI Prompt Generator Modal */}
+      <PromptGeneratorModal
+        open={isPromptModalOpen}
+        onOpenChange={setIsPromptModalOpen}
+      />
     </div>
   );
 }

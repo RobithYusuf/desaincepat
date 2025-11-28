@@ -78,7 +78,7 @@ export function FrameSizePaddingControls() {
             <select
               value={frameSize}
               onChange={(e) => setFrameSize(e.target.value as any)}
-              className="flex-1 sm:flex-none rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+              className="flex-1 sm:flex-none h-9 rounded-lg border border-gray-200 bg-white px-3 text-xs font-medium shadow-lg focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
             >
               <option value="youtube">YouTube Thumbnail (1280×720)</option>
               <option value="instagram">Instagram Portrait (1080×1350)</option>

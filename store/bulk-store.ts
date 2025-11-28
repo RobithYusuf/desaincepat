@@ -1,4 +1,9 @@
 import { create } from 'zustand';
+import { useDesignStore } from './design-store';
+
+// ============================================
+// Types
+// ============================================
 
 export interface BulkItemTypography {
   fontSize?: number;
@@ -25,6 +30,101 @@ export interface GeneratedImage {
   error?: string;
 }
 
+// Global typography settings for snapshot
+export interface GlobalTypography {
+  fontSize: number;
+  lineHeight: number;
+  maxWidth: number;
+  fontColor: string;
+  fontFamily: string;
+  textAlign: 'left' | 'center' | 'right';
+  backgroundColor: string;
+  backgroundMode: 'solid' | 'gradient' | 'image';
+  gradientPreset: string;
+  customGradient: string;
+  textureEnabled: boolean;
+  textureType: string;
+  textureIntensity: number;
+}
+
+// Snapshot for undo/redo
+export interface BulkSnapshot {
+  bulkItems: BulkItem[];
+  rawInput: string;
+  globalTypography?: GlobalTypography;
+}
+
+// ============================================
+// Helper Functions (DRY - Don't Repeat Yourself)
+// ============================================
+
+/**
+ * Get current global typography settings from design store
+ */
+export function getGlobalTypography(): GlobalTypography {
+  const ds = useDesignStore.getState();
+  return {
+    fontSize: ds.fontSize,
+    lineHeight: ds.lineHeight,
+    maxWidth: ds.maxWidth,
+    fontColor: ds.fontColor,
+    fontFamily: ds.fontFamily,
+    textAlign: ds.textAlign,
+    backgroundColor: ds.backgroundColor,
+    backgroundMode: ds.backgroundMode,
+    gradientPreset: ds.gradientPreset,
+    customGradient: ds.customGradient,
+    textureEnabled: ds.textureEnabled,
+    textureType: ds.textureType,
+    textureIntensity: ds.textureIntensity,
+  };
+}
+
+/**
+ * Restore global typography settings to design store
+ */
+export function restoreGlobalTypography(gt: GlobalTypography): void {
+  const ds = useDesignStore.getState();
+  ds.setFontSize(gt.fontSize);
+  ds.setLineHeight(gt.lineHeight);
+  ds.setMaxWidth(gt.maxWidth);
+  ds.setFontColor(gt.fontColor);
+  ds.setFontFamily(gt.fontFamily);
+  ds.setTextAlign(gt.textAlign);
+  ds.setBackgroundColor(gt.backgroundColor);
+  ds.setBackgroundMode(gt.backgroundMode);
+  ds.setGradientPreset(gt.gradientPreset);
+  ds.setCustomGradient(gt.customGradient);
+  ds.setTextureEnabled(gt.textureEnabled);
+  ds.setTextureType(gt.textureType);
+  ds.setTextureIntensity(gt.textureIntensity);
+}
+
+/**
+ * Deep clone an object (for immutable state updates)
+ */
+function deepClone<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+ * Check if two snapshots are identical
+ */
+function areSnapshotsEqual(a: BulkSnapshot, b: BulkSnapshot): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+// ============================================
+// Constants
+// ============================================
+
+const MAX_HISTORY_LENGTH = 50;
+const UNDO_REDO_DELAY_MS = 100;
+
+// ============================================
+// State & Store
+// ============================================
+
 export interface BulkState {
   // Mode
   isBulkMode: boolean;
@@ -45,6 +145,11 @@ export interface BulkState {
   
   // Cancel flag
   shouldCancel: boolean;
+
+  // History for undo/redo
+  bulkHistory: BulkSnapshot[];
+  bulkHistoryIndex: number;
+  isBulkUndoRedoAction: boolean;
 }
 
 export interface BulkActions {
@@ -79,6 +184,13 @@ export interface BulkActions {
   // Reset
   resetGeneration: () => void;
   resetAll: () => void;
+
+  // Undo/Redo
+  bulkUndo: () => void;
+  bulkRedo: () => void;
+  canBulkUndo: () => boolean;
+  canBulkRedo: () => boolean;
+  pushBulkHistory: () => void;
 }
 
 export type BulkStore = BulkState & BulkActions;
@@ -108,6 +220,11 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
   totalItems: 0,
   generatedImages: [],
   shouldCancel: false,
+  
+  // History for undo/redo
+  bulkHistory: [],
+  bulkHistoryIndex: -1,
+  isBulkUndoRedoAction: false,
 
   // Actions
   toggleBulkMode: () => set((state) => ({ isBulkMode: !state.isBulkMode })),
@@ -270,5 +387,99 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
     totalItems: 0,
     generatedImages: [],
     shouldCancel: false,
+    bulkHistory: [],
+    bulkHistoryIndex: -1,
+    isBulkUndoRedoAction: false,
   }),
+
+  // Undo/Redo implementations
+  pushBulkHistory: () => {
+    const state = get();
+    
+    // Guard clauses
+    if (state.isBulkUndoRedoAction) return;
+    if (state.bulkItems.length === 0) return;
+
+    // Create snapshot
+    const snapshot: BulkSnapshot = {
+      bulkItems: deepClone(state.bulkItems),
+      rawInput: state.rawInput,
+      globalTypography: getGlobalTypography(),
+    };
+
+    // Skip if identical to last snapshot
+    const lastSnapshot = state.bulkHistory[state.bulkHistoryIndex];
+    if (lastSnapshot && areSnapshotsEqual(snapshot, lastSnapshot)) {
+      return;
+    }
+
+    // Update history (remove future, add new, limit size)
+    const newHistory = [
+      ...state.bulkHistory.slice(0, state.bulkHistoryIndex + 1),
+      snapshot,
+    ].slice(-MAX_HISTORY_LENGTH);
+
+    set({
+      bulkHistory: newHistory,
+      bulkHistoryIndex: newHistory.length - 1,
+    });
+  },
+
+  bulkUndo: () => {
+    const state = get();
+    if (state.bulkHistoryIndex <= 0) return;
+
+    const newIndex = state.bulkHistoryIndex - 1;
+    const snapshot = state.bulkHistory[newIndex];
+    if (!snapshot) return;
+
+    // Restore bulk state
+    set({
+      isBulkUndoRedoAction: true,
+      bulkHistoryIndex: newIndex,
+      bulkItems: deepClone(snapshot.bulkItems),
+      rawInput: snapshot.rawInput,
+    });
+
+    // Restore global typography
+    if (snapshot.globalTypography) {
+      restoreGlobalTypography(snapshot.globalTypography);
+    }
+
+    setTimeout(() => set({ isBulkUndoRedoAction: false }), UNDO_REDO_DELAY_MS);
+  },
+
+  bulkRedo: () => {
+    const state = get();
+    if (state.bulkHistoryIndex >= state.bulkHistory.length - 1) return;
+
+    const newIndex = state.bulkHistoryIndex + 1;
+    const snapshot = state.bulkHistory[newIndex];
+    if (!snapshot) return;
+
+    // Restore bulk state
+    set({
+      isBulkUndoRedoAction: true,
+      bulkHistoryIndex: newIndex,
+      bulkItems: deepClone(snapshot.bulkItems),
+      rawInput: snapshot.rawInput,
+    });
+
+    // Restore global typography
+    if (snapshot.globalTypography) {
+      restoreGlobalTypography(snapshot.globalTypography);
+    }
+
+    setTimeout(() => set({ isBulkUndoRedoAction: false }), UNDO_REDO_DELAY_MS);
+  },
+
+  canBulkUndo: () => {
+    const state = get();
+    return state.bulkHistoryIndex > 0;
+  },
+
+  canBulkRedo: () => {
+    const state = get();
+    return state.bulkHistoryIndex < state.bulkHistory.length - 1;
+  },
 }));

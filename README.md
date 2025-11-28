@@ -17,8 +17,11 @@ Aplikasi web untuk membuat thumbnail dan gradient berkualitas tinggi dengan cepa
 - **Real-time Preview** - Lihat perubahan design secara instant
 - **Multiple Presets** - YouTube, Instagram, Twitter, Custom size
 - **Background Options** - Gradients, Images, Solid colors, Noise texture
-- **Typography** - 26+ Google Fonts dengan full controls
+- **Typography** - 26+ Google Fonts dengan full controls (font size 12-500px)
 - **Template System** - Save dan load konfigurasi design
+- **Bulk Mode** - Generate multiple thumbnails dengan text berbeda dalam satu batch
+- **Undo/Redo** - Full history support dengan keyboard shortcuts (Ctrl+Z/Y)
+- **AI Prompt Generator** - Generate prompt untuk Gemini AI image generation
 
 ### 📐 Canvas & Preview
 - **Real-time Preview** - Lihat perubahan design secara instant
@@ -50,11 +53,26 @@ Aplikasi web untuk membuat thumbnail dan gradient berkualitas tinggi dengan cepa
   - Font color picker with hex input
   - Multiple font categories (Sans, Display, Serif, Handwriting, Monospace)
 
+### 📦 Bulk Mode
+- **Multiple Thumbnails** - Generate banyak thumbnail sekaligus dengan text berbeda
+- **Per-Item Customization** - Custom background dan typography untuk setiap item
+- **Preview Grid** - Lihat semua thumbnails dalam grid responsive
+- **Batch Export** - Download sebagai ZIP atau multiple files
+- **Bulk Undo/Redo** - History tracking untuk perubahan bulk
+
+### 🤖 AI Prompt Generator
+- **Smart Prompt Generation** - Generate prompt optimal untuk Gemini AI
+- **Platform-Aware** - Prompt menyesuaikan dengan frame size (YouTube/Instagram/Twitter)
+- **Style Options** - 10 visual styles (Modern Gradient, Minimalist, Cinematic, dll)
+- **Audience Targeting** - 7 audience types untuk prompt yang lebih relevan
+- **API Integration** - Support Gemini API untuk direct image generation
+- **Copy & Go** - Copy prompt dan redirect ke Google AI Studio
+
 ### 💾 Export & Templates
 - **High Quality Export** - 3 preset kualitas:
-  - Standard (85%, 1x) - File kecil
-  - Best (92%, 2x) - Balanced (Recommended)
-  - Maximum (100%, 3x) - Kualitas terbaik
+  - Normal (1x) - File kecil, quick sharing
+  - HD (2x) - Balanced quality (Recommended)
+  - Ultra HD (3x) - Maximum quality untuk print
 - **Template System** - Simpan dan load konfigurasi design
 - **LocalStorage Persist** - Templates tersimpan otomatis
 
@@ -99,10 +117,11 @@ docker-compose --profile dev up dev
 - **Styling**: Tailwind CSS + shadcn/ui
 - **State Management**: Zustand (with persist middleware)
 - **Gradient Rendering**: SVG + Canvas (feTurbulence, feSpecularLighting)
+- **AI Integration**: Google Gemini API (optional)
 - **Default Font**: IBM Plex Sans Condensed
 - **Fonts**: Google Fonts (26+ families)
 - **Icons**: Lucide React
-- **Export**: html-to-image, Canvas API
+- **Export**: html-to-image, Canvas API, JSZip (bulk export)
 - **Containerization**: Docker (Multi-stage build)
 
 ## 📁 Project Structure
@@ -122,26 +141,33 @@ desaincepat/
 ├── components/                    # React components
 │   ├── Canvas.tsx                # Preview canvas with zoom
 │   ├── Sidebar.tsx               # Desktop sidebar controls
-│   ├── MobileSidebar.tsx         # Mobile sidebar overlay
 │   ├── Navbar.tsx                # Centered sticky navbar with backdrop blur
-│   ├── Hero3DModern.tsx          # Modern geometric 3D background
 │   ├── GradientPicker.tsx        # Enhanced color picker with tooltips
 │   ├── ZoomControls.tsx          # Zoom in/out/fit controls
+│   ├── UndoRedoControls.tsx      # Undo/redo with keyboard shortcuts
 │   ├── FrameSizePaddingControls.tsx  # Frame & padding controls
 │   ├── TemplateManager.tsx       # Save/load templates
 │   ├── ExportModal.tsx           # Export dialog
-│   ├── ProgressSlider.tsx        # Custom slider component
+│   ├── PromptGeneratorModal.tsx  # AI prompt generator
+│   ├── ApiKeySettingsModal.tsx   # Gemini API key settings
+│   ├── bulk/                     # Bulk mode components
+│   │   ├── BulkPreviewGrid.tsx   # Preview grid for bulk items
+│   │   ├── BulkExportModal.tsx   # Bulk export (ZIP/multiple)
+│   │   ├── BulkBackgroundPicker.tsx
+│   │   └── BulkTypographyPicker.tsx
 │   └── ui/                       # shadcn/ui components
-│       ├── button.tsx
-│       ├── label.tsx
-│       ├── slider.tsx
-│       └── ...
 ├── store/                         # Zustand stores
-│   └── design-store.ts           # Design state (with persist)
+│   ├── design-store.ts           # Design state (with persist & undo/redo)
+│   └── bulk-store.ts             # Bulk mode state
 ├── lib/                           # Utilities & data
 │   ├── utils.ts                  # Helper functions
 │   ├── gradients.ts              # 181 gradient presets
-│   └── fonts.ts                  # Font family definitions
+│   ├── fonts.ts                  # Font family definitions
+│   ├── prompt-templates.ts       # AI prompt templates
+│   └── gemini-client.ts          # Gemini API client
+├── hooks/                         # Custom React hooks
+│   ├── useHistoryTracker.ts      # Single mode undo/redo
+│   └── useBulkHistoryTracker.ts  # Bulk mode undo/redo
 ├── public/                        # Static assets
 │   └── textures/                 # Noise textures
 ├── docs/                          # Documentation
