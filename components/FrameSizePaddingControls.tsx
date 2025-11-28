@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDesignStore } from '@/store/design-store';
 import { useBulkStore } from '@/store/bulk-store';
+import { TopBarWrapper } from './TopBarWrapper';
 import { ProgressSlider } from './ProgressSlider';
 import { ExportModal } from './ExportModal';
 import { BulkExportModal } from './bulk/BulkExportModal';
@@ -68,10 +69,9 @@ export function FrameSizePaddingControls() {
   };
 
   return (
-    <div className="border-b border-gray-200 bg-white">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 px-4 py-3 sm:px-6">
-        {/* Left Side: Frame Size & Padding */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full sm:w-auto">
+    <TopBarWrapper>
+      {/* Left Side: Frame Size & Padding */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full sm:w-auto">
           {/* Frame Size Selector */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <label className="text-xs font-medium text-gray-700 whitespace-nowrap">Frame Size</label>
@@ -131,11 +131,10 @@ export function FrameSizePaddingControls() {
           </div>
         </div>
 
-        {/* Right Side: Export Button */}
-        <div className="w-full sm:w-auto">
-          {isBulkMode ? <BulkExportModal /> : <ExportModal />}
-        </div>
+      {/* Right Side: Export Button */}
+      <div className="w-full sm:w-auto">
+        {isBulkMode ? <BulkExportModal /> : <ExportModal />}
       </div>
-    </div>
+    </TopBarWrapper>
   );
 }

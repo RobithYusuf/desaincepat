@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Lock, Unlock, Download, Image, FileCode, Link, Check } from 'lucide-react';
 import { useGradientStore } from '@/store/gradient-store';
 import { generateMeshGradient } from '@/lib/mesh-generator';
+import { TopBarWrapper } from '@/components/TopBarWrapper';
 import { Button } from '@/components/ui/button';
 
 interface GradientTopBarProps {
@@ -142,10 +143,9 @@ export function GradientTopBar({
   const isCustomSize = !currentPreset;
 
   return (
-    <div className="border-b border-gray-200 bg-white">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 px-4 py-2.5 sm:px-6">
-        {/* Left Side: Size Presets */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+    <TopBarWrapper>
+      {/* Left Side: Size Presets */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           {/* Preset Selector */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <label className="text-xs font-medium text-gray-700 whitespace-nowrap">Frame Size</label>
@@ -319,7 +319,6 @@ export function GradientTopBar({
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </TopBarWrapper>
   );
 }
