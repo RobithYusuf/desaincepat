@@ -39,7 +39,7 @@ export interface GlobalTypography {
   fontFamily: string;
   textAlign: 'left' | 'center' | 'right';
   backgroundColor: string;
-  backgroundMode: 'solid' | 'gradient' | 'image';
+  backgroundMode: 'solid' | 'gradient';
   gradientPreset: string;
   customGradient: string;
   textureEnabled: boolean;
