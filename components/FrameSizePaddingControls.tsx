@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useDesignStore } from '@/store/design-store';
 import { useBulkStore } from '@/store/bulk-store';
 import { TopBarWrapper } from './TopBarWrapper';
+import { TopBarLabel, TopBarSelect, TopBarInput, TopBarSeparator, TopBarUnit, TopBarGroup, TopBarSection } from './ui/topbar-controls';
 import { ProgressSlider } from './ProgressSlider';
 import { ExportModal } from './ExportModal';
 import { BulkExportModal } from './bulk/BulkExportModal';
@@ -71,70 +72,63 @@ export function FrameSizePaddingControls() {
   return (
     <TopBarWrapper>
       {/* Left Side: Frame Size & Padding */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 w-full sm:w-auto">
-          {/* Frame Size Selector */}
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label className="text-xs font-medium text-gray-700 whitespace-nowrap">Frame Size</label>
-            <select
-              value={frameSize}
-              onChange={(e) => setFrameSize(e.target.value as any)}
-              className="flex-1 sm:flex-none h-9 rounded-lg border border-gray-200 bg-white px-3 text-xs font-medium shadow-lg focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-            >
-              <option value="youtube">YouTube Thumbnail (1280×720)</option>
-              <option value="instagram">Instagram Portrait (1080×1350)</option>
-              <option value="twitter">Twitter Banner (1500×500)</option>
-              <option value="custom">Custom Size</option>
-            </select>
-          </div>
+      <TopBarSection position="left">
+        {/* Frame Size Selector */}
+        <TopBarGroup>
+          <TopBarLabel>Frame Size</TopBarLabel>
+          <TopBarSelect
+            value={frameSize}
+            onChange={(e) => setFrameSize(e.target.value as any)}
+          >
+            <option value="youtube">YouTube Thumbnail (1280×720)</option>
+            <option value="instagram">Instagram Portrait (1080×1350)</option>
+            <option value="twitter">Twitter Banner (1500×500)</option>
+            <option value="custom">Custom Size</option>
+          </TopBarSelect>
+        </TopBarGroup>
 
-          {/* Custom Size Inputs - Show when custom is selected */}
-          {frameSize === 'custom' && (
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <input
-                type="text"
-                inputMode="numeric"
-                value={widthInput}
-                onChange={(e) => handleWidthChange(e.target.value)}
-                onBlur={applyWidth}
-                onKeyDown={(e) => e.key === 'Enter' && applyWidth()}
-                placeholder="Width"
-                className="w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-              />
-              <span className="text-xs text-gray-500">×</span>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={heightInput}
-                onChange={(e) => handleHeightChange(e.target.value)}
-                onBlur={applyHeight}
-                onKeyDown={(e) => e.key === 'Enter' && applyHeight()}
-                placeholder="Height"
-                className="w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
-              />
-              <span className="text-[10px] text-gray-500">px</span>
-            </div>
-          )}
-          
-          {/* Padding Slider */}
-          <div className="flex items-center gap-3 w-full sm:flex-1 sm:max-w-xs">
-            <label className="text-xs font-medium text-gray-700 whitespace-nowrap">Padding</label>
-            <div className="flex-1">
-              <ProgressSlider
-                value={padding}
-                onChange={setPadding}
-                min={0}
-                max={100}
-                showValue={false}
-              />
-            </div>
-            <span className="text-xs font-medium text-gray-600 min-w-[2rem] text-right">{padding}</span>
+        {/* Custom Size Inputs - Show when custom is selected */}
+        {frameSize === 'custom' && (
+          <TopBarGroup>
+            <TopBarInput
+              value={widthInput}
+              onChange={(e) => handleWidthChange(e.target.value)}
+              onBlur={applyWidth}
+              onKeyDown={(e) => e.key === 'Enter' && applyWidth()}
+              placeholder="Width"
+            />
+            <TopBarSeparator />
+            <TopBarInput
+              value={heightInput}
+              onChange={(e) => handleHeightChange(e.target.value)}
+              onBlur={applyHeight}
+              onKeyDown={(e) => e.key === 'Enter' && applyHeight()}
+              placeholder="Height"
+            />
+            <TopBarUnit />
+          </TopBarGroup>
+        )}
+        
+        {/* Padding Slider */}
+        <div className="flex items-center gap-3 w-full sm:flex-1 sm:max-w-xs">
+          <TopBarLabel>Padding</TopBarLabel>
+          <div className="flex-1">
+            <ProgressSlider
+              value={padding}
+              onChange={setPadding}
+              min={0}
+              max={100}
+              showValue={false}
+            />
           </div>
+          <span className="text-xs font-medium text-gray-600 min-w-[2rem] text-right">{padding}</span>
         </div>
+      </TopBarSection>
 
       {/* Right Side: Export Button */}
-      <div className="w-full sm:w-auto">
+      <TopBarSection position="right">
         {isBulkMode ? <BulkExportModal /> : <ExportModal />}
-      </div>
+      </TopBarSection>
     </TopBarWrapper>
   );
 }

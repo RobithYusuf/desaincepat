@@ -5,6 +5,7 @@ import { Lock, Unlock, Download, Image, FileCode, Link, Check } from 'lucide-rea
 import { useGradientStore } from '@/store/gradient-store';
 import { generateMeshGradient } from '@/lib/mesh-generator';
 import { TopBarWrapper } from '@/components/TopBarWrapper';
+import { TopBarLabel, TopBarSelect, TopBarInput, TopBarSeparator, TopBarUnit, TopBarGroup, TopBarSection } from '@/components/ui/topbar-controls';
 import { Button } from '@/components/ui/button';
 
 interface GradientTopBarProps {
@@ -145,74 +146,70 @@ export function GradientTopBar({
   return (
     <TopBarWrapper>
       {/* Left Side: Size Presets */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          {/* Preset Selector */}
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label className="text-xs font-medium text-gray-700 whitespace-nowrap">Frame Size</label>
-            <select
-              value={isCustomSize ? 'custom' : currentPreset?.value}
-              onChange={(e) => {
-                if (e.target.value !== 'custom') {
-                  handlePresetClick(e.target.value as any);
-                }
-              }}
-              className="flex-1 sm:flex-none rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              {presets.map((preset) => (
-                <option key={preset.value} value={preset.value}>
-                  {preset.label} ({preset.width}×{preset.height})
-                </option>
-              ))}
-              {isCustomSize && (
-                <option value="custom">
-                  Custom ({canvas.width}×{canvas.height})
-                </option>
-              )}
-            </select>
-          </div>
+      <TopBarSection position="left">
+        {/* Preset Selector */}
+        <TopBarGroup>
+          <TopBarLabel>Frame Size</TopBarLabel>
+          <TopBarSelect
+            value={isCustomSize ? 'custom' : currentPreset?.value}
+            onChange={(e) => {
+              if (e.target.value !== 'custom') {
+                handlePresetClick(e.target.value as any);
+              }
+            }}
+          >
+            {presets.map((preset) => (
+              <option key={preset.value} value={preset.value}>
+                {preset.label} ({preset.width}×{preset.height})
+              </option>
+            ))}
+            {isCustomSize && (
+              <option value="custom">
+                Custom ({canvas.width}×{canvas.height})
+              </option>
+            )}
+          </TopBarSelect>
+        </TopBarGroup>
 
-          {/* Custom Size Inputs */}
-          <div className="flex items-center gap-2">
-            <label className="text-xs font-medium text-gray-500 hidden sm:inline">Custom:</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={widthInput !== null ? widthInput : canvas.width}
-              onChange={(e) => handleWidthChange(e.target.value)}
-              onBlur={handleWidthBlur}
-              onFocus={(e) => e.target.select()}
-              className="w-16 sm:w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            />
-            <button
-              onClick={() => setIsLocked(!isLocked)}
-              className={`p-1.5 rounded border transition-colors ${
-                isLocked 
-                  ? 'bg-blue-50 border-blue-300 text-blue-600' 
-                  : 'bg-white border-gray-300 text-gray-400 hover:text-gray-600'
-              }`}
-              title={isLocked ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
-            >
-              {isLocked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
-            </button>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={heightInput !== null ? heightInput : canvas.height}
-              onChange={(e) => handleHeightChange(e.target.value)}
-              onBlur={handleHeightBlur}
-              onFocus={(e) => e.target.select()}
-              className="w-16 sm:w-20 rounded border border-gray-300 bg-white px-2 py-1.5 text-xs font-medium focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            />
-            <span className="text-xs text-gray-500">px</span>
-          </div>
-        </div>
+        {/* Custom Size Inputs */}
+        <TopBarGroup>
+          <TopBarLabel className="text-gray-500 hidden sm:inline">Custom:</TopBarLabel>
+          <TopBarInput
+            width="sm"
+            value={widthInput !== null ? widthInput : canvas.width}
+            onChange={(e) => handleWidthChange(e.target.value)}
+            onBlur={handleWidthBlur}
+            onFocus={(e) => e.target.select()}
+          />
+          <button
+            onClick={() => setIsLocked(!isLocked)}
+            className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-colors ${
+              isLocked 
+                ? 'bg-purple-50 border-purple-300 text-purple-600' 
+                : 'bg-white border-gray-200 text-gray-400 hover:text-gray-600'
+            }`}
+            title={isLocked ? 'Unlock aspect ratio' : 'Lock aspect ratio'}
+          >
+            {isLocked ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
+          </button>
+          <TopBarInput
+            width="sm"
+            value={heightInput !== null ? heightInput : canvas.height}
+            onChange={(e) => handleHeightChange(e.target.value)}
+            onBlur={handleHeightBlur}
+            onFocus={(e) => e.target.select()}
+          />
+          <TopBarUnit />
+        </TopBarGroup>
+      </TopBarSection>
 
-        {/* Right Side: Export Button */}
+      {/* Right Side: Export Button */}
+      <TopBarSection position="right">
         <div className="relative" ref={exportModalRef}>
           <Button
             onClick={() => setShowExportModal(!showExportModal)}
             disabled={isExporting}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 h-8"
+            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs px-4 h-9"
           >
             <Download className="h-3.5 w-3.5" />
             <span>{isExporting ? 'Exporting...' : 'Export'}</span>
@@ -319,6 +316,7 @@ export function GradientTopBar({
             </div>
           )}
         </div>
+      </TopBarSection>
     </TopBarWrapper>
   );
 }
