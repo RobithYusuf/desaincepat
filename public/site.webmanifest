@@ -1,21 +1,30 @@
 {
-  "name": "DesainCepat",
+  "name": "DesainCepat - AI-Powered Thumbnail Generator",
   "short_name": "DesainCepat",
-  "description": "AI-Powered Thumbnail Generator",
+  "description": "Buat thumbnail YouTube, Instagram, dan media sosial secara gratis. Generator thumbnail profesional dengan 60+ background, gradient editor, bulk mode. Tanpa watermark!",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#22c55e",
+  "categories": ["design", "graphics", "productivity", "utilities"],
+  "lang": "id",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
-  ]
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
 }

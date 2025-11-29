@@ -61,27 +61,64 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: '--font-jet
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: '--font-plus-jakarta-sans' });
 
 export const metadata: Metadata = {
-  title: "DesainCepat - AI-Powered Thumbnail Generator",
-  description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode. Buat thumbnail berkualitas tinggi dengan mudah dan cepat.",
-  keywords: ["thumbnail generator", "thumbnail maker", "desain thumbnail", "AI thumbnail", "editor thumbnail", "3D animation", "gradient generator"],
-  authors: [{ name: "DesainCepat" }],
+  title: {
+    default: "DesainCepat - AI-Powered Thumbnail Generator | Buat Thumbnail Gratis",
+    template: "%s | DesainCepat"
+  },
+  description: "Buat thumbnail YouTube, Instagram, dan media sosial secara gratis dengan DesainCepat. Generator thumbnail profesional dengan 60+ background, gradient editor, bulk mode, dan AI prompt generator. Tanpa watermark!",
+  keywords: [
+    "thumbnail generator",
+    "thumbnail maker", 
+    "desain thumbnail",
+    "AI thumbnail",
+    "editor thumbnail",
+    "gradient generator",
+    "thumbnail youtube",
+    "thumbnail instagram",
+    "thumbnail gratis",
+    "buat thumbnail online",
+    "generator thumbnail indonesia",
+    "desain grafis online",
+    "thumbnail maker free",
+    "bulk thumbnail generator"
+  ],
+  authors: [{ name: "DesainCepat", url: "https://desaincepat.vercel.app" }],
   creator: "DesainCepat",
   publisher: "DesainCepat",
   metadataBase: new URL('https://desaincepat.vercel.app'),
+  applicationName: "DesainCepat",
+  category: "Design Tools",
+  classification: "Graphic Design, Thumbnail Generator",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   alternates: {
     canonical: '/',
+    languages: {
+      'id-ID': '/',
+      'en-US': '/',
+    },
   },
   openGraph: {
-    title: "DesainCepat - AI-Powered Thumbnail Generator",
-    description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode. Buat thumbnail berkualitas tinggi dengan mudah dan cepat.",
+    title: "DesainCepat - Buat Thumbnail Profesional Gratis",
+    description: "Generator thumbnail YouTube & Instagram gratis. 60+ background, gradient editor, bulk mode, AI prompt. Tanpa watermark, tanpa login!",
     url: "https://desaincepat.vercel.app",
     siteName: "DesainCepat",
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        url: "https://desaincepat.vercel.app/icon.png",
+        width: 512,
+        height: 512,
         alt: "DesainCepat - AI-Powered Thumbnail Generator",
+        type: "image/png",
       },
     ],
     locale: "id_ID",
@@ -89,20 +126,30 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DesainCepat - AI-Powered Thumbnail Generator",
-    description: "Generator thumbnail profesional dengan editor visual interaktif, animasi 3D Three.js, dan dark mode.",
-    images: ["/og-image.png"],
+    title: "DesainCepat - Buat Thumbnail Profesional Gratis",
+    description: "Generator thumbnail YouTube & Instagram gratis. 60+ background, gradient editor, bulk mode, AI prompt. Tanpa watermark!",
+    images: ["https://desaincepat.vercel.app/icon.png"],
+    creator: "@desaincepat",
   },
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/png" },
-      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
     ],
     apple: [
       { url: "/icon.png", sizes: "180x180", type: "image/png" },
     ],
+    shortcut: "/favicon.png",
   },
   manifest: "/site.webmanifest",
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "DesainCepat",
+    "format-detection": "telephone=no",
+    "theme-color": "#22c55e",
+  },
 };
 
 export default function RootLayout({
