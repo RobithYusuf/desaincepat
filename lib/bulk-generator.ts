@@ -175,7 +175,9 @@ async function generateSingleThumbnail(
   designStore: DesignStore,
   settings: ExportSettings,
   customBackground?: string,
-  customTypography?: BulkItemTypography
+  customTypography?: BulkItemTypography,
+  aiBackground?: string,
+  aiOutputMode?: 'full' | 'background'
 ): Promise<string> {
   // Get the actual canvas element
   const canvasElement = document.getElementById('canvas-export');
@@ -192,6 +194,7 @@ async function generateSingleThumbnail(
   const originalBgMode = designStore.backgroundMode;
   const originalBgColor = designStore.backgroundColor;
   const originalGradient = designStore.customGradient;
+  const originalBgSizing = designStore.backgroundSizing;
   // Store original typography values
   const originalFontSize = designStore.fontSize;
   const originalFontFamily = designStore.fontFamily;
@@ -207,18 +210,32 @@ async function generateSingleThumbnail(
     }
 
     // Temporarily update the design store with bulk item values
-    designStore.setText(text);
+    // If AI generated full thumbnail (with text), don't overlay our text
+    if (aiOutputMode === 'full') {
+      designStore.setText(''); // Hide text, AI image has its own
+    } else {
+      designStore.setText(text);
+    }
     
-    if (customBackground) {
-      if (customBackground.includes('gradient') || customBackground.includes('linear') || customBackground.includes('radial')) {
+    // Priority: aiBackground > customBackground > default
+    const backgroundToUse = aiBackground || customBackground;
+    
+    if (backgroundToUse) {
+      if (backgroundToUse.startsWith('data:')) {
+        // AI-generated background is a data URL image
         designStore.setBackgroundMode('gradient');
-        designStore.setCustomGradient(customBackground);
-      } else if (customBackground.includes('url')) {
+        designStore.setCustomGradient(`url(${backgroundToUse})`);
+        designStore.setBackgroundSizing('cover'); // Ensure AI images fill canvas
+      } else if (backgroundToUse.includes('gradient') || backgroundToUse.includes('linear') || backgroundToUse.includes('radial')) {
         designStore.setBackgroundMode('gradient');
-        designStore.setCustomGradient(customBackground);
+        designStore.setCustomGradient(backgroundToUse);
+      } else if (backgroundToUse.includes('url')) {
+        designStore.setBackgroundMode('gradient');
+        designStore.setCustomGradient(backgroundToUse);
+        designStore.setBackgroundSizing('cover'); // Ensure images fill canvas
       } else {
         designStore.setBackgroundMode('solid');
-        designStore.setBackgroundColor(customBackground);
+        designStore.setBackgroundColor(backgroundToUse);
       }
     }
 
@@ -262,6 +279,7 @@ async function generateSingleThumbnail(
     designStore.setBackgroundMode(originalBgMode);
     designStore.setBackgroundColor(originalBgColor);
     designStore.setCustomGradient(originalGradient);
+    designStore.setBackgroundSizing(originalBgSizing);
     // Restore original typography values
     designStore.setFontSize(originalFontSize);
     designStore.setFontFamily(originalFontFamily);
@@ -313,13 +331,15 @@ export async function generateBulkThumbnails(
     onProgress(i + 1, pendingImage);
 
     try {
-      // Generate thumbnail with optional custom background and typography
+      // Generate thumbnail with optional custom background, typography, AI background, and output mode
       const dataUrl = await generateSingleThumbnail(
         item.text, 
         designStore, 
         settings,
         item.background,
-        item.typography
+        item.typography,
+        item.aiBackground,
+        item.aiOutputMode
       );
 
       const completedImage: GeneratedImage = {

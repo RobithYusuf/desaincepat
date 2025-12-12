@@ -82,32 +82,46 @@ function PreviewCard({
   const scale = cardWidth / canvasWidth;
   const fileName = textToFileName(item.text);
 
+  // Calculate aspect ratio percentage for padding trick (more reliable than CSS aspectRatio)
+  const aspectRatioPercent = (canvasHeight / canvasWidth) * 100;
+
   return (
     <div className="group relative">
-      {/* Preview Card Container */}
+      {/* Preview Card Container - using padding-bottom for reliable aspect ratio */}
       <div
         ref={cardRef}
         className="relative w-full rounded-lg overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-shadow"
-        style={{ aspectRatio: `${canvasWidth} / ${canvasHeight}` }}
+        style={{ 
+          paddingBottom: `${aspectRatioPercent}%`,
+          // Apply AI background directly to container for proper sizing
+          ...(item.aiBackground && {
+            backgroundImage: `url(${item.aiBackground})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          })
+        }}
       >
         {/* Scaled Content - renders at full canvas size then scales down */}
         <div
-          className="absolute top-0 left-0 origin-top-left"
+          className="absolute inset-0 origin-top-left"
           style={{
             width: `${canvasWidth}px`,
             height: `${canvasHeight}px`,
             transform: `scale(${scale})`,
           }}
         >
-          {/* Background */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: itemBackground,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
+          {/* Background - gradient/solid (not AI) */}
+          {!item.aiBackground && (
+            <div
+              className="absolute inset-0"
+              style={{
+                background: itemBackground,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+          )}
           
           {/* Texture Overlay */}
           {textureEnabled && textureUrl && (
@@ -124,37 +138,76 @@ function PreviewCard({
           )}
           
           {/* Text Container - EXACT same as Canvas */}
-          <div
-            className="relative z-20 flex h-full items-center justify-center"
-            style={{ padding: `${padding}px` }}
-          >
-            <h1
-              className={fontFamily}
-              style={{
-                fontSize: `${fontSize}px`,
-                lineHeight: lineHeight,
-                color: fontColor,
-                textAlign: textAlign,
-                fontWeight: 700,
-                maxWidth: `${maxWidth}%`,
-                wordWrap: 'break-word',
-              }}
+          {/* Hide text when AI generated full thumbnail (includes AI text) */}
+          {item.aiOutputMode !== 'full' && (
+            <div
+              className="relative z-20 flex h-full items-center justify-center"
+              style={{ padding: `${padding}px` }}
             >
-              {item.text}
-            </h1>
-          </div>
+              <h1
+                className={fontFamily}
+                style={{
+                  fontSize: `${fontSize}px`,
+                  lineHeight: lineHeight,
+                  color: fontColor,
+                  textAlign: textAlign,
+                  fontWeight: 700,
+                  maxWidth: `${maxWidth}%`,
+                  wordWrap: 'break-word',
+                }}
+              >
+                {item.text}
+              </h1>
+            </div>
+          )}
         </div>
 
-        {/* Status Overlay */}
+        {/* Status Overlay - Export Generation */}
         {isGenerating && generated && (
-          <div className="absolute inset-0 z-30 bg-black/50 flex items-center justify-center">
+          <div className="absolute inset-0 z-30 bg-black/60 flex flex-col items-center justify-center gap-3">
             {generated.status === 'generating' && (
-              <Loader2 className="h-5 w-5 text-white animate-spin" />
+              <>
+                <Loader2 className="h-10 w-10 text-white animate-spin" />
+                <span className="text-white text-sm font-medium">Exporting...</span>
+              </>
             )}
             {generated.status === 'done' && (
-              <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                <Check className="h-4 w-4 text-white" />
+              <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                <Check className="h-6 w-6 text-white" />
               </div>
+            )}
+          </div>
+        )}
+
+        {/* AI Generation Status Overlay */}
+        {item.aiStatus && item.aiStatus !== 'done' && (
+          <div className="absolute inset-0 z-30 bg-black/60 flex flex-col items-center justify-center gap-3">
+            {item.aiStatus === 'pending' && (
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-gray-500/80 flex items-center justify-center">
+                  <span className="text-white text-lg">⏳</span>
+                </div>
+                <span className="text-white/80 text-xs">Menunggu...</span>
+              </div>
+            )}
+            {item.aiStatus === 'generating' && (
+              <>
+                <Loader2 className="h-12 w-12 text-white animate-spin" />
+                <span className="text-white text-sm font-medium animate-pulse">Generating AI...</span>
+              </>
+            )}
+            {item.aiStatus === 'error' && (
+              <>
+                <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center">
+                  <X className="h-6 w-6 text-white" />
+                </div>
+                <span className="text-white text-sm font-medium">Gagal</span>
+                {item.aiError && (
+                  <p className="text-xs text-red-300 text-center px-3 max-w-[90%] line-clamp-2">
+                    {item.aiError}
+                  </p>
+                )}
+              </>
             )}
           </div>
         )}
@@ -197,6 +250,14 @@ function PreviewCard({
 
       {/* Filename & Custom Indicators */}
       <div className="mt-2 flex items-center justify-center gap-1.5">
+        {item.aiBackground && (
+          <div 
+            className="w-4 h-4 rounded border border-purple-300 bg-purple-100 flex-shrink-0 shadow-sm flex items-center justify-center text-purple-600"
+            title="AI-generated background"
+          >
+            <span className="text-[8px] font-bold">AI</span>
+          </div>
+        )}
         {item.typography && Object.keys(item.typography).length > 0 && (
           <div 
             className="w-4 h-4 rounded border border-green-300 bg-green-100 flex-shrink-0 shadow-sm flex items-center justify-center text-green-600"
@@ -205,7 +266,7 @@ function PreviewCard({
             <span className="text-[8px] font-bold">T</span>
           </div>
         )}
-        {item.background && (
+        {item.background && !item.aiBackground && (
           <div 
             className="w-4 h-4 rounded border border-gray-300 flex-shrink-0 shadow-sm"
             style={{ background: item.background }}

@@ -8,6 +8,7 @@ import { TopBarLabel, TopBarSelect, TopBarInput, TopBarSeparator, TopBarUnit, To
 import { ProgressSlider } from './ProgressSlider';
 import { ExportModal } from './ExportModal';
 import { BulkExportModal } from './bulk/BulkExportModal';
+import { HistoryModal } from './HistoryModal';
 
 export function FrameSizePaddingControls() {
   const {
@@ -125,8 +126,9 @@ export function FrameSizePaddingControls() {
         </div>
       </TopBarSection>
 
-      {/* Right Side: Export Button */}
+      {/* Right Side: History + Export Button */}
       <TopBarSection position="right">
+        <HistoryModal />
         {isBulkMode ? <BulkExportModal /> : <ExportModal />}
       </TopBarSection>
     </TopBarWrapper>

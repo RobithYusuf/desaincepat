@@ -377,6 +377,7 @@ export function PromptGeneratorModal({ open, onOpenChange }: PromptGeneratorModa
               {generatedImage && (
                 <div className="space-y-3">
                   <div className="rounded-lg border overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`data:${generatedImage.mimeType};base64,${generatedImage.base64}`}
                       alt="Generated thumbnail"

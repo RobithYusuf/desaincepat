@@ -19,6 +19,10 @@ export interface BulkItem {
   text: string;
   background?: string; // Custom background color/gradient per item
   typography?: BulkItemTypography; // Custom typography per item
+  aiBackground?: string; // AI-generated background (data URL)
+  aiStatus?: 'pending' | 'generating' | 'done' | 'error'; // AI generation status
+  aiError?: string; // AI generation error message
+  aiOutputMode?: 'full' | 'background'; // How AI generated the image
 }
 
 export interface GeneratedImage {
@@ -137,11 +141,16 @@ export interface BulkState {
   exportFormat: 'png' | 'webp';
   exportQuality: 1 | 2 | 3;
   
-  // Generation status
+  // Generation status (for export)
   isGenerating: boolean;
   currentIndex: number;
   totalItems: number;
   generatedImages: GeneratedImage[];
+  
+  // AI Bulk Generation status
+  isAIGenerating: boolean;
+  aiCurrentIndex: number;
+  aiStyle: string; // Style for AI generation
   
   // Cancel flag
   shouldCancel: boolean;
@@ -180,6 +189,14 @@ export interface BulkActions {
   // Cancel
   cancelGeneration: () => void;
   resetCancel: () => void;
+  
+  // AI Bulk Generation
+  setIsAIGenerating: (generating: boolean) => void;
+  setAICurrentIndex: (index: number) => void;
+  setAIStyle: (style: string) => void;
+  updateItemAIStatus: (id: string, status: BulkItem['aiStatus'], error?: string) => void;
+  updateItemAIBackground: (id: string, background: string, outputMode?: 'full' | 'background') => void;
+  clearAllAIBackgrounds: () => void;
   
   // Reset
   resetGeneration: () => void;
@@ -221,6 +238,11 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
   generatedImages: [],
   shouldCancel: false,
   
+  // AI Bulk Generation state
+  isAIGenerating: false,
+  aiCurrentIndex: 0,
+  aiStyle: 'modern-gradient',
+  
   // History for undo/redo
   bulkHistory: [],
   bulkHistoryIndex: -1,
@@ -248,7 +270,7 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
     // Remove duplicate lines (keep first occurrence)
     const uniqueLines = Array.from(new Set(lines));
     
-    // Preserve existing backgrounds and typography when updating
+    // Preserve existing backgrounds, typography, and AI data when updating
     const items: BulkItem[] = uniqueLines.map((text, index) => {
       const existing = existingItems.find((item) => item.text === text);
       return {
@@ -256,6 +278,10 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
         text,
         background: existing?.background,
         typography: existing?.typography,
+        aiBackground: existing?.aiBackground,
+        aiStatus: existing?.aiStatus,
+        aiError: existing?.aiError,
+        aiOutputMode: existing?.aiOutputMode,
       };
     });
     
@@ -290,6 +316,10 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
         text,
         background: existing?.background,
         typography: existing?.typography,
+        aiBackground: existing?.aiBackground,
+        aiStatus: existing?.aiStatus,
+        aiError: existing?.aiError,
+        aiOutputMode: existing?.aiOutputMode,
       };
     });
     
@@ -368,6 +398,41 @@ export const useBulkStore = create<BulkStore>()((set, get) => ({
   cancelGeneration: () => set({ shouldCancel: true }),
   
   resetCancel: () => set({ shouldCancel: false }),
+
+  // AI Bulk Generation actions
+  setIsAIGenerating: (generating) => set({ isAIGenerating: generating }),
+  
+  setAICurrentIndex: (index) => set({ aiCurrentIndex: index }),
+  
+  setAIStyle: (style) => set({ aiStyle: style }),
+  
+  updateItemAIStatus: (id, status, error) => {
+    const { bulkItems } = get();
+    const newItems = bulkItems.map((item) =>
+      item.id === id ? { ...item, aiStatus: status, aiError: error } : item
+    );
+    set({ bulkItems: newItems });
+  },
+  
+  updateItemAIBackground: (id, background, outputMode) => {
+    const { bulkItems } = get();
+    const newItems = bulkItems.map((item) =>
+      item.id === id ? { ...item, aiBackground: background, aiStatus: 'done' as const, aiOutputMode: outputMode } : item
+    );
+    set({ bulkItems: newItems });
+  },
+  
+  clearAllAIBackgrounds: () => {
+    const { bulkItems } = get();
+    const newItems = bulkItems.map((item) => ({
+      ...item,
+      aiBackground: undefined,
+      aiStatus: undefined,
+      aiError: undefined,
+      aiOutputMode: undefined,
+    }));
+    set({ bulkItems: newItems, isAIGenerating: false, aiCurrentIndex: 0 });
+  },
 
   resetGeneration: () => set({
     isGenerating: false,

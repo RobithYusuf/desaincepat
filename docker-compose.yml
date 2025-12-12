@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  app:
+  prod:
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,8 +8,9 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
+    profiles:
+      - prod
 
-  # Development mode with hot reload
   dev:
     image: node:20-alpine
     working_dir: /app
@@ -20,8 +19,11 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-      - /app/node_modules
+      - node_modules:/app/node_modules
     environment:
       - NODE_ENV=development
     profiles:
       - dev
+
+volumes:
+  node_modules:

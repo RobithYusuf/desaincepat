@@ -652,6 +652,7 @@ export default function GradientEditorPage() {
                                   className="flex-1 flex items-center gap-3 text-left"
                                 >
                                   {g.thumbnail ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
                                     <img 
                                       src={g.thumbnail} 
                                       alt={g.name}

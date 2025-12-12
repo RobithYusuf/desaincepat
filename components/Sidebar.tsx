@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { useDesignStore } from '@/store/design-store';
 import { useBulkStore } from '@/store/bulk-store';
-import { Type, Paintbrush, X, ChevronDown, ChevronUp, Image as ImageIcon, Layers } from 'lucide-react';
+import { Type, Paintbrush, X, ChevronDown, ChevronUp, Image as ImageIcon, Layers, Sparkles } from 'lucide-react';
 import { GradientPicker } from './GradientPicker';
 import { ProgressSlider } from './ProgressSlider';
 import { TemplateManager } from './TemplateManager';
-import { BulkTextInput } from './bulk';
+import { BulkTextInput, AIBulkGenerator } from './bulk';
+import { AIGeneratorSection } from './AIGeneratorSection';
 
 interface SidebarProps {
   onClose?: () => void;
@@ -18,6 +19,7 @@ export function Sidebar({ onClose }: SidebarProps) {
   const { isBulkMode, setBulkMode, resetGeneration, bulkItems } = useBulkStore();
   
   // Collapsible sections state
+  const [aiGeneratorOpen, setAiGeneratorOpen] = useState(false);
   const [textOpen, setTextOpen] = useState(true);
   const [typographyOpen, setTypographyOpen] = useState(true);
   const [backgroundOpen, setBackgroundOpen] = useState(true);
@@ -49,6 +51,8 @@ export function Sidebar({ onClose }: SidebarProps) {
     setGradientPreset,
     customGradient,
     setCustomGradient,
+    backgroundSizing,
+    setBackgroundSizing,
     textureEnabled,
     setTextureEnabled,
     textureType,
@@ -139,9 +143,7 @@ export function Sidebar({ onClose }: SidebarProps) {
               )}
 
               {/* Bulk Mode: Multiple Text Input */}
-              {isBulkMode && (
-                <BulkTextInput />
-              )}
+              {isBulkMode && <BulkTextInput />}
             </div>
           )}
         </div>
@@ -312,6 +314,31 @@ export function Sidebar({ onClose }: SidebarProps) {
                   }}
                 />
               </div>
+
+              {/* Background Sizing - Only show when using image background */}
+              {customGradient?.includes('url') && (
+                <div>
+                  <label className="mb-1 block text-xs text-gray-700">Image Sizing</label>
+                  <div className="flex gap-1.5">
+                    {(['cover', 'contain'] as const).map((sizing) => (
+                      <button
+                        key={sizing}
+                        onClick={() => setBackgroundSizing(sizing)}
+                        className={`flex-1 rounded border px-2 py-1.5 text-xs font-medium transition-all ${
+                          backgroundSizing === sizing
+                            ? 'border-green-600 bg-green-600 text-white'
+                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
+                        }`}
+                      >
+                        {sizing === 'cover' ? 'Fill' : 'Fit'}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-1 text-[10px] text-gray-500">
+                    {backgroundSizing === 'cover' ? 'Fills canvas, may crop edges' : 'Shows full image, may have gaps'}
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -373,6 +400,34 @@ export function Sidebar({ onClose }: SidebarProps) {
             </div>
           )}
         </div>
+
+        {/* AI Generator Section - At bottom, collapsible, default OFF */}
+        {!isBulkMode ? (
+          <div className="border-b border-gray-200">
+            <button
+              onClick={() => setAiGeneratorOpen(!aiGeneratorOpen)}
+              className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
+            >
+              <div className="flex items-center gap-1.5 font-semibold text-green-600 text-xs">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>AI GENERATOR</span>
+                <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium">Beta</span>
+              </div>
+              {aiGeneratorOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+            </button>
+
+            {aiGeneratorOpen && (
+              <div className="px-4 pb-4">
+                <AIGeneratorSection />
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Bulk mode - AI Bulk Generator */
+          <div className="border-b border-gray-200 px-4 py-3">
+            <AIBulkGenerator />
+          </div>
+        )}
       </div>
     </aside>
   );

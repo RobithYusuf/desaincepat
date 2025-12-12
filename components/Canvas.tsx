@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, memo } from 'react';
 import { useDesignStore } from '@/store/design-store';
 
-export function Canvas() {
+// Inner canvas component - memoized to prevent unnecessary re-renders
+const CanvasInner = memo(function CanvasInner() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   
@@ -25,6 +26,8 @@ export function Canvas() {
     textureIntensity,
     frameSize,
     zoomLevel,
+    backgroundSizing,
+    isAIGenerating,
     getFrameDimensions,
   } = useDesignStore();
 
@@ -148,9 +151,9 @@ export function Canvas() {
               background: canvasBackground,
               ...(customGradient?.includes('url') && {
                 backgroundImage: customGradient,
-                backgroundColor: 'transparent',
+                backgroundColor: customGradient?.includes('data:') ? '#1a1a2e' : 'transparent', // Dark bg for AI images with contain
               }),
-              backgroundSize: 'cover',
+              backgroundSize: customGradient?.includes('url') ? backgroundSizing : 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
             }}
@@ -167,6 +170,31 @@ export function Canvas() {
                   pointerEvents: 'none',
                 }}
               />
+            )}
+
+            {/* AI Generating Overlay */}
+            {isAIGenerating && (
+              <div className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-4">
+                  {/* Animated Spinner */}
+                  <div className="relative">
+                    <div className="h-16 w-16 rounded-full border-4 border-white/20"></div>
+                    <div className="absolute inset-0 h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-green-400"></div>
+                    <div className="absolute inset-2 h-12 w-12 animate-spin rounded-full border-4 border-transparent border-t-emerald-300" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+                  </div>
+                  {/* Text */}
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-white">Generating with AI</p>
+                    <p className="mt-1 text-sm text-white/70">Creating your thumbnail...</p>
+                  </div>
+                  {/* Progress dots */}
+                  <div className="flex gap-1.5">
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-green-400" style={{ animationDelay: '0ms' }}></div>
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-green-400" style={{ animationDelay: '150ms' }}></div>
+                    <div className="h-2 w-2 animate-bounce rounded-full bg-green-400" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                </div>
+              </div>
             )}
             
             <div
@@ -187,7 +215,7 @@ export function Canvas() {
                   wordWrap: 'break-word',
                 }}
               >
-                {text || 'Enter your text...'}
+                {text || (customGradient?.includes('data:') ? '' : 'Enter your text...')}
               </h1>
             </div>
           </div>
@@ -202,4 +230,9 @@ export function Canvas() {
       </div>
     </div>
   );
+});
+
+// Export wrapper - prevents parent re-renders from affecting canvas
+export function Canvas() {
+  return <CanvasInner />;
 }

@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { 
-  ArrowRight, Type, Palette, Image, Sliders, Download, Sparkles, Check,
-  Layers, Move, Eye, Settings, Zap, MousePointer
+  ArrowRight, Type, Palette, Sliders, Download, Sparkles, Check,
+  Move, Eye, Settings, Zap
 } from "lucide-react";
 
 export default function TutorialPage() {
@@ -20,13 +20,13 @@ export default function TutorialPage() {
           {/* Header */}
           <div className="text-center">
             <div className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 text-sm font-semibold text-green-700">
-              📚 Documentation & Tutorial
+              📚 Dokumentasi & Tutorial
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-              Master DesainCepat
+              Panduan DesainCepat
             </h1>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Complete guides for creating stunning thumbnails and beautiful gradients
+              Panduan lengkap untuk membuat thumbnail keren dan gradien cantik
             </p>
           </div>
 
@@ -42,7 +42,7 @@ export default function TutorialPage() {
                 }`}
               >
                 <Type className="h-4 w-4" />
-                Thumbnail Editor
+                Editor Thumbnail
               </button>
               <button
                 onClick={() => setActiveTab("gradient")}
@@ -53,7 +53,7 @@ export default function TutorialPage() {
                 }`}
               >
                 <Palette className="h-4 w-4" />
-                Gradient Editor
+                Editor Gradien
               </button>
             </div>
           </div>
@@ -71,10 +71,10 @@ export default function TutorialPage() {
           <div className="mt-16 rounded-2xl bg-gradient-to-br from-green-600 via-emerald-600 to-green-700 p-8 text-center sm:p-12 shadow-2xl">
             <Sparkles className="mx-auto h-12 w-12 text-yellow-200" />
             <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
-              Ready to Create Amazing Designs?
+              Siap Membuat Desain Keren?
             </h2>
             <p className="mt-2 text-green-100 max-w-xl mx-auto">
-              Choose your tool and start designing professional graphics in minutes
+              Pilih tool dan mulai buat desain profesional dalam hitungan menit
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
@@ -82,7 +82,7 @@ export default function TutorialPage() {
                 className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-green-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
               >
                 <Type className="h-5 w-5" />
-                Thumbnail Editor
+                Editor Thumbnail
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
@@ -90,7 +90,7 @@ export default function TutorialPage() {
                 className="inline-flex items-center gap-2 rounded-lg bg-white/20 border-2 border-white px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-white/30 hover:scale-105"
               >
                 <Palette className="h-5 w-5" />
-                Gradient Editor
+                Editor Gradien
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -102,11 +102,24 @@ export default function TutorialPage() {
               href="/"
               className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-green-600 font-medium"
             >
-              ← Back to Home
+              ← Kembali ke Beranda
             </Link>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 bg-white py-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-gray-500">© 2024 DesainCepat. MIT License.</p>
+            <div className="flex gap-6 text-sm text-gray-500">
+              <Link href="/terms" className="hover:text-green-600 transition-colors">Syarat & Ketentuan</Link>
+              <Link href="/privacy" className="hover:text-green-600 transition-colors">Kebijakan Privasi</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -122,22 +135,22 @@ function ThumbnailTutorial() {
             <Type className="h-6 w-6" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">Thumbnail Editor</h2>
+            <h2 className="text-xl font-bold text-gray-900">Editor Thumbnail</h2>
             <p className="mt-2 text-gray-700">
-              Create professional thumbnails for YouTube, Instagram, and social media with customizable text, backgrounds, and effects.
+              Buat thumbnail profesional untuk YouTube, Instagram, dan media sosial dengan teks, background, dan efek yang bisa dikustomisasi.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
                 26 Google Fonts
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                181 Gradients
+                181 Gradien
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                60 Images
+                60 Gambar
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                Multiple Sizes
+                Berbagai Ukuran
               </span>
             </div>
           </div>
@@ -150,27 +163,27 @@ function ThumbnailTutorial() {
         <TutorialStep
           number={1}
           icon={<Type className="h-5 w-5" />}
-          title="Add Your Text"
-          description="Enter your thumbnail text in the Text Content section. Keep it short and impactful (3-5 words work best)."
+          title="Tambahkan Teks"
+          description="Masukkan teks thumbnail di bagian Text Content. Buat singkat dan menarik (3-5 kata paling efektif)."
           color="green"
         >
           <div className="mt-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
               <Zap className="h-4 w-4 text-yellow-600" />
-              Pro Tips
+              Tips Pro
             </p>
             <ul className="mt-3 space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Use ALL CAPS for maximum impact</span>
+                <span>Gunakan HURUF KAPITAL untuk dampak maksimal</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Add emojis to make it eye-catching 🔥</span>
+                <span>Tambah emoji agar lebih eye-catching 🔥</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Test different text alignments</span>
+                <span>Coba berbagai alignment teks</span>
               </li>
             </ul>
           </div>
@@ -180,13 +193,13 @@ function ThumbnailTutorial() {
         <TutorialStep
           number={2}
           icon={<Sliders className="h-5 w-5" />}
-          title="Customize Typography"
-          description="Choose from 26 Google Fonts and adjust font size (12-200px), line height, and max width."
+          title="Kustomisasi Tipografi"
+          description="Pilih dari 26 Google Fonts dan atur ukuran font (12-200px), tinggi baris, dan lebar maksimal."
           color="emerald"
         >
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <InfoBox label="Font Size" value="60-120px for YouTube" />
-            <InfoBox label="Font Family" value="Bold fonts work great" />
+            <InfoBox label="Ukuran Font" value="60-120px untuk YouTube" />
+            <InfoBox label="Jenis Font" value="Font tebal lebih menarik" />
           </div>
         </TutorialStep>
 
@@ -194,14 +207,14 @@ function ThumbnailTutorial() {
         <TutorialStep
           number={3}
           icon={<Palette className="h-5 w-5" />}
-          title="Choose Background"
-          description="Select from solid colors, 181 gradient presets, or 60 background images."
+          title="Pilih Background"
+          description="Pilih dari warna solid, 181 preset gradien, atau 60 gambar background."
           color="teal"
         >
           <div className="mt-4 space-y-2">
-            <BackgroundOption type="Solid" description="200 colors organized by hue" />
-            <BackgroundOption type="Gradient" description="181 beautiful gradients" />
-            <BackgroundOption type="Image" description="60 curated images or upload" />
+            <BackgroundOption type="Solid" description="200 warna dikelompokkan berdasarkan hue" />
+            <BackgroundOption type="Gradien" description="181 gradien cantik" />
+            <BackgroundOption type="Gambar" description="60 gambar pilihan atau upload sendiri" />
           </div>
         </TutorialStep>
 
@@ -209,8 +222,8 @@ function ThumbnailTutorial() {
         <TutorialStep
           number={4}
           icon={<Settings className="h-5 w-5" />}
-          title="Fine-tune Settings"
-          description="Select frame size (YouTube, Instagram, Twitter) and adjust padding for perfect spacing."
+          title="Atur Pengaturan"
+          description="Pilih ukuran frame (YouTube, Instagram, Twitter) dan atur padding untuk spacing sempurna."
           color="green"
         />
 
@@ -218,8 +231,8 @@ function ThumbnailTutorial() {
         <TutorialStep
           number={5}
           icon={<Download className="h-5 w-5" />}
-          title="Export Your Design"
-          description="Click Export, choose quality preset (Standard, Best, Maximum), and download your PNG."
+          title="Ekspor Desain"
+          description="Klik Export, pilih preset kualitas (Standard, Best, Maximum), dan download PNG kamu."
           color="green"
         />
       </div>
@@ -238,22 +251,22 @@ function GradientTutorial() {
             <Palette className="h-6 w-6" />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">Gradient Editor</h2>
+            <h2 className="text-xl font-bold text-gray-900">Editor Gradien</h2>
             <p className="mt-2 text-gray-700">
-              Create stunning mesh gradients with interactive controls. Perfect for backgrounds, social media posts, and modern designs.
+              Buat mesh gradien menakjubkan dengan kontrol interaktif. Sempurna untuk background, konten media sosial, dan desain modern.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                5 Color Presets
+                5 Preset Warna
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                Interactive Shapes
+                Shape Interaktif
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                Blur & Grain Effects
+                Efek Blur & Grain
               </span>
               <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700">
-                Multiple Export Sizes
+                Berbagai Ukuran Ekspor
               </span>
             </div>
           </div>
@@ -266,27 +279,27 @@ function GradientTutorial() {
         <TutorialStep
           number={1}
           icon={<Palette className="h-5 w-5" />}
-          title="Choose Color Palette"
-          description="Select from 5 beautiful presets (Golden Mist, Coral Breeze, etc.) or create your own by adding/removing colors."
+          title="Pilih Palet Warna"
+          description="Pilih dari 5 preset cantik (Golden Mist, Coral Breeze, dll.) atau buat sendiri dengan menambah/hapus warna."
           color="emerald"
         >
           <div className="mt-4 rounded-lg bg-gray-50 p-4 border border-gray-200">
             <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
               <Zap className="h-4 w-4 text-yellow-600" />
-              Color Tips
+              Tips Warna
             </p>
             <ul className="mt-3 space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Use 3-5 colors for best results</span>
+                <span>Gunakan 3-5 warna untuk hasil terbaik</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Drag colors to reorder them</span>
+                <span>Drag warna untuk mengubah urutan</span>
               </li>
               <li className="flex items-start gap-2">
                 <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-                <span>Click color swatches to edit</span>
+                <span>Klik color swatch untuk edit</span>
               </li>
             </ul>
           </div>
@@ -296,13 +309,13 @@ function GradientTutorial() {
         <TutorialStep
           number={2}
           icon={<Move className="h-5 w-5" />}
-          title="Adjust Positions (Optional)"
-          description="Enable 'Adjust color position' to move shape centers or 'Adjust Vertices' to reshape individual polygons."
+          title="Atur Posisi (Opsional)"
+          description="Aktifkan 'Adjust color position' untuk geser pusat shape atau 'Adjust Vertices' untuk mengubah bentuk polygon."
           color="green"
         >
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <InfoBox label="Center Points" value="Drag to reposition shapes" />
-            <InfoBox label="Vertices" value="Fine-tune polygon shapes" />
+            <InfoBox label="Center Points" value="Drag untuk posisi ulang shape" />
+            <InfoBox label="Vertices" value="Atur bentuk polygon detail" />
           </div>
         </TutorialStep>
 
@@ -310,14 +323,14 @@ function GradientTutorial() {
         <TutorialStep
           number={3}
           icon={<Sliders className="h-5 w-5" />}
-          title="Apply Filters & Effects"
-          description="Adjust blur (0-100), grain texture (0-100), opacity, and spread to perfect your gradient."
+          title="Terapkan Filter & Efek"
+          description="Atur blur (0-100), tekstur grain (0-100), opacity, dan spread untuk sempurnakan gradien."
           color="teal"
         >
           <div className="mt-4 space-y-2">
-            <FilterOption label="Blur" description="Smoothness of color blending" range="0-100" />
-            <FilterOption label="Grain" description="Film-like texture overlay" range="0-100" />
-            <FilterOption label="Spread" description="Shape distribution" range="50-150" />
+            <FilterOption label="Blur" description="Kelembutan pencampuran warna" range="0-100" />
+            <FilterOption label="Grain" description="Overlay tekstur seperti film" range="0-100" />
+            <FilterOption label="Spread" description="Distribusi bentuk" range="50-150" />
           </div>
         </TutorialStep>
 
@@ -325,8 +338,8 @@ function GradientTutorial() {
         <TutorialStep
           number={4}
           icon={<Eye className="h-5 w-5" />}
-          title="Choose Export Size"
-          description="Select from preset sizes: Square (1080×1080), Story (1080×1920), Landscape (1920×1080), Open Graph (1200×630), and more."
+          title="Pilih Ukuran Ekspor"
+          description="Pilih dari ukuran preset: Square (1080×1080), Story (1080×1920), Landscape (1920×1080), Open Graph (1200×630), dan lainnya."
           color="green"
         />
 
@@ -334,8 +347,8 @@ function GradientTutorial() {
         <TutorialStep
           number={5}
           icon={<Download className="h-5 w-5" />}
-          title="Export Your Gradient"
-          description="Click Export to download as PNG, WebP, or SVG. Your gradient is ready for backgrounds, posts, or designs!"
+          title="Ekspor Gradien"
+          description="Klik Export untuk download sebagai PNG, WebP, atau SVG. Gradien siap untuk background, postingan, atau desain!"
           color="emerald"
         />
 
@@ -343,8 +356,8 @@ function GradientTutorial() {
         <TutorialStep
           number={6}
           icon={<Sparkles className="h-5 w-5" />}
-          title="Randomize & Experiment"
-          description="Use 'Randomize' for new layouts or 'Shuffle' to reorder colors. Keep experimenting until you find the perfect gradient!"
+          title="Randomize & Eksperimen"
+          description="Gunakan 'Randomize' untuk layout baru atau 'Shuffle' untuk acak urutan warna. Terus bereksperimen sampai dapat gradien sempurna!"
           color="green"
         />
       </div>

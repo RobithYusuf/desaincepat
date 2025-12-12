@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Canvas } from "@/components/Canvas";
 import { Sidebar } from "@/components/Sidebar";
 import { Navbar } from "@/components/Navbar";
@@ -9,7 +9,7 @@ import { FrameSizePaddingControls } from "@/components/FrameSizePaddingControls"
 import { ZoomControls } from "@/components/ZoomControls";
 import { UndoRedoControls } from "@/components/UndoRedoControls";
 import { BulkPreviewGrid } from "@/components/bulk";
-import { PromptGeneratorModal } from "@/components/PromptGeneratorModal";
+import { ApiKeySettingsModal } from "@/components/ApiKeySettingsModal";
 import { useBulkStore } from "@/store/bulk-store";
 import { useDesignStore } from "@/store/design-store";
 import { useHistoryTracker } from "@/hooks/useHistoryTracker";
@@ -20,7 +20,7 @@ export default function Home() {
   useHistoryTracker();
   useBulkHistoryTracker();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { isBulkMode, bulkItems } = useBulkStore();
   const { frameSize, getFrameDimensions } = useDesignStore();
   const { width, height } = getFrameDimensions();
@@ -54,14 +54,14 @@ export default function Home() {
             {/* Separator */}
             <div className="h-6 w-px bg-gray-300" />
             
-            {/* AI Prompt Button */}
+            {/* AI Settings Button */}
             <button
-              onClick={() => setIsPromptModalOpen(true)}
-              className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-green-600 transition-colors hover:bg-green-50"
-              title="AI Prompt Generator"
+              onClick={() => setIsSettingsOpen(true)}
+              className="flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100"
+              title="AI API Key Settings"
             >
-              <Sparkles className="h-4 w-4" />
-              <span className="hidden sm:inline">AI Prompt</span>
+              <Settings className="h-4 w-4" />
+              <span className="hidden sm:inline">AI Settings</span>
             </button>
           </div>
           
@@ -129,10 +129,10 @@ export default function Home() {
         )}
       </main>
 
-      {/* AI Prompt Generator Modal */}
-      <PromptGeneratorModal
-        open={isPromptModalOpen}
-        onOpenChange={setIsPromptModalOpen}
+      {/* AI API Key Settings Modal */}
+      <ApiKeySettingsModal
+        open={isSettingsOpen}
+        onOpenChange={setIsSettingsOpen}
       />
     </div>
   );

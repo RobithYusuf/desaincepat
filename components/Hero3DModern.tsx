@@ -30,15 +30,15 @@ function FloatingGeometry({ position, geometry, speed, color }: {
   const geometryComponent = useMemo(() => {
     switch (geometry) {
       case 'box':
-        return <boxGeometry args={[1, 1, 1]} />;
+        return <boxGeometry args={[0.8, 0.8, 0.8]} />;
       case 'octahedron':
-        return <octahedronGeometry args={[1, 0]} />;
+        return <octahedronGeometry args={[0.8, 0]} />;
       case 'icosahedron':
-        return <icosahedronGeometry args={[1, 0]} />;
+        return <icosahedronGeometry args={[0.8, 0]} />;
       case 'torus':
-        return <torusGeometry args={[0.6, 0.25, 16, 32]} />;
+        return <torusGeometry args={[0.6, 0.2, 16, 32]} />;
       default:
-        return <boxGeometry args={[1, 1, 1]} />;
+        return <boxGeometry args={[0.8, 0.8, 0.8]} />;
     }
   }, [geometry]);
 
@@ -50,18 +50,18 @@ function FloatingGeometry({ position, geometry, speed, color }: {
         <meshPhysicalMaterial
           color={color}
           transparent
-          opacity={0.15}
-          metalness={0.2}
-          roughness={0.1}
-          transmission={0.9}
-          thickness={0.5}
+          opacity={0.25}
+          metalness={0.3}
+          roughness={0.2}
+          transmission={0.7}
+          thickness={0.3}
         />
       </mesh>
       
       {/* Wireframe overlay */}
       <lineSegments ref={wireframeRef}>
         {geometryComponent}
-        <lineBasicMaterial color={color} transparent opacity={0.6} />
+        <lineBasicMaterial color={color} transparent opacity={0.4} linewidth={1} />
       </lineSegments>
     </group>
   );
@@ -129,10 +129,10 @@ function ConnectingLines() {
   return (
     <>
       <lineSegments ref={linesRefLeft} geometry={leftGeometry}>
-        <lineBasicMaterial color="#a855f7" transparent opacity={0.12} />
+        <lineBasicMaterial color="#10b981" transparent opacity={0.25} />
       </lineSegments>
       <lineSegments ref={linesRefRight} geometry={rightGeometry}>
-        <lineBasicMaterial color="#ec4899" transparent opacity={0.12} />
+        <lineBasicMaterial color="#059669" transparent opacity={0.25} />
       </lineSegments>
     </>
   );
@@ -148,8 +148,8 @@ function EnergyParticles() {
     const colors = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
     
-    const color1 = new THREE.Color('#a855f7');
-    const color2 = new THREE.Color('#ec4899');
+    const color1 = new THREE.Color('#10b981');
+    const color2 = new THREE.Color('#059669');
     
     for (let i = 0; i < count; i++) {
       // Distribute in a sphere pattern
@@ -215,14 +215,14 @@ function EnergyParticles() {
 // Main Scene - Responsive positioning
 function ModernScene({ isMobile = false }: { isMobile?: boolean }) {
   if (isMobile) {
-    // Mobile/Tablet: Slightly to the sides, not directly behind text
+    // Mobile/Tablet: More spread out to the sides
     return (
       <>
         {/* Shapes positioned to the sides */}
-        <FloatingGeometry position={[-3, 2, -3]} geometry="icosahedron" speed={1} color="#a855f7" />
-        <FloatingGeometry position={[3, -1, -4]} geometry="octahedron" speed={0.8} color="#ec4899" />
-        <FloatingGeometry position={[-3.5, -2, -3]} geometry="box" speed={0.7} color="#c084fc" />
-        <FloatingGeometry position={[3.5, 2.5, -5]} geometry="torus" speed={0.6} color="#f472b6" />
+        <FloatingGeometry position={[-4, 2.5, -3]} geometry="icosahedron" speed={1} color="#10b981" />
+        <FloatingGeometry position={[4, -1, -4]} geometry="octahedron" speed={0.8} color="#059669" />
+        <FloatingGeometry position={[-4.5, -2, -3]} geometry="box" speed={0.7} color="#34d399" />
+        <FloatingGeometry position={[4.5, 3, -5]} geometry="torus" speed={0.6} color="#6ee7b7" />
         
         {/* Energy Particles */}
         <EnergyParticles />
@@ -230,19 +230,19 @@ function ModernScene({ isMobile = false }: { isMobile?: boolean }) {
     );
   }
 
-  // Desktop: Positioned on sides
+  // Desktop: Positioned on sides, more spread out
   return (
     <>
       {/* Geometric Shapes - Positioned on left and right sides */}
       {/* Left side shapes */}
-      <FloatingGeometry position={[-5, 2, -2]} geometry="icosahedron" speed={1} color="#a855f7" />
-      <FloatingGeometry position={[-6, -1, -3]} geometry="octahedron" speed={0.8} color="#ec4899" />
-      <FloatingGeometry position={[-4.5, -3, -1]} geometry="torus" speed={0.6} color="#f472b6" />
+      <FloatingGeometry position={[-5, 2, -2]} geometry="icosahedron" speed={1} color="#10b981" />
+      <FloatingGeometry position={[-5.5, -0.5, -3]} geometry="octahedron" speed={0.8} color="#059669" />
+      <FloatingGeometry position={[-4.5, -2.5, -1]} geometry="torus" speed={0.6} color="#6ee7b7" />
       
       {/* Right side shapes */}
-      <FloatingGeometry position={[5, 1, -2]} geometry="box" speed={0.7} color="#c084fc" />
-      <FloatingGeometry position={[6, -2, -3]} geometry="octahedron" speed={0.9} color="#d946ef" />
-      <FloatingGeometry position={[4.5, 3, -1]} geometry="icosahedron" speed={0.85} color="#a855f7" />
+      <FloatingGeometry position={[5, 1, -2]} geometry="box" speed={0.7} color="#34d399" />
+      <FloatingGeometry position={[5.5, -1.5, -3]} geometry="octahedron" speed={0.9} color="#10b981" />
+      <FloatingGeometry position={[4.5, 3, -1]} geometry="icosahedron" speed={0.85} color="#059669" />
       
       {/* Connecting Lines */}
       <ConnectingLines />
@@ -256,10 +256,51 @@ function ModernScene({ isMobile = false }: { isMobile?: boolean }) {
 // Main Component - Modern Geometric 3D Design (Responsive)
 export default function Hero3DModern() {
   const [isMobile, setIsMobile] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  console.log('[Hero3DModern] Component rendering, isMobile:', isMobile);
 
   React.useEffect(() => {
+    console.log('[Hero3DModern] useEffect mounted');
+    
+    // Log container dimensions
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const styles = window.getComputedStyle(containerRef.current);
+      console.log('[Hero3DModern] Container dimensions:', {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top,
+        left: rect.left,
+        display: styles.display,
+        visibility: styles.visibility,
+        opacity: styles.opacity,
+        zIndex: styles.zIndex,
+        position: styles.position,
+        overflow: styles.overflow
+      });
+      
+      // Check parent element
+      const parent = containerRef.current.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const parentStyles = window.getComputedStyle(parent);
+        console.log('[Hero3DModern] Parent dimensions:', {
+          tagName: parent.tagName,
+          className: parent.className,
+          width: parentRect.width,
+          height: parentRect.height,
+          position: parentStyles.position,
+          overflow: parentStyles.overflow
+        });
+      }
+    } else {
+      console.warn('[Hero3DModern] Container ref is null!');
+    }
+    
     // Check screen size
     const checkMobile = () => {
+      console.log('[Hero3DModern] checkMobile called, window.innerWidth:', window.innerWidth);
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
     };
 
@@ -268,26 +309,62 @@ export default function Hero3DModern() {
 
     // Listen to resize
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      console.log('[Hero3DModern] useEffect cleanup');
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden bg-gradient-to-br from-green-50/60 via-emerald-50/40 to-white">
+    <div 
+      ref={containerRef}
+      className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-br from-green-50/60 via-emerald-50/40 to-white"
+      style={{ pointerEvents: 'none' }}
+    >
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 50 }}
+        key="hero-3d-canvas"
+        camera={{ position: [0, 0, 6], fov: 60 }}
         dpr={[1, 2]}
         gl={{ 
           antialias: true,
           alpha: true,
           powerPreference: "high-performance",
+          preserveDrawingBuffer: true,
         }}
         style={{ background: 'transparent' }}
+        onCreated={({ gl, scene, camera }) => {
+          console.log('[Hero3DModern] Canvas created successfully');
+          console.log('[Hero3DModern] WebGL Renderer:', {
+            domElement: gl.domElement,
+            canvasWidth: gl.domElement.width,
+            canvasHeight: gl.domElement.height,
+            clientWidth: gl.domElement.clientWidth,
+            clientHeight: gl.domElement.clientHeight,
+            pixelRatio: gl.getPixelRatio(),
+          });
+          console.log('[Hero3DModern] Scene children count:', scene.children.length);
+          console.log('[Hero3DModern] Camera position:', camera.position);
+          gl.setClearColor(0x000000, 0);
+          
+          // Log canvas computed styles
+          const canvasStyles = window.getComputedStyle(gl.domElement);
+          console.log('[Hero3DModern] Canvas styles:', {
+            width: canvasStyles.width,
+            height: canvasStyles.height,
+            display: canvasStyles.display,
+            visibility: canvasStyles.visibility,
+            opacity: canvasStyles.opacity,
+          });
+        }}
+        onError={(error) => {
+          console.error('[Hero3DModern] Canvas error:', error);
+        }}
       >
         {/* Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={0.6} color="#ffffff" />
-        <pointLight position={[-5, 3, 0]} color="#a855f7" intensity={1} />
-        <pointLight position={[5, -3, 0]} color="#ec4899" intensity={1} />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={0.7} color="#ffffff" />
+        <pointLight position={[-5, 3, 0]} color="#10b981" intensity={1.5} />
+        <pointLight position={[5, -3, 0]} color="#059669" intensity={1.5} />
         
         <ModernScene isMobile={isMobile} />
       </Canvas>

@@ -118,7 +118,11 @@ interface TopBarSectionProps {
 
 export function TopBarSection({ children, position = "left" }: TopBarSectionProps) {
   if (position === "right") {
-    return <div className="w-full sm:w-auto">{children}</div>;
+    return (
+      <div className="flex items-center gap-2 w-full sm:w-auto">
+        {children}
+      </div>
+    );
   }
   
   return (

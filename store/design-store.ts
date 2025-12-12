@@ -82,8 +82,14 @@ export interface DesignState extends UndoableState {
   // Zoom properties (not undoable)
   zoomLevel: number; // 0.25 to 2.0 (25% to 200%)
 
+  // Background sizing for AI-generated images
+  backgroundSizing: 'cover' | 'contain';
+
   // Templates (not undoable)
   templates: Template[];
+
+  // AI Generation state
+  isAIGenerating: boolean;
 
   // History for undo/redo
   history: UndoableState[];
@@ -116,7 +122,9 @@ export interface DesignActions {
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
-  exportAsImage: (fileName?: string) => Promise<void>;
+  setBackgroundSizing: (sizing: 'cover' | 'contain') => void;
+  setIsAIGenerating: (isGenerating: boolean) => void;
+  exportAsImage: (fileName?: string, options?: ExportOptions) => Promise<void>;
   getFrameDimensions: () => { width: number; height: number };
   
   // Template actions
@@ -135,6 +143,14 @@ export interface DesignActions {
 
 export type DesignStore = DesignState & DesignActions;
 
+export type ExportFormat = 'png' | 'jpeg' | 'webp';
+
+export interface ExportOptions {
+  format?: ExportFormat;
+  pixelRatio?: number;
+  quality?: number; // 0-1, only for JPEG/WebP
+}
+
 const FRAME_DIMENSIONS = {
   youtube: { width: 1280, height: 720 },
   instagram: { width: 1080, height: 1350 }, // Updated to 4:5 Portrait (2025 recommended)
@@ -142,11 +158,152 @@ const FRAME_DIMENSIONS = {
   custom: { width: 1200, height: 630 },
 };
 
+// Direct export for AI-generated images using native canvas
+// This avoids html-to-image issues with large base64 data URLs
+async function exportAIImageDirect(
+  imageDataUrl: string,
+  text: string,
+  textStyle: {
+    fontSize: number;
+    fontColor: string;
+    fontFamily: string;
+    textAlign: 'left' | 'center' | 'right';
+    lineHeight: number;
+    maxWidth: number;
+    padding: number;
+  },
+  canvasWidth: number,
+  canvasHeight: number,
+  backgroundSizing: 'cover' | 'contain',
+  fileName: string,
+  format: ExportFormat,
+  quality: number,
+  pixelRatio: number
+): Promise<void> {
+  const width = canvasWidth * pixelRatio;
+  const height = canvasHeight * pixelRatio;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get canvas context');
+
+  // Fill dark background for contain mode
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, width, height);
+
+  // Load and draw AI image
+  await new Promise<void>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      if (backgroundSizing === 'contain') {
+        const scale = Math.min(width / img.width, height / img.height);
+        const x = (width - img.width * scale) / 2;
+        const y = (height - img.height * scale) / 2;
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+      } else {
+        // cover
+        const scale = Math.max(width / img.width, height / img.height);
+        const x = (width - img.width * scale) / 2;
+        const y = (height - img.height * scale) / 2;
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+      }
+      resolve();
+    };
+    img.onerror = () => reject(new Error('Failed to load AI image'));
+    img.src = imageDataUrl;
+  });
+
+  // Draw text if not empty
+  if (text && text.trim() && text !== 'Text Kamu Disini...') {
+    const fontSize = textStyle.fontSize * pixelRatio;
+    const padding = textStyle.padding * pixelRatio;
+    
+    // Map font family class to actual font
+    const fontMap: Record<string, string> = {
+      'font-inter': 'Inter, sans-serif',
+      'font-roboto': 'Roboto, sans-serif',
+      'font-poppins': 'Poppins, sans-serif',
+      'font-montserrat': 'Montserrat, sans-serif',
+      'font-bebas': '"Bebas Neue", sans-serif',
+      'font-oswald': 'Oswald, sans-serif',
+    };
+    const fontFamily = fontMap[textStyle.fontFamily] || 'Inter, sans-serif';
+    
+    ctx.font = `bold ${fontSize}px ${fontFamily}`;
+    ctx.fillStyle = textStyle.fontColor;
+    ctx.textAlign = textStyle.textAlign;
+    ctx.textBaseline = 'middle';
+    
+    // Word wrap text
+    const maxTextWidth = (width - padding * 2) * (textStyle.maxWidth / 100);
+    const words = text.split(' ');
+    const lines: string[] = [];
+    let currentLine = '';
+    
+    for (const word of words) {
+      const testLine = currentLine ? `${currentLine} ${word}` : word;
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxTextWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    
+    const lineHeight = fontSize * textStyle.lineHeight;
+    const totalHeight = lines.length * lineHeight;
+    const startY = (height - totalHeight) / 2 + lineHeight / 2;
+    
+    // Draw text shadow for readability
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 8 * pixelRatio;
+    ctx.shadowOffsetX = 2 * pixelRatio;
+    ctx.shadowOffsetY = 2 * pixelRatio;
+    
+    const x = textStyle.textAlign === 'left' ? padding : 
+              textStyle.textAlign === 'right' ? width - padding : 
+              width / 2;
+    
+    lines.forEach((line, i) => {
+      ctx.fillText(line, x, startY + i * lineHeight);
+    });
+  }
+
+  // Export
+  let mimeType: string;
+  let extension: string;
+  switch (format) {
+    case 'jpeg':
+      mimeType = 'image/jpeg';
+      extension = 'jpg';
+      break;
+    case 'webp':
+      mimeType = 'image/webp';
+      extension = 'webp';
+      break;
+    default:
+      mimeType = 'image/png';
+      extension = 'png';
+  }
+
+  const dataUrl = canvas.toDataURL(mimeType, format === 'png' ? undefined : quality);
+  const link = document.createElement('a');
+  link.download = `${fileName}.${extension}`;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 export const useDesignStore = create<DesignStore>()(
   persist(
     (set, get) => ({
       // Initial state
-      text: 'Thumbnails Made Quicker Than Ever',
+      text: 'Text Kamu Disini...',
       fontSize: 72,
       lineHeight: 1.2,
       maxWidth: 80,
@@ -173,8 +330,13 @@ export const useDesignStore = create<DesignStore>()(
       exportPixelRatio: 2, // 2x for retina displays
 
       zoomLevel: 1, // 100% default
+
+      backgroundSizing: 'cover', // 'cover' fills canvas, 'contain' shows full image
       
       templates: [], // No templates initially
+
+      // AI Generation state
+      isAIGenerating: false,
 
       // History for undo/redo
       history: [],
@@ -219,33 +381,115 @@ export const useDesignStore = create<DesignStore>()(
     set({ zoomLevel: newZoom });
   },
   resetZoom: () => set({ zoomLevel: 1 }),
+  setBackgroundSizing: (backgroundSizing) => set({ backgroundSizing }),
+  setIsAIGenerating: (isAIGenerating) => set({ isAIGenerating }),
 
-  exportAsImage: async (customFileName?: string) => {
+  exportAsImage: async (customFileName?: string, options?: ExportOptions) => {
     const state = get();
     const element = document.getElementById('canvas-export');
-    if (!element) return;
+    if (!element) {
+      console.error('Export failed: canvas-export element not found');
+      return;
+    }
 
+    const format = options?.format || 'png';
+    const pixelRatio = options?.pixelRatio || state.exportPixelRatio;
+    const quality = options?.quality || state.exportQuality;
+
+    // Check if using AI-generated image (data URL in customGradient)
+    const hasDataUrlBackground = state.customGradient?.includes('data:image');
+
+    // For AI-generated images, use direct canvas export (avoids html-to-image stack overflow)
+    if (hasDataUrlBackground) {
+      try {
+        // Extract the data URL from customGradient (format: "url(data:image/...)")
+        const dataUrlStart = state.customGradient.indexOf('data:');
+        const dataUrlEnd = state.customGradient.lastIndexOf(')');
+        const imageDataUrl = state.customGradient.substring(dataUrlStart, dataUrlEnd);
+        
+        const dimensions = state.frameSize === 'custom' 
+          ? { width: state.customWidth, height: state.customHeight }
+          : FRAME_DIMENSIONS[state.frameSize];
+        
+        await exportAIImageDirect(
+          imageDataUrl,
+          state.text,
+          {
+            fontSize: state.fontSize,
+            fontColor: state.fontColor,
+            fontFamily: state.fontFamily,
+            textAlign: state.textAlign,
+            lineHeight: state.lineHeight,
+            maxWidth: state.maxWidth,
+            padding: state.padding,
+          },
+          dimensions.width,
+          dimensions.height,
+          state.backgroundSizing,
+          customFileName || state.fileName,
+          format,
+          quality,
+          pixelRatio
+        );
+        return;
+      } catch (error) {
+        console.error('AI image export failed:', error);
+        alert('Export gagal. Coba refresh halaman dan generate ulang.');
+        return;
+      }
+    }
+
+    // Standard export for non-AI images using html-to-image
     try {
-      const { toPng } = await import('html-to-image');
-      const dataUrl = await toPng(element, {
-        quality: state.exportQuality,
-        pixelRatio: state.exportPixelRatio,
+      const htmlToImage = await import('html-to-image');
+      
+      const baseOptions = {
+        pixelRatio,
         cacheBust: true,
         includeQueryParams: true,
         skipAutoScale: true,
         backgroundColor: undefined,
-        fetchRequestInit: {
-          mode: 'cors',
-          cache: 'no-cache',
+        skipFonts: false,
+        filter: (node: HTMLElement) => {
+          if (node.style?.display === 'none') return false;
+          if (node.classList?.contains('animate-spin')) return false;
+          return true;
         },
-      });
+      };
+
+      let dataUrl: string;
+      let fileExtension: string;
+
+      switch (format) {
+        case 'jpeg':
+          dataUrl = await htmlToImage.toJpeg(element, { ...baseOptions, quality });
+          fileExtension = 'jpg';
+          break;
+        case 'webp':
+          const canvas = await htmlToImage.toCanvas(element, baseOptions);
+          dataUrl = canvas.toDataURL('image/webp', quality);
+          fileExtension = 'webp';
+          break;
+        case 'png':
+        default:
+          dataUrl = await htmlToImage.toPng(element, baseOptions);
+          fileExtension = 'png';
+          break;
+      }
+
+      if (!dataUrl || !dataUrl.startsWith('data:image')) {
+        throw new Error('Failed to generate valid image data');
+      }
 
       const link = document.createElement('a');
-      link.download = `${customFileName || state.fileName}.png`;
+      link.download = `${customFileName || state.fileName}.${fileExtension}`;
       link.href = dataUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error('Export failed:', error);
+      alert('Export gagal. Coba gunakan gradient biasa atau refresh halaman.');
     }
   },
 

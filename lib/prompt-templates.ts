@@ -51,29 +51,80 @@ export const FONT_OPTIONS = [
   'Bangers', 'Russo One', 'Merriweather', 'Playfair Display'
 ] as const;
 
-// Detailed style descriptions with cinematic language (Best Practice 2025)
+// Detailed style descriptions optimized for thumbnail generation (Best Practice 2025)
+// Each description includes: visual elements, colors, lighting, composition, and thumbnail-specific guidance
+// Style descriptions for BACKGROUND generation (no text - text added by app)
 const STYLE_SCENE_DESCRIPTIONS: Record<string, string> = {
-  'modern-gradient': 'A sleek, contemporary scene with smooth flowing gradient colors transitioning seamlessly across the background. Rich, saturated hues blend from deep purple to vibrant blue or warm orange to pink. Clean geometric shapes float subtly in the background. Studio-quality lighting with soft highlights.',
-  'minimalist': 'A clean, elegant composition with generous negative space. Pure white or soft neutral background with minimal visual elements. Sharp, crisp edges and perfect alignment. Soft, even lighting that creates a sense of calm sophistication.',
-  'bold-colorful': 'An explosion of vibrant, saturated colors with high contrast and dynamic energy. Bold color blocking with complementary hues. Dramatic shadows and highlights create depth. Elements pop with intensity and visual impact.',
-  'professional': 'A refined corporate aesthetic with trustworthy blue and sophisticated gray tones. Clean lines, subtle gradients, and professional polish. Soft directional lighting creating gentle shadows. Business-appropriate elegance.',
-  'playful': 'A fun, energetic scene bursting with bright cheerful colors. Rounded shapes, bouncy elements, and friendly visual appeal. Warm, inviting lighting with playful shadows. Cartoon-like charm with professional execution.',
-  'dark-mode': 'A moody, sophisticated dark background with deep blacks and charcoal grays. Neon accent colors (cyan, magenta, electric blue) provide striking contrast. Subtle glow effects and rim lighting. Modern tech aesthetic with depth.',
-  'neon-glow': 'A cyberpunk-inspired scene with intense neon lights cutting through darkness. Vivid pink, blue, and purple glows with realistic light bloom effects. Reflective surfaces catching the neon ambiance. Futuristic urban energy.',
-  'retro-vintage': 'A nostalgic scene with warm, muted color palette reminiscent of vintage photography. Soft grain texture, faded edges, and classic typography styles. Golden hour lighting with warm orange and brown undertones.',
-  'cinematic': 'A dramatic, movie-poster quality composition with professional cinematography. Cinematic aspect ratio feel, dramatic lighting with deep shadows and bright highlights. Rich color grading like a Hollywood production.',
-  '3d-render': 'A polished 3D rendered scene with realistic materials and lighting. Smooth surfaces, accurate reflections, and professional CGI quality. Global illumination creating natural light bounce. Modern Pixar-quality aesthetic.',
+  'modern-gradient': `A beautiful modern gradient background with smooth flowing color transitions from rich purple through vibrant blue to soft pink or orange. Elegant glassmorphism shapes float subtly in the composition - translucent rectangles and circles with frosted glass effect. Soft bokeh light orbs add depth and dimension. Clean, uncluttered center area reserved for content. Professional studio lighting creates a premium, contemporary aesthetic. Perfect for tech and creative content.`,
+
+  'minimalist': `An ultra-clean minimalist background with generous negative space. Soft white or light gray canvas with maximum empty area (80% clean). A single subtle accent element positioned thoughtfully using rule of thirds. Premium Apple-style aesthetic with perfect simplicity. Soft, even lighting with no harsh shadows. Sophisticated and elegant, letting content breathe.`,
+
+  'bold-colorful': `A vibrant, high-energy background with bold geometric shapes and dynamic color blocking. Rich saturated colors: electric yellow, hot pink, and cyan create visual excitement. Paint splashes or abstract brush strokes add artistic flair. Strong contrast between light and dark areas. The composition flows diagonally, creating movement and energy. Studio lighting with soft shadows.`,
+
+  'professional': `A sophisticated corporate background with a deep navy blue to slate gradient. Subtle golden accent lines create elegant geometric patterns. Clean, minimal design with abstract business-inspired shapes floating softly. Soft studio lighting creates depth. Professional and trustworthy atmosphere, suitable for business content. Polished, high-end aesthetic.`,
+
+  'playful': `A cheerful, fun background bursting with positive energy. Soft pastel colors: sunny yellow, coral pink, sky blue, and mint green blend harmoniously. Floating elements like bubbles, confetti, stars, and organic curved shapes. Cartoon-style clouds add whimsy. Bright, even lighting creates a welcoming atmosphere. Kid-friendly yet stylish, perfect for entertainment content.`,
+
+  'dark-mode': `A sleek dark-mode tech background with rich charcoal black gradient. Subtle cyan and magenta neon accents glow softly at the edges. Faint grid lines or circuit board patterns add technical depth. Modern developer aesthetic with clean lines. Dramatic rim lighting creates separation. Moody but professional atmosphere, perfect for coding or tech tutorials.`,
+
+  'neon-glow': `A cyberpunk-inspired background with deep dark purple-black base. Intense neon lights in hot pink and electric cyan create dramatic glow effects. Light bloom and lens flare add cinematic quality. Reflective wet surfaces hint at a futuristic city. Blade Runner aesthetic with high contrast. Dramatic, edgy atmosphere perfect for gaming or tech content.`,
+
+  'retro-vintage': `A nostalgic retro background inspired by 1970s design. Warm muted colors: burnt orange, mustard yellow, olive green, and brown. Subtle film grain texture adds authenticity. Classic sunburst rays emanate from center. Halftone dot patterns and vignette edges complete the vintage look. Warm, cozy lighting creates comfortable nostalgia.`,
+
+  'cinematic': `A dramatic cinematic background with Hollywood-style color grading. Rich teal shadows contrast with warm orange highlights. Atmospheric fog or haze creates depth and mystery. Dramatic light rays pierce through, adding epic scale. Strong foreground-background separation. Film-like quality with high dynamic range. Perfect for storytelling content.`,
+
+  '3d-render': `A modern 3D rendered background with glossy translucent objects floating in space. Glass-like cubes, spheres, and abstract geometric shapes catch the light beautifully. Deep gradient backdrop transitioning from navy blue through purple to dark teal. Professional studio lighting with soft shadows and subtle reflections. Objects have a slight glow effect. Clean, premium tech aesthetic like Apple product shots. Moody but vibrant atmosphere.`,
 };
 
-// Audience-specific visual elements
+// Audience-specific visual elements for thumbnail optimization
 const AUDIENCE_VISUAL_ELEMENTS: Record<string, string> = {
-  'general': 'Universal visual appeal with relatable imagery. Balanced composition suitable for all ages. Clear, accessible design language.',
-  'developers': 'Tech-inspired elements like code snippets, terminal windows, or abstract circuit patterns. Modern IDE color schemes. Binary or matrix-style accents.',
-  'business': 'Professional imagery with charts, upward trends, or corporate iconography. Clean data visualization elements. Confidence-inspiring visual hierarchy.',
-  'students': 'Educational elements like books, lightbulbs, or brain imagery. Encouraging and aspirational visuals. Clear learning-focused design.',
-  'gamers': 'Dynamic gaming elements with action-oriented composition. RGB lighting effects, controller or game-inspired graphics. High-energy visual intensity.',
-  'creators': 'Creative tools imagery, artistic elements, or content creation visuals. Inspiration-focused design with creative flair. Platform-agnostic appeal.',
-  'kids': 'Bright, friendly characters or elements. Safe, cheerful imagery with rounded shapes. Educational yet entertaining visual approach.',
+  'general': `Target: Universal appeal for all viewers.
+- Clean, relatable imagery without niche-specific elements
+- Balanced composition that works across demographics
+- Accessible color choices with good contrast
+- Friendly but not childish aesthetic`,
+
+  'developers': `Target: Software developers and tech enthusiasts.
+- Include subtle code elements: syntax highlighting colors, curly braces {}, angle brackets <>
+- Terminal/IDE inspired dark backgrounds with monospace font hints
+- Tech icons: git branches, API symbols, database icons floating subtly
+- Matrix-style or circuit board patterns in background
+- Colors: VS Code dark theme palette, green (#22C55E) on dark`,
+
+  'business': `Target: Business professionals and entrepreneurs.
+- Include abstract data visualization: subtle line charts trending up, pie charts
+- Professional icons: briefcase, handshake, growth arrows
+- Corporate color palette: navy, gold accents, clean whites
+- Confidence-inspiring imagery: skyscrapers silhouette, success symbols
+- Clean, trustworthy aesthetic without being boring`,
+
+  'students': `Target: Students and learners of all ages.
+- Educational symbols: lightbulbs (ideas), books, graduation caps, brain icons
+- Encouraging, aspirational mood with bright hopeful colors
+- Study-related elements: notebooks, pencils, sticky notes floating
+- Growth mindset imagery: stairs, progress bars, checkmarks
+- Approachable and motivating visual language`,
+
+  'gamers': `Target: Gaming community and esports fans.
+- High-energy dynamic composition with action feel
+- RGB lighting effects: rainbow gradients, LED strip glows
+- Gaming elements: controller silhouettes, health bars, XP icons
+- Competitive aesthetic: flames, speed lines, power-up symbols
+- Bold neon colors on dark: electric blue, hot pink, toxic green`,
+
+  'creators': `Target: Content creators and digital artists.
+- Creative tools floating: camera, microphone, paint brush, play button
+- Multi-platform icons subtly integrated: video, audio, social
+- Artistic splashes, gradients, creative chaos organized beautifully  
+- Inspiring, aspirational mood with trendy color palettes
+- Modern influencer/creator aesthetic`,
+
+  'kids': `Target: Children and family-friendly content.
+- Bright, saturated cheerful colors: primary colors, rainbow elements
+- Friendly rounded shapes, no sharp edges
+- Cartoon-style clouds, stars, hearts, smiley elements
+- Safe, wholesome imagery - nothing scary or complex
+- Fun, playful, educational aesthetic with high energy`,
 };
 
 // Get frame details based on frame size
@@ -155,29 +206,24 @@ export function buildPromptJson(config: ThumbnailPromptConfig): object {
 }
 
 /**
- * Build optimized narrative prompt for Gemini image generation (Best Practices 2025)
- * Narrative-only format for better image generation results
+ * Build optimized MODULAR prompt for Gemini Image Generation
+ * Based on Best Practices 2025 - Narrative description, not keyword lists
+ * Structure: SUBJECT → COMPOSITION → STYLE → CONSTRAINTS
  */
 export function buildCopyPrompt(config: ThumbnailPromptConfig): string {
   const frame = getFrameDetails(config.resolution);
   const styleScene = STYLE_SCENE_DESCRIPTIONS[config.style] || STYLE_SCENE_DESCRIPTIONS['modern-gradient'];
-  const audienceElements = AUDIENCE_VISUAL_ELEMENTS[config.audience] || AUDIENCE_VISUAL_ELEMENTS['general'];
   
-  return `Create a professional ${frame.platform} image (${frame.width}×${frame.height}, ${frame.aspectRatio} aspect ratio).
+  // Modular prompt with text included - Gemini 3 Pro handles text well
+  return `[SUBJECT]: A ${frame.platform} thumbnail about "${config.topic}" with the title displayed prominently in large, bold typography.
 
-SCENE: ${styleScene}
+[COMPOSITION]: ${frame.aspectRatio} aspect ratio. Title "${config.topic}" centered, large and readable. 15% safe margins from edges.
 
-SUBJECT: "${config.topic}"
-${audienceElements}${config.additionalNotes ? `\n${config.additionalNotes}` : ''}
+[STYLE]: ${styleScene}
 
-TEXT REQUIREMENTS (CRITICAL):
-• Title "${config.topic}" must be LARGE and BOLD (40-60% of image width)
-• Use Impact, Bebas Neue, or Montserrat Black font
-• HIGH CONTRAST colors (white on dark or dark on light background)
-• Add subtle drop shadow for depth
-• Text must be readable even at small sizes
+[TEXT]: Title "${config.topic}" in bold Impact/Bebas Neue font. White text with dark shadow on dark backgrounds, or dark text on light backgrounds. Text must be crisp and readable.
 
-OUTPUT: Single high-quality ${frame.label} image, production-ready for ${frame.platform}.`;
+[CONSTRAINTS]: Single cohesive image. No watermarks. No cut-off elements.${config.additionalNotes ? ` ${config.additionalNotes}` : ''}`
 }
 
 

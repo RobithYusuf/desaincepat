@@ -62,25 +62,23 @@ const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: '--fon
 
 export const metadata: Metadata = {
   title: {
-    default: "DesainCepat - AI-Powered Thumbnail Generator | Buat Thumbnail Gratis",
+    default: "DesainCepat - Free AI Thumbnail Generator & Design Tool",
     template: "%s | DesainCepat"
   },
-  description: "Buat thumbnail YouTube, Instagram, dan media sosial secara gratis dengan DesainCepat. Generator thumbnail profesional dengan 60+ background, gradient editor, bulk mode, dan AI prompt generator. Tanpa watermark!",
+  description: "Create stunning YouTube thumbnails, Instagram posts, and social media graphics for free. Features 26+ fonts, mesh gradient generator, bulk creation mode, and AI prompt tools. No signup, no watermark.",
   keywords: [
     "thumbnail generator",
     "thumbnail maker", 
-    "desain thumbnail",
-    "AI thumbnail",
-    "editor thumbnail",
+    "youtube thumbnail",
+    "instagram post creator",
     "gradient generator",
-    "thumbnail youtube",
-    "thumbnail instagram",
-    "thumbnail gratis",
-    "buat thumbnail online",
-    "generator thumbnail indonesia",
-    "desain grafis online",
-    "thumbnail maker free",
-    "bulk thumbnail generator"
+    "mesh gradients",
+    "free design tool",
+    "bulk thumbnail creator",
+    "no watermark",
+    "online graphic design",
+    "desain cepat",
+    "thumbnail maker free"
   ],
   authors: [{ name: "DesainCepat", url: "https://desaincepat.vercel.app" }],
   creator: "DesainCepat",
@@ -103,13 +101,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'id-ID': '/',
       'en-US': '/',
     },
   },
   openGraph: {
-    title: "DesainCepat - Buat Thumbnail Profesional Gratis",
-    description: "Generator thumbnail YouTube & Instagram gratis. 60+ background, gradient editor, bulk mode, AI prompt. Tanpa watermark, tanpa login!",
+    title: "DesainCepat - Create Professional Thumbnails for Free",
+    description: "The #1 free online thumbnail generator. Create YouTube & Instagram visuals in seconds. Features gradient editor, bulk mode, and AI tools. No signup required.",
     url: "https://desaincepat.vercel.app",
     siteName: "DesainCepat",
     images: [
@@ -121,13 +118,13 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
-    locale: "id_ID",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DesainCepat - Buat Thumbnail Profesional Gratis",
-    description: "Generator thumbnail YouTube & Instagram gratis. 60+ background, gradient editor, bulk mode, AI prompt. Tanpa watermark!",
+    title: "DesainCepat - Free Professional Thumbnail Maker",
+    description: "Create stunning thumbnails in seconds. No watermark, no signup. Includes gradient generator and bulk editing tools.",
     images: ["https://desaincepat.vercel.app/icon.png"],
     creator: "@desaincepat",
   },
@@ -158,7 +155,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="en">
       <body 
         className={`
           ${ibmPlexSansCondensed.variable}
