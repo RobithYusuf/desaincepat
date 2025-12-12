@@ -46,7 +46,7 @@ export default function LandingPage() {
               {/* Badge */}
               <div className="mb-8 inline-flex animate-fade-in-up items-center gap-2 rounded-full border border-green-100 bg-green-50/80 px-4 py-1.5 text-sm font-medium text-green-700 backdrop-blur-sm">
                 <Sparkles className="h-4 w-4" />
-                <span>Generator Thumbnail #1 di Indonesia</span>
+                <span>Buka & Langsung Desain</span>
               </div>
               
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl lg:text-7xl">
@@ -58,7 +58,7 @@ export default function LandingPage() {
               </h1>
               
               <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600 sm:text-xl md:leading-relaxed">
-                Buat thumbnail YouTube profesional, konten media sosial, dan gradien secara instan. 
+                Buat thumbnail Blog, YouTube, konten media sosial, dan gradien secara instan. 
                 <span className="font-semibold text-gray-900"> Tanpa daftar. Tanpa watermark. Langsung pakai.</span>
               </p>
               
