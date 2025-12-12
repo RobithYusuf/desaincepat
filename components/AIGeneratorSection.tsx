@@ -51,7 +51,15 @@ import { useDesignStore } from '@/store/design-store';
 import { useHistoryStore } from '@/store/history-store';
 
 export function AIGeneratorSection() {
-  const { frameSize, setBackgroundMode, setCustomGradient, getFrameDimensions, setIsAIGenerating, setBackgroundSizing } = useDesignStore();
+  const {
+    frameSize,
+    setText,
+    setBackgroundMode,
+    setCustomGradient,
+    getFrameDimensions,
+    setIsAIGenerating,
+    setBackgroundSizing,
+  } = useDesignStore();
   const { addItem: addToHistory } = useHistoryStore();
   
   // Form state
@@ -134,16 +142,24 @@ export function AIGeneratorSection() {
       if (result.success) {
         // Apply generated image as canvas background
         const dataUrl = `data:${result.data.mimeType};base64,${result.data.base64}`;
+
+        // For AI images that already include typography, prefer 'contain' to guarantee no cropping.
+        // This avoids small edge cut-offs even when the returned image ratio isn't perfectly stable.
+        const sizing: 'cover' | 'contain' = 'contain';
+
         setBackgroundMode('gradient');
-        setCustomGradient(`url(${dataUrl})`);
-        setBackgroundSizing('cover'); // Fill canvas completely (may crop edges slightly)
+        setCustomGradient(`url("${dataUrl}")`);
+        setBackgroundSizing(sizing);
+
+        // AI image already contains typography; avoid double text overlay
+        setText('');
         
         // Calculate and display image size
         const sizeBytes = new Blob([dataUrl]).size;
         const sizeKB = (sizeBytes / 1024).toFixed(2);
         const sizeMB = (sizeBytes / (1024 * 1024)).toFixed(2);
         setLastGeneratedSize(`${sizeMB} MB (${sizeKB} KB)`);
-        console.log(`[AI Generator] Image size: ${sizeMB} MB (${sizeKB} KB) - Resolution: ${resolution}`);
+        console.log(`[AI Generator] Image size: ${sizeMB} MB (${sizeKB} KB) - Resolution: ${resolution} - Sizing: ${sizing}`);
         
         // Only save to history if image is small enough (< 2MB to prevent quota issues)
         const maxHistorySize = 2 * 1024 * 1024; // 2MB

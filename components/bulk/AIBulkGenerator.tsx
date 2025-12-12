@@ -87,6 +87,10 @@ export function AIBulkGenerator() {
         finalPrompt = `${prompt}\n\n[OUTPUT]: Thumbnail, ${width}×${height}px (2K), ${aspectRatio}.`;
       } else {
         // Background only - no text
+        const styleHint = aiStyle === '3d-render'
+          ? '\n\n[3D LAYOUT]: Distribute multiple 3D objects around the edges (left/right/top/bottom) and corners, avoid a centered cluster. Keep the center relatively clean for future text overlay. Layer depth with varying sizes; some objects can be slightly off-frame for immersion.'
+          : '';
+
         finalPrompt = `Create a visually stunning background image for a YouTube thumbnail about "${item.text}".
 
 [STYLE]: ${aiStyle} aesthetic, professional, eye-catching
@@ -97,6 +101,7 @@ export function AIBulkGenerator() {
 - Create ONLY the background visual/scene
 - Leave space for text overlay (center area should not be too busy)
 - High contrast areas for text readability
+${styleHint}
 
 [OUTPUT]: Background image, ${width}×${height}px (2K), ${aspectRatio}.`;
       }

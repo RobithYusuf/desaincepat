@@ -93,9 +93,12 @@ export function ApiKeySettingsModal({ open, onOpenChange }: ApiKeySettingsModalP
     setTestResult(null);
   };
 
-  const maskedKey = apiKey 
-    ? `${apiKey.slice(0, 6)}${'•'.repeat(Math.min(20, apiKey.length - 10))}${apiKey.slice(-4)}`
-    : '';
+  const maskedKey = (() => {
+    if (!apiKey) return '';
+    if (apiKey.length <= 8) return '•'.repeat(apiKey.length);
+    const middleCount = Math.max(0, Math.min(20, apiKey.length - 10));
+    return `${apiKey.slice(0, 6)}${'•'.repeat(middleCount)}${apiKey.slice(-4)}`;
+  })();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

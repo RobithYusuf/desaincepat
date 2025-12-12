@@ -402,10 +402,14 @@ export const useDesignStore = create<DesignStore>()(
     // For AI-generated images, use direct canvas export (avoids html-to-image stack overflow)
     if (hasDataUrlBackground) {
       try {
-        // Extract the data URL from customGradient (format: "url(data:image/...)")
+        // Extract the data URL from customGradient (supports url(data:...), url("data:..."), url('data:...'))
+        const urlMatch = state.customGradient.match(/url\(\s*(['"]?)(data:[^\)]+?)\1\s*\)/);
         const dataUrlStart = state.customGradient.indexOf('data:');
         const dataUrlEnd = state.customGradient.lastIndexOf(')');
-        const imageDataUrl = state.customGradient.substring(dataUrlStart, dataUrlEnd);
+
+        let imageDataUrl = urlMatch?.[2] ?? state.customGradient.substring(dataUrlStart, dataUrlEnd);
+        imageDataUrl = imageDataUrl.trim();
+        imageDataUrl = imageDataUrl.replace(/^['"]/, '').replace(/['"]$/, '');
         
         const dimensions = state.frameSize === 'custom' 
           ? { width: state.customWidth, height: state.customHeight }
