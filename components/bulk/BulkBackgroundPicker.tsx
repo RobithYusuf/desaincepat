@@ -141,14 +141,35 @@ export function BulkBackgroundPicker({
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageUrl = event.target?.result as string;
-        setBackground(`url(${imageUrl})`);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    const fileExtension = file.name.toLowerCase().slice(file.name.lastIndexOf('.'));
+    
+    if (!allowedTypes.includes(file.type)) {
+      alert('Tipe file tidak didukung. Gunakan JPG, PNG, WebP, atau GIF.');
+      return;
     }
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      alert('Ekstensi file tidak valid. Gunakan .jpg, .png, .webp, atau .gif');
+      return;
+    }
+
+    if (file.size > maxSize) {
+      alert('Ukuran file terlalu besar. Maksimal 5MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageUrl = event.target?.result as string;
+      setBackground(`url(${imageUrl})`);
+    };
+    reader.readAsDataURL(file);
   };
 
   const defaultTab = useMemo(() => {
